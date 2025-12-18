@@ -2,41 +2,544 @@
 
 \section{Tinjauan Pustaka}
 
-Berisi tugas akhir-tugas akhir terdahulu yang terkait dengan judul skripsi yang dilakukan. Hal ini meliputi skripsi, tesis, atau publikasi terdahulu yang terkait dengan judul skripsi yang diusulkan. Lakukan pembahasan secara sistemastis dengan menjelaskan masalah apa yang dilakukan oleh tugas akhir terdahulu, kontribusi yang dilakukan, serta analisis penulis terkait dengan keunggulan dan keterbatasan tugas akhir. 
+Teknologi \textit{blockchain} pertama kali diperkenalkan melalui Bitcoin pada tahun 2009 dengan tujuan filosofis menghadirkan sistem transaksi elektronik tanpa perantara (\textit{peer-to-peer electronic cash system}) yang aman, transparan, dan tahan gangguan. Selanjutnya, kemunculan Ethereum pada tahun 2015 memperluas fungsi \textit{blockchain} melalui konsep \textit{smart contract}, yang memungkinkan berbagai aplikasi desentralisasi (\textit{dApps}) dikembangkan di atasnya. Inovasi ini mendorong penelitian intensif terhadap mekanisme konsensus alternatif yang lebih efisien dibandingkan \textit{proof-of-work} (PoW), di antaranya Proof of Authority (PoA) dan Proof of Stake (PoS), yang sejak 2017–2020 menjadi fokus utama riset terkait performa, keamanan, dan skalabilitas \textit{blockchain}.
 
-Setelah membahas berbagai tugas akhir terdahulu, maka alangkah baiknya penulis melakukan rangkuman terutama terkait dengan peluang pengembangan atau tugas akhir yang akan dilakukan.
+Sejumlah penelitian telah mengkaji performa PoA dan PoS dalam konteks \textit{blockchain} umum. Choi dan Hong \cite{choi2020} , Rebello \textit{et al.} \cite{rebello2020}, serta Arslan \textit{et al.} \cite{arslan2020} membandingkan kedua mekanisme konsensus berdasarkan metrik dasar seperti \textit{Transactions Per Second} (TPS) dan latensi. Hasil penelitian mereka menunjukkan bahwa PoA memiliki keunggulan dari sisi latensi rendah dan \textit{throughput} tinggi pada beban sedang, sementara PoS lebih unggul dalam hal desentralisasi serta performa pada skala transaksi besar. Namun, pengujian yang dilakukan masih terbatas pada parameter performa dasar tanpa analisis terhadap penggunaan sumber daya dan stabilitas sistem.
+
+Dari sisi metodologi, Li \cite{li2021}, Kumar \textit{et al.} \cite{kumar2020}, dan Kaushal \& Kumar \cite{kaushal2020} menekankan pentingnya penggunaan \textit{benchmarking tools} seperti Hyperledger Caliper untuk evaluasi performa \textit{blockchain}. Alat ini memungkinkan pengukuran metrik standar seperti TPS, latensi, dan konsumsi sumber daya. Meski demikian, sebagian besar penelitian hanya menguji satu mekanisme konsensus pada satu waktu, sehingga belum memberikan gambaran perbandingan langsung yang komprehensif antara PoA dan PoS.
+
+Aspek skalabilitas dan efisiensi sumber daya juga menjadi perhatian dalam penelitian terdahulu. Sharma \textit{et al.} \cite{sharma2020} dan Ali \textit{et al.} \cite{ali2020} menemukan bahwa PoA cenderung lebih hemat CPU dan memori untuk beban rendah hingga menengah, sementara PoS lebih stabil ketika menghadapi variasi beban transaksi. Walaupun demikian, studi-studi tersebut umumnya berbasis simulasi pada jaringan Ethereum privat dan tidak dikaitkan dengan konteks sektor pendidikan.
+
+Dalam konteks pendidikan, Gaikwad \& Patel \cite{gaikwad2019} serta Singh \& Chatterjee \cite{singh2019} menekankan peran \textit{blockchain} dalam verifikasi ijazah digital dan pengelolaan data akademik. Implementasi yang dilakukan pada penelitian-penelitian ini masih dominan menggunakan PoA karena efisiensinya, tetapi tidak mengkaji potensi penggunaan PoS secara lebih mendalam.
+
+Penelitian yang paling mendekati fokus skripsi ini adalah studi oleh Wicaksono, Hatta, dan Aristyagama (2025) \cite{wicaksono2025}. Mereka membandingkan PoA (Ethereum 1.0) dan PoS (Ethereum 2.0) pada sistem transkrip akademik berbasis \textit{blockchain}. Pengujian dilakukan dengan Hyperledger Caliper menggunakan metrik \textit{throughput} dan latensi. Hasilnya menunjukkan bahwa PoA lebih unggul pada beban rendah hingga menengah, sementara PoS lebih sesuai untuk transaksi berskala besar. Walaupun demikian, penelitian ini memiliki keterbatasan penting: (1) hanya menggunakan dua metrik (TPS dan latensi) tanpa mencakup penggunaan sumber daya; (2) eksperimen dilakukan dengan satu \textit{worker} di Caliper sehingga kurang mencerminkan kondisi multi-user; (3) fokus terbatas pada satu aplikasi (transkrip akademik); dan (4) tidak ada analisis stabilitas sistem, termasuk toleransi kesalahan dan \textit{fork rate}.
+
+Penelitian ini hadir untuk mengisi kesenjangan tersebut. Cakupan pengujian diperluas dengan menambahkan metrik penggunaan sumber daya, skalabilitas, serta stabilitas sistem. Selain itu, penelitian ini menerapkan variasi parameter \textit{benchmarking} yang lebih beragam, meliputi jumlah node, waktu blok, ukuran blok, tingkat beban transaksi, jenis operasi transaksi, serta jumlah \textit{worker}. Fokus penelitian diarahkan pada jaringan DChain sebagai infrastruktur \textit{blockchain} nasional untuk pendidikan tinggi.
+
+Untuk memperjelas posisi penelitian ini dibandingkan dengan penelitian terdahulu, dilakukan pemetaan terhadap beberapa literatur yang relevan. Ringkasan literatur ditunjukkan pada Tabel~\ref{tab:litrev-a} dan Tabel~\ref{tab:litrev-b}.
+
+Berdasarkan hasil analisis terhadap penelitian-penelitian terdahulu sebagaimana dirangkum pada Tabel~\ref{tab:litrev-a} dan Tabel~\ref{tab:litrev-b}, dapat disimpulkan bahwa evaluasi performa konsensus PoA dan PoS umumnya dilakukan melalui pendekatan eksperimental dengan mempertimbangkan parameter utama seperti \textit{throughput}, \textit{latency}, dan efisiensi sumber daya. Namun, mayoritas penelitian tersebut masih terbatas pada pengujian metrik dasar (TPS dan latensi) serta konteks jaringan \textit{private Ethereum} atau aplikasi spesifik. Hanya sebagian kecil yang membahas penggunaan \textit{benchmarking tools} standar maupun eksplorasi aspek konsumsi sumber daya dan stabilitas sistem.
+
+Dengan demikian, penelitian ini menegaskan posisinya sebagai perluasan dari studi-studi sebelumnya dengan pendekatan yang lebih komprehensif untuk mengevaluasi kinerja konsensus PoA dan PoS pada konteks jaringan blockchain nasional seperti DChain, sehingga diharapkan dapat mengisi kekosongan penelitian yang masih ada dalam literatur terkait.
+
+% Tabel 2.1a: baris 1–6
+\afterpage{%
+\begin{landscape}
+\begin{table}[p]
+\centering
+\caption{Ringkasan Penelitian Terdahulu Terkait PoA dan PoS dalam Evaluasi Performa Blockchain (a)}
+\label{tab:litrev-a}
+% Gunakan tabularx agar tabel mengisi lebar halaman landscape dan teks membungkus otomatis
+% Pada halaman landscape, gunakan \linewidth (alias \textwidth) untuk lebar penuh
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{|c|l|X|X|X|X|X|X|}
+\hline
+\textbf{No} & \textbf{Peneliti \& Tahun} & \textbf{Objek Penelitian} & \textbf{Metode/Alat} & \textbf{Metrik} & \textbf{Hasil Utama} & \textbf{Keterbatasan} & \textbf{Kontribusi Utama} \\ \hline
+
+1 & Choi \& Hong (2020) & PoA vs PoS pada Ethereum privat & Eksperimen performa & TPS, Latensi & PoA unggul dalam latensi rendah dan throughput tinggi & Tidak ukur konsumsi sumber daya & Perbandingan awal PoA–PoS di jaringan privat \\ \hline
+
+2 & Rebello \textit{et al.} (2020) & PoA dan PoS di jaringan Ethereum privat & Simulasi & TPS, Latensi & PoA efisien di beban sedang; PoS stabil di beban besar & Tanpa analisis stabilitas & Dasar empiris evaluasi PoA–PoS \\ \hline
+
+3 & Arslan \textit{et al.} (2020) & Analisis algoritma konsensus modern & Studi eksperimental & Throughput, Latensi & PoS unggul dalam desentralisasi & Umum, tanpa alat ukur & Klasifikasi performa konsensus modern \\ \hline
+
+4 & Li (2021) & PoW, PoS, BFT, DAG & Analisis literatur & Teoretis (skala, efisiensi) & PoS efisien energi & Tidak diuji eksperimen & Arah pengembangan konsensus \\ \hline
+
+5 & Kumar \textit{et al.} (2020) & Evaluasi performa blockchain dengan Caliper & Eksperimen & TPS, Latensi & Caliper efektif untuk benchmarking & Hanya satu konsensus diuji & Validasi alat ukur performa \\ \hline
+
+6 & Kaushal \& Kumar (2020) & Benchmarking Hyperledger & Eksperimen performa & TPS, Latensi, Throughput & Caliper akurat mengukur performa & Tidak bandingkan PoA–PoS & Perkenalan alat ukur standar \\ \hline
+\end{tabularx}
+\end{table}
+\end{landscape}
+}% end afterpage
+
+% Tabel 2.1b: baris 7–11
+\afterpage{%
+\begin{landscape}
+\begin{table}[p]
+\centering
+\caption{Ringkasan Penelitian Terdahulu Terkait PoA dan PoS dalam Evaluasi Performa Blockchain (b)}
+\label{tab:litrev-b}
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{|c|l|X|X|X|X|X|X|}
+\hline
+\textbf{No} & \textbf{Peneliti \& Tahun} & \textbf{Objek Penelitian} & \textbf{Metode/Alat} & \textbf{Metrik} & \textbf{Hasil Utama} & \textbf{Keterbatasan} & \textbf{Kontribusi Utama} \\ \hline
+
+7 & Sharma \textit{et al.} (2020) & Ethereum privat dengan berbagai konsensus & Simulasi & TPS, CPU, Memori & PoA hemat sumber daya & Tidak diuji skala besar & Efisiensi PoA di beban rendah \\ \hline
+
+8 & Ali \textit{et al.} (2020) & Evaluasi performa dan skalabilitas konsensus & Eksperimen & TPS, Skalabilitas & PoS stabil di beban tinggi & Tidak ukur sumber daya & Analisis komparatif PoA–PoS \\ \hline
+
+9 & Gaikwad \& Patel (2019) & Sistem verifikasi ijazah & Implementasi aplikasi & Waktu transaksi & Blockchain meningkatkan keamanan verifikasi & Tidak bahas konsensus & Aplikasi awal blockchain di pendidikan \\ \hline
+
+10 & Singh \& Chatterjee (2019) & Keamanan data akademik & Studi implementatif & Integritas data & PoA efisien untuk kontrol otoritatif & Tidak bandingkan PoS & Penerapan PoA di sistem akademik \\ \hline
+
+11 & Wicaksono \textit{et al.} (2025) & PoA vs PoS pada sistem transkrip akademik & Eksperimen Caliper & TPS, Latensi & PoA unggul di beban rendah; PoS unggul di beban besar & Tidak uji sumber daya, tanpa analisis stabilitas & Studi komparatif PoA–PoS di pendidikan \\ \hline
+\end{tabularx}
+\end{table}
+\end{landscape}
+}% end afterpage
 
 
 \section{Dasar Teori}
 
-Berisi teori-teori yang menjadi dasar solusi atau produk hasil skripsi. Dasar teori pada umumnya diperoleh melalui buku referensi, publikasi tugas akhir, dan informasi web yang dapat dipertanggungjawabkan. Hindari penggunaan dasar teori melalui tautan wikipedia, surat kabar, atau portal berita.
+\subsection{Teknologi Blockchain}
 
-\subsection{Pengenalan Aplikasi Permainan}
+Teknologi \textit{blockchain} pertama kali diperkenalkan melalui publikasi \textit{whitepaper} Bitcoin oleh Satoshi Nakamoto pada tahun 2008, yang kemudian diimplementasikan pada tahun 2009 sebagai sistem pencatatan digital terdesentralisasi yang aman, transparan, dan tahan manipulasi \cite{dong2023, krichen2022, niranjanamurthy2018}. Konsep awal ini bertujuan menghadirkan sistem transaksi elektronik tanpa perantara, dengan filosofi menciptakan sistem keuangan digital yang dapat dipercaya tanpa otoritas pusat, sehingga mengurangi risiko monopoli kekuasaan serta meningkatkan transparansi transaksi \cite{dong2023, krichen2022, guo2022}. 
 
-Proses pembuatan \textit{game} dimulai dari pembuatan \textit{game design document} dimana 
-dokumen ini akan menjadi landasan pengembangan game tersebut serta menginformasikan gambaran keseluruhan game yang akan dibuat \cite{ferdiana2012agile}. \textcolor{red}{\textit{Catatan: apapun yang diambil dari tulisan orang lain harus disitasi seperti dicontohkan \cite{ferdiana2012agile}.}}
+Karakteristik utama \textit{blockchain} meliputi desentralisasi, di mana data disimpan di banyak \textit{node} tanpa kontrol tunggal \cite{dong2023, ahram2017}, immutability atau ketidakbisaan mengubah data setelah dicatat \cite{krichen2022, guo2022}, transparansi yang memungkinkan semua transaksi dapat dilacak \cite{krichen2022, niranjanamurthy2018, guo2022}, serta keamanan melalui penerapan kriptografi untuk menjaga integritas data \cite{niranjanamurthy2018, ahram2017}. Selain itu, validasi transaksi dalam \textit{blockchain} dilakukan melalui mekanisme konsensus seperti \textit{Proof of Work} (PoW) atau \textit{Proof of Stake} (PoS) \cite{krichen2022, moosavi2021}.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=12cm]{contents/chapter-2/gambar-buatan-sendiri.png}
-	\caption[Contoh gambar]{Contoh gambar \cite{lukito2016}}
-	\label{Fig:gambar-buatan-sendiri}
+Pada fase awal, pemanfaatan \textit{blockchain} terfokus pada sektor keuangan, terutama melalui mata uang kripto (\textit{cryptocurrency}) yang memungkinkan transfer nilai secara langsung antar pengguna tanpa perantara \cite{dong2023, jaoude2019}. Namun, seiring dengan perkembangan teknologi, \textit{blockchain} tidak lagi dipandang hanya sebagai sistem pembayaran digital, melainkan juga sebagai teknologi pencatatan data yang menjamin integritas, transparansi, dan efisiensi di berbagai sektor \cite{jaoude2019, habib2022, aljaroodi2019}. 
+
+Karakteristik utama seperti desentralisasi dan immutabilitas membuat data sulit dimanipulasi \cite{dong2023, habib2022}, transparansi dan auditabilitas memastikan setiap transaksi dapat dilacak \cite{jaoude2019, aljaroodi2019}, sementara kriptografi menjamin aspek keamanan dan privasi \cite{habib2022, raddatz2021}. Selain itu, inovasi \textit{smart contract} memungkinkan eksekusi otomatis transaksi, mengurangi biaya dan waktu dengan mengeliminasi kebutuhan perantara \cite{jaoude2019, mahmudnia2022}.
+
+Penerapan \textit{blockchain} pun semakin luas: pada sektor keuangan digunakan untuk sistem pembayaran lintas negara dan kontrak pintar \cite{jaoude2019, habib2022}; pada sektor kesehatan untuk manajemen rekam medis dan rantai pasok obat \cite{jaoude2019, habib2022}; di bidang logistik dan rantai pasok, teknologi ini mendukung pelacakan barang, efisiensi dokumen, dan pencegahan pemalsuan \cite{mukherjee2021, tijan2019}; dalam pemerintahan, \textit{blockchain} digunakan untuk identitas digital, sistem pemungutan suara, dan administrasi tanah \cite{aljaroodi2019, saari2022}; sementara di sektor pendidikan, \textit{blockchain} dimanfaatkan untuk sertifikat digital dan verifikasi ijazah \cite{chen2018}. 
+
+Evolusi ini menunjukkan bahwa \textit{blockchain} telah bertransformasi dari sekadar inovasi keuangan menjadi teknologi fundamental dengan aplikasi lintas industri yang semakin diakui secara global.
+
+Sejak periode 2016 hingga 2020, riset \textit{blockchain} mengalami peningkatan pesat dengan banyaknya publikasi ilmiah dan proyek implementasi di berbagai sektor. Fokus utama penelitian pada fase ini adalah peningkatan skalabilitas, efisiensi energi, dan keamanan, serta pengembangan mekanisme konsensus alternatif untuk menggantikan \textit{proof-of-work} (PoW) yang dikenal boros energi dan kurang efisien \cite{wang2018, xiao2019, zhang2020}. Dari sinilah muncul konsensus baru seperti \textit{Proof-of-Stake} (PoS) dan \textit{Proof-of-Authority} (PoA), serta varian lain seperti \textit{Delegated Proof-of-Stake} (DPoS) dan model hybrid berbasis \textit{Byzantine Fault Tolerance} (BFT) yang banyak diterapkan pada \textit{blockchain} privat dan konsorsium \cite{nguyen2019, lashkari2021, xu2023, yao2021}.
+
+Kondisi saat ini menunjukkan bahwa \textit{blockchain} telah berevolusi menjadi infrastruktur digital yang lebih luas, dengan tren riset yang mulai bersinggungan dengan bidang lain seperti kecerdasan buatan (AI), \textit{Internet of Things} (IoT), dan \textit{metaverse} \cite{huang2022, yadav2023}. Meski demikian, penelitian mengenai performa \textit{blockchain} tetap relevan, khususnya dalam pemilihan mekanisme konsensus yang sesuai dengan kebutuhan aplikasi spesifik. Hal ini menjadi sangat penting untuk konteks tertentu, misalnya pengelolaan data pendidikan tinggi melalui platform DChain, yang memerlukan evaluasi empiris dalam membandingkan PoA dan PoS \cite{lashkari2021, liu2024}.
+
+
+\subsection{Konsep Dasar Blockchain}
+
+\textit{Blockchain} merupakan bentuk teknologi buku besar terdistribusi (\textit{distributed ledger technology}) yang menyimpan data dalam blok-blok yang saling terhubung secara kronologis melalui fungsi hash kriptografi \cite{dong2023, judmayer2018}. Setiap blok memuat kumpulan transaksi yang telah diverifikasi, serta hash unik yang merujuk pada blok sebelumnya, sehingga membentuk rantai data. Sifat keterhubungan ini menjadikan \textit{blockchain} tahan manipulasi, karena perubahan pada satu blok akan memengaruhi seluruh rantai setelahnya. Data yang tersimpan dalam \textit{blockchain} bersifat \textit{immutable}, yakni tidak dapat diubah atau dihapus, sehingga menjamin kepercayaan dan keamanan informasi \cite{dong2023, tripathi2023, guo2022}.
+
+Transaksi dalam \textit{blockchain} merupakan unit data yang merepresentasikan perpindahan aset digital atau informasi lain yang tercatat dalam jaringan. Agar transaksi dapat ditambahkan ke dalam blok, diperlukan proses verifikasi melalui mekanisme konsensus seperti \textit{Proof of Work} (PoW), \textit{Proof of Stake} (PoS), dan \textit{Proof of Authority} (PoA). Konsensus ini berfungsi memastikan seluruh \textit{node} dalam jaringan memiliki salinan data yang sama dan valid tanpa harus mengandalkan pihak pusat \cite{judmayer2018, guo2022, monrat2019}.
+
+Karakteristik utama \textit{blockchain} meliputi: desentralisasi, di mana data didistribusikan ke banyak \textit{node} tanpa otoritas pusat \cite{dong2023, guo2022, monrat2019}; \textit{immutability}, yakni sifat permanen dari data yang sudah tercatat \cite{dong2023, tripathi2023, krichen2022}; transparansi dan auditabilitas, yang memungkinkan setiap transaksi dapat ditelusuri dan diverifikasi oleh seluruh peserta jaringan \cite{dong2023, guo2022, monrat2019}; serta keamanan, yang dicapai melalui algoritma kriptografi dan struktur hash \cite{dong2023, tripathi2023, kc2018}. 
+
+Dibandingkan dengan basis data konvensional, \textit{blockchain} menawarkan transparansi, auditabilitas, dan ketahanan yang lebih tinggi terhadap manipulasi. Namun, teknologi ini juga menghadapi tantangan seperti skalabilitas, biaya implementasi, serta isu privasi yang masih menjadi fokus riset \cite{dong2023, monrat2019, krichen2022, bhutta2021}. Dengan sifat-sifat tersebut, \textit{blockchain} dapat dianggap sebagai teknologi fundamental yang menghadirkan sistem pencatatan digital yang aman, transparan, dan tahan manipulasi, sekaligus relevan untuk berbagai aplikasi modern.
+
+
+\subsection{Perkembangan Riset Blockchain}
+
+Perkembangan penelitian mengenai \textit{blockchain} dapat dipetakan ke dalam tiga periode utama, yaitu 2008--2014, 2015--2020, dan 2021--2025. Setiap periode menunjukkan arah, aplikasi, dan tantangan yang berbeda, seiring dengan transformasi \textit{blockchain} dari teknologi berbasis \textit{cryptocurrency} menuju infrastruktur digital lintas sektor.
+
+Pada periode 2008--2014, penelitian \textit{blockchain} masih sangat terbatas pada pengembangan teknologi dasar dan penerapannya pada \textit{cryptocurrency}, terutama Bitcoin. Fokus riset pada tahap ini adalah keamanan transaksi, validasi berbasis \textit{proof-of-work} (PoW), serta aspek fundamental seperti desentralisasi dan integritas \textit{ledger} \cite{ylihuumo2016, zheng2018, yuan2018}. Aplikasi \textit{blockchain} pada masa ini hampir sepenuhnya berkaitan dengan sistem pembayaran digital, dengan tantangan utama berupa konsumsi energi tinggi dan keterbatasan skalabilitas.
+
+Memasuki periode 2015--2020, riset \textit{blockchain} mengalami ekspansi signifikan. Peluncuran Ethereum pada 2015 dengan konsep \textit{smart contract} membuka peluang aplikasi di luar sektor finansial. Fokus penelitian meluas ke bidang \textit{supply chain}, kesehatan, \textit{Internet of Things} (IoT), pemerintahan, dan pendidikan, serta mulai membahas integrasi \textit{blockchain} dengan teknologi lain seperti kecerdasan buatan (AI) dan \textit{big data} \cite{casino2019, monrat2019, bhutta2021, salah2019, deepa2022, dutta2020, wang2019}. Tren ini ditandai dengan lonjakan publikasi akademik dan semakin beragamnya topik riset, yang tidak lagi hanya berfokus pada keamanan transaksi tetapi juga pada isu privasi, interoperabilitas, dan skalabilitas \cite{dutta2020, wang2019}.
+
+Pada periode 2021--2025, riset \textit{blockchain} semakin diarahkan pada adopsi sektor publik dan pendidikan, termasuk aplikasi untuk identitas digital, sertifikat akademik, tata kelola data, dan pengembangan \textit{smart cities}. Selain itu, penelitian lebih menekankan pada integrasi lintas teknologi, seperti konvergensi \textit{blockchain} dengan AI, IoT, \textit{cloud computing}, dan \textit{big data}, untuk meningkatkan efisiensi serta keamanan sistem digital \cite{sunny2022, gad2022, abdelmaboud2022, bhushan2020}. Tantangan teknis yang paling banyak disorot pada fase ini meliputi skalabilitas (throughput, latency, konsumsi energi), interoperabilitas antar-\textit{blockchain}, privasi, serta regulasi \cite{rao2024, kolb2020, mohanta2019, habib2022}.
+
+Meskipun riset \textit{blockchain} terus berkembang, terdapat indikasi kelesuan riset \textit{mainstream} sejak 2022. Hal ini ditandai dengan penurunan tren publikasi di beberapa domain, seiring bergesernya perhatian akademik dan industri ke bidang lain seperti AI, IoT, dan \textit{metaverse} \cite{salah2019, cao2021}. Namun demikian, penelitian mengenai evaluasi performa \textit{blockchain} dan perbandingan mekanisme konsensus (khususnya PoS dan PoA) tetap aktif dan relevan, terutama dalam konteks aplikasi nasional dan tata kelola data publik \cite{li2023, lin2022, johar2021}.
+
+Adapun \textit{gap} penelitian masih terlihat jelas pada sektor publik dan pendidikan, yang relatif jarang diteliti dibanding sektor keuangan atau rantai pasok. Selain itu, studi empiris jangka panjang yang menguji implementasi \textit{blockchain} secara nyata masih sangat terbatas. Penelitian mengenai integrasi \textit{blockchain} dengan AI dan IoT juga masih didominasi studi konseptual, belum banyak yang mengevaluasi performa implementasi praktis \cite{sunny2022, lin2022, agrawal2022}. Oleh karena itu, riset \textit{blockchain} di bidang evaluasi performa konsensus, khususnya PoA dan PoS untuk skala nasional seperti DChain, masih sangat relevan dan memiliki urgensi tinggi untuk menjawab kebutuhan pengelolaan data publik dan pendidikan di masa depan.
+
+Untuk memperjelas arah perkembangan riset \textit{blockchain} dari waktu ke waktu, diperlukan pemetaan terhadap literatur yang menjadi rujukan utama dalam tiga periode berbeda, yaitu 2008--2014, 2015--2020, dan 2021--2025. Literatur-literatur tersebut menunjukkan pergeseran fokus riset, mulai dari kajian awal yang berorientasi pada \textit{cryptocurrency} dan mekanisme dasar PoW, menuju penelitian yang lebih luas mengenai aplikasi non-finansial, \textit{smart contract}, serta integrasi dengan teknologi lain seperti AI, IoT, dan \textit{big data}. Pada periode terkini, penelitian lebih menekankan pada adopsi \textit{blockchain} di sektor publik dan pendidikan, serta isu skalabilitas, interoperabilitas, privasi, dan regulasi.
+
+Namun, pemetaan literatur ini juga menegaskan masih adanya sejumlah keterbatasan penelitian. Beberapa \textit{gap} yang menonjol antara lain minimnya studi empiris jangka panjang, terbatasnya riset pada sektor publik dan pendidikan, serta masih sedikitnya evaluasi performa nyata untuk implementasi berskala nasional. Dengan demikian, penelitian ini menempatkan diri sebagai upaya untuk mengisi kekosongan tersebut, khususnya melalui kajian perbandingan mekanisme konsensus PoA dan PoS pada platform \textit{blockchain} nasional DChain. Ringkasan literatur yang relevan dengan arah, aplikasi, dan \textit{gap} riset \textit{blockchain} disajikan pada Tabel~\ref{tab:blockchain_litrev}.
+
+\begin{table}[ht]
+\centering
+\caption{Ringkasan Literatur Perkembangan Riset Blockchain}
+\label{tab:blockchain_litrev}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|c|p{5cm}|p{6cm}|}
+\hline
+\textbf{Literatur} & \textbf{Periode} & \textbf{Fokus Riset Utama} & \textbf{Gap Penelitian yang Teridentifikasi} \\ \hline
+Yli-Huumo et al. (2016) \cite{ylihuumo2016} & 2008--2014 & Sistem dasar blockchain, Bitcoin, keamanan transaksi berbasis PoW & Aplikasi non-finansial masih minim; skalabilitas belum dikaji secara mendalam \\ \hline
+Zheng et al. (2018) \cite{zheng2018} & 2008--2014 & Tantangan dan peluang awal blockchain & Kurangnya studi implementasi nyata di luar kripto \\ \hline
+Yuan \& Wang (2018) \cite{yuan2018} & 2008--2014 & Model teknis blockchain dan cryptocurrency & Fokus terbatas pada PoW, belum ada kajian alternatif konsensus \\ \hline
+Casino et al. (2019) \cite{casino2019} & 2015--2020 & Aplikasi blockchain di supply chain, kesehatan, IoT, smart contracts & Kurang evaluasi performa praktis, interoperabilitas terbatas \\ \hline
+Monrat et al. (2019) \cite{monrat2019} & 2015--2020 & Survei aplikasi dan tantangan blockchain lintas sektor & Isu privasi, regulasi, dan adopsi lintas industri belum terpecahkan \\ \hline
+Salah et al. (2019) \cite{salah2019} & 2015--2020 & Integrasi blockchain dengan AI & Integrasi masih sebatas konsep, evaluasi performa belum ada \\ \hline
+Deepa et al. (2022) \cite{deepa2022} & 2015--2020 & Blockchain untuk big data & Skalabilitas dan efisiensi pengolahan data besar masih menjadi tantangan \\ \hline
+Dutta et al. (2020) \cite{dutta2020} & 2015--2020 & Aplikasi supply chain dan logistik & Minim studi empiris jangka panjang; adopsi praktis rendah \\ \hline
+Sunny et al. (2022) \cite{sunny2022} & 2021--2025 & Aplikasi di sektor publik, pendidikan, smart cities & Riset empiris pada sektor publik masih terbatas \\ \hline
+Gad et al. (2022) \cite{gad2022} & 2021--2025 & Tren baru blockchain, DeFi, NFT & Regulasi dan interoperabilitas belum stabil \\ \hline
+Abdelmaboud et al. (2022) \cite{abdelmaboud2022} & 2021--2025 & Blockchain untuk IoT dan cloud & Tantangan privasi dan keamanan data IoT \\ \hline
+Rao et al. (2024) \cite{rao2024} & 2021--2025 & Skalabilitas blockchain, solusi layer-2 dan sharding & Efektivitas solusi masih perlu diuji dalam implementasi nyata \\ \hline
+Li et al. (2023) \cite{li2023} & 2015--2021 & Analisis bibliometrik dan tren riset blockchain & Minim kajian empiris; fokus lebih pada literatur daripada praktik \\ \hline
+Lin et al. (2022) \cite{lin2022} & 2021--2025 & Aplikasi berbasis smart contract & Studi terbatas pada prototipe, evaluasi sistem nasional minim \\ \hline
+Johar et al. (2021) \cite{johar2021} & 2015--2021 & Perspektif riset dan aplikasi blockchain & Gap besar pada sektor publik dan pendidikan \\ \hline
+Agrawal et al. (2022) \cite{agrawal2022} & 2021--2025 & Survei aplikasi blockchain modern & Masih kurang fokus pada integrasi teknologi lintas domain (AI/IoT) \\ \hline
+\end{tabular}}
+\end{table}
+
+\subsection{Kelebihan dan Keterbatasan Blockchain}
+
+Sebagai salah satu teknologi disruptif, \textit{blockchain} diakui memiliki sejumlah keunggulan fundamental sekaligus menghadapi berbagai keterbatasan yang menjadi tantangan riset maupun implementasi. Dari sisi kelebihan, \textit{blockchain} menawarkan desentralisasi dan transparansi dengan mendistribusikan data ke seluruh \textit{node} dalam jaringan, sehingga mengurangi ketergantungan pada pihak ketiga serta meningkatkan auditabilitas transaksi \cite{ahmed2025, akhtar2025, mayani2025, monrat2019, guo2022, walia2025}. Selain itu, sifat \textit{immutability} menjadikan data yang sudah tercatat tidak dapat diubah atau dihapus, sehingga memperkuat keamanan dan meningkatkan kepercayaan antar pengguna \cite{ahmed2025, akhtar2025, monrat2019, guo2022, paul2024, dong2023, hardas2024}. Keunggulan lain terletak pada efisiensi dan otomatisasi melalui penerapan \textit{smart contract}, yang memungkinkan eksekusi transaksi secara otomatis, mengurangi potensi kesalahan manusia, serta menekan biaya operasional \cite{ahmed2025, akhtar2025, paul2024, hardas2024}.
+
+Namun, di balik keunggulannya, \textit{blockchain} juga menghadapi sejumlah keterbatasan signifikan. Salah satu isu utama adalah skalabilitas, karena keterbatasan \textit{throughput} dan \textit{latency} membatasi jumlah transaksi yang dapat diproses per detik \cite{ahmed2025, akhtar2025, monrat2019, guo2022, bernabe2019, deepak2024}. Selain itu, mekanisme konsensus berbasis \textit{Proof of Work} (PoW) dikenal memiliki konsumsi energi yang tinggi, sehingga menimbulkan masalah efisiensi dan keberlanjutan \cite{akhtar2025, guo2022, walia2025, paul2024, khan2024}. Biaya transaksi yang tidak stabil, terutama pada saat jaringan padat, juga menjadi hambatan dalam adopsi luas \cite{monrat2019, paul2024, bernabe2019}. Tantangan lain mencakup interoperabilitas antar \textit{blockchain} yang masih terbatas \cite{ahmed2025, monrat2019, paul2024, alhat2024}, ketidakpastian regulasi di berbagai yurisdiksi \cite{akhtar2025, monrat2019, paul2024, bernabe2019, kakashvili2024}, serta isu privasi data akibat sifat transparansi \textit{ledger} publik \cite{monrat2019, guo2022, paul2024, vallejo2024}.
+
+Untuk menjawab keterbatasan tersebut, riset terkini mengusulkan beberapa solusi. Optimalisasi konsensus melalui mekanisme baru seperti \textit{Proof of Stake} (PoS), \textit{sharding}, dan \textit{layer-2 solutions} dikembangkan untuk meningkatkan skalabilitas sekaligus mengurangi konsumsi energi \cite{akhtar2025, guo2022, alhat2024}. Di sisi lain, teknologi privasi seperti \textit{zero-knowledge proofs}, enkripsi lanjutan, serta konsep \textit{self-sovereign identity} diperkenalkan untuk menjaga kerahasiaan data \cite{guo2022, paul2024, vallejo2024}. Selain itu, kolaborasi lintas industri dan pemerintah diperlukan untuk menciptakan kerangka regulasi dan standarisasi yang jelas, sehingga mendorong adopsi \textit{blockchain} dalam skala yang lebih luas \cite{ahmed2025, akhtar2025, monrat2019, paul2024, bernabe2019, kakashvili2024}.
+
+Dengan demikian, \textit{blockchain} dapat dipandang sebagai teknologi dengan potensi besar dalam mendukung sistem digital yang aman, transparan, dan efisien, namun keberhasilan adopsinya sangat bergantung pada kemampuan mengatasi tantangan skalabilitas, energi, biaya, interoperabilitas, regulasi, dan privasi data.
+
+
+\subsection{Jenis-Jenis Blockchain}
+
+\textit{Blockchain} dapat dikategorikan menjadi empat jenis utama, yaitu publik, privat, konsorsium, dan hibrida. Perbedaan di antara keempat jenis ini terletak pada partisipasi, mekanisme kontrol, serta tingkat transparansi, yang pada akhirnya menentukan keunggulan, keterbatasan, dan kesesuaian penggunaan di berbagai sektor.
+
+\textit{Blockchain} publik merupakan jenis yang paling terbuka, memungkinkan siapa pun untuk berpartisipasi tanpa memerlukan izin. Desentralisasi penuh menjadi ciri khasnya, dengan tingkat transparansi yang tinggi sehingga cocok digunakan dalam aplikasi yang membutuhkan kepercayaan publik, seperti \textit{cryptocurrency} dan \textit{e-voting}. Namun, \textit{blockchain} publik sering kali menghadapi keterbatasan dalam hal efisiensi dan skalabilitas, karena \textit{throughput} rendah dan konsumsi energi tinggi \cite{dong2023, habib2022, pakseresht2024}.
+
+Sebaliknya, \textit{blockchain} privat hanya dapat diakses oleh pihak-pihak yang memiliki otorisasi. Jenis ini banyak digunakan dalam lingkungan perusahaan untuk aplikasi internal, seperti manajemen data atau sistem keuangan internal. Keunggulannya terletak pada efisiensi, kecepatan, dan skalabilitas yang lebih baik, meskipun harus dikompensasi dengan rendahnya tingkat desentralisasi dan transparansi \cite{dong2023, habib2022, pakseresht2024}.
+
+\textit{Blockchain} konsorsium berada di antara publik dan privat, di mana jaringan dikelola oleh sekelompok organisasi yang tergabung dalam konsorsium. Model ini menekankan kolaborasi dan efisiensi, serta sering digunakan dalam sektor rantai pasok, perbankan, dan keuangan lintas institusi. Transparansi \textit{blockchain} konsorsium lebih tinggi dibanding privat, namun tetap lebih terbatas dibanding \textit{blockchain} publik \cite{dong2023, sedlmeir2022}.
+
+Adapun \textit{blockchain} hibrida menggabungkan elemen publik dan privat untuk menyeimbangkan kebutuhan transparansi dan kontrol. \textit{Blockchain} hibrida menawarkan fleksibilitas tinggi dan memungkinkan penyesuaian sesuai kebutuhan aplikasi. Namun, kompleksitas implementasi menjadi salah satu tantangan utama jenis ini. \textit{Blockchain} hibrida banyak diterapkan pada sektor yang membutuhkan kombinasi keterbukaan dan kerahasiaan, seperti pendidikan, logistik, dan layanan publik-privat \cite{sedlmeir2022}.
+
+Dari perspektif transparansi, \textit{blockchain} publik menawarkan keterbukaan penuh, namun hal ini justru menimbulkan tantangan di sektor yang membutuhkan privasi tinggi, seperti kesehatan atau pemerintahan. Sebaliknya, \textit{blockchain} privat dan konsorsium menyediakan solusi dengan kontrol akses yang lebih ketat, didukung oleh teknologi kriptografi untuk menjaga kerahasiaan data \cite{habib2022, sedlmeir2022, pakseresht2024}. Dengan demikian, pemilihan jenis \textit{blockchain} harus disesuaikan dengan konteks aplikasi, kebutuhan tingkat kepercayaan, serta keseimbangan antara transparansi dan privasi yang diinginkan.
+
+\begin{table}[ht]
+\centering
+\caption{Perbandingan Jenis-Jenis Blockchain}
+\label{tab:jenis_blockchain}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|p{3.2cm}|p{3.2cm}|p{3.2cm}|p{3.2cm}|}
+\hline
+\textbf{Aspek} & \textbf{Publik} & \textbf{Privat} & \textbf{Konsorsium} & \textbf{Hibrida} \\ \hline
+Partisipasi & Terbuka untuk semua pengguna & Terbatas pada pihak berizin & Dibatasi pada anggota konsorsium & Kombinasi publik dan privat \\ \hline
+Kontrol Akses & Tanpa izin (\textit{permissionless}) & Berizin (\textit{permissioned}) & Semi-terbuka & Fleksibel tergantung desain \\ \hline
+Desentralisasi & Sangat tinggi & Rendah & Sedang & Sedang–tinggi \\ \hline
+Transparansi & Penuh, semua data dapat diakses publik & Terbatas untuk pihak internal & Terbatas untuk anggota & Dapat diatur sebagian publik/sebagian privat \\ \hline
+Efisiensi & Rendah (lambat dan boros energi) & Tinggi & Tinggi & Sedang–tinggi \\ \hline
+Contoh Aplikasi & Bitcoin, Ethereum, e-voting & Manajemen data perusahaan, keuangan internal & Rantai pasok, perbankan, keuangan antar lembaga & Pendidikan, logistik, layanan publik-privat \\ \hline
+\end{tabular}}
+\end{table}
+
+
+\subsection{DChain (Dikti Chain)}
+
+\textit{DChain} (\textit{Dikti Chain}) merupakan jaringan \textit{blockchain} nasional berbasis \textit{Ethereum} yang dikembangkan oleh tim peneliti lintas universitas di Indonesia dan berada di bawah koordinasi Direktorat Jenderal Pendidikan Tinggi, Riset, dan Teknologi (Ditjen Diktiristek). Inisiatif ini dirancang untuk menghadirkan infrastruktur digital terdesentralisasi yang mendukung transformasi digital pendidikan tinggi di Indonesia, khususnya dalam hal penerbitan, penyimpanan, dan verifikasi dokumen akademik.
+
+\subsubsection{Tujuan dan Fungsi}
+
+Tujuan utama pembangunan \textit{DChain} adalah untuk menyediakan platform nasional yang dapat digunakan dalam penerbitan dan verifikasi ijazah digital, sertifikat akademik, dan data pendidikan tinggi lainnya. Selain itu, \textit{DChain} berperan dalam mendukung interoperabilitas data antar institusi pendidikan secara aman, transparan, dan terdistribusi. Platform ini juga berfungsi sebagai laboratorium riset dan inovasi teknologi \textit{blockchain} di kalangan mahasiswa, dosen, dan peneliti.
+
+Selain tujuan utama, \textit{DChain} juga memiliki sasaran tambahan, antara lain:
+
+\begin{enumerate}[nolistsep]
+    \item Bagi institusi pendidikan tinggi: menyediakan sarana penerbitan, validasi, dan distribusi sertifikat digital, termasuk sertifikat dari lembaga internasional.
+    \item Bagi mahasiswa: memberikan kemudahan penyimpanan dan pembagian sertifikat melalui dompet digital yang aman dan berlaku seumur hidup.
+    \item Bagi dunia industri: memfasilitasi proses verifikasi karyawan, pembaruan data, kepatuhan terhadap standar, serta integrasi dengan sistem pendidikan.
+\end{enumerate}
+
+\subsubsection{Manfaat Bagi Pemangku Kepentingan}
+
+Implementasi \textit{DChain} memberikan sejumlah manfaat praktis sebagai berikut:
+\begin{itemize}[nolistsep]
+    \item Mahasiswa memperoleh keamanan data, kepemilikan kredensial permanen, akses global, serta proses verifikasi yang cepat dan transparan.
+    \item Institusi pendidikan memperoleh efisiensi administrasi, peningkatan reputasi akademik, serta dukungan untuk inovasi layanan berbasis \textit{blockchain}.
+    \item Mitra industri memperoleh kemudahan dalam proses rekrutmen dan validasi sertifikat, sekaligus jaminan integritas data.
+\end{itemize}
+
+\subsubsection{Fitur Utama}
+
+\textit{DChain} dilengkapi dengan sejumlah fitur utama untuk mendukung operasional pendidikan tinggi, di antaranya:
+\begin{itemize}[nolistsep]
+    \item Transkrip elektronik yang aman, tahan bencana, dan mudah diverifikasi.
+    \item \textit{Microcredential} untuk menjamin keaslian sertifikat kompetensi.
+    \item Manajemen identitas berbasis \textit{blockchain}.
+    \item Penyimpanan awan dengan biaya relatif rendah.
+    \item Kepatuhan terhadap regulasi perlindungan data.
+    \item Skalabilitas tinggi untuk partisipasi banyak institusi.
+    \item Kemudahan penggunaan melalui antarmuka yang ramah pengguna.
+\end{itemize}
+
+\subsubsection{Teknologi yang Digunakan}
+
+\textit{DChain} dibangun di atas \textit{Ethereum-compatible blockchain} dengan dukungan \textit{smart contract} berbasis \textit{Ethereum Virtual Machine} (EVM). Pada tahap awal, \textit{DChain} menggunakan mekanisme konsensus \textit{Proof of Authority} (PoA) dengan implementasi \textit{Go Ethereum} (Geth v1.13.2 dan v1.13.10) serta \textit{Clef v1.13.2} untuk pengelolaan akun dan penandatanganan transaksi. Dalam perkembangannya, \textit{DChain} dirancang untuk mendukung migrasi ke \textit{Proof of Stake} (PoS) dengan memanfaatkan klien \textit{Go Ethereum} dan \textit{Prysm}.
+
+Pemantauan jaringan dapat diakses melalui \url{https://monitoring.dchain.id}. Data terakhir menunjukkan bahwa \textit{DChain} masih aktif dengan 12 \textit{node validator} yang tersebar di berbagai universitas. \textit{Chain ID 17845} dipilih sebagai simbol dari tanggal kemerdekaan Indonesia (17/08/1945). Walaupun aktivitas transaksi relatif rendah, sistem tetap berfungsi dengan rata-rata waktu blok sekitar 13 jam.
+
+Repositori publik \textit{DChain} tersedia melalui:
+\begin{itemize}[nolistsep]
+    \item \url{https://github.com/Dikti-Blockchain-and-Metaverse/dchain-clef-public}
+    \item \url{https://github.com/Dikti-Blockchain-and-Metaverse/dchain-mainnet-public}
+    \item \url{https://github.com/Dikti-Blockchain-and-Metaverse/dchain-mainnet-non-authority-public}
+\end{itemize}
+
+\subsubsection{Perjalanan Pengembangan DChain}
+
+Perjalanan pengembangan \textit{DChain} dapat diringkas sebagai berikut:
+\begin{enumerate}[nolistsep]
+    \item Tahap awal (PoA): implementasi dengan \textit{Go Ethereum} menggunakan konsensus PoA di bawah administrasi Ditjen Diktiristek.
+    \item Migrasi ke PoS: dilakukan untuk meningkatkan desentralisasi dan skalabilitas, mengikuti arah pengembangan jaringan \textit{Ethereum}.
+    \item Rencana migrasi ulang: upaya migrasi penuh ke PoS sempat tertunda pada akhir 2024 karena keterbatasan pendanaan dari APBN.
+\end{enumerate}
+
+\subsubsection{Jaringan Validator}
+
+Validator \textit{DChain} berasal dari berbagai perguruan tinggi di Indonesia, di antaranya: Universitas Gadjah Mada, Institut Teknologi Bandung, Universitas Indonesia, Universitas Brawijaya, Universitas Negeri Medan, Universitas Udayana, Universitas Gunadarma, Universitas Terbuka, Institut Teknologi Sepuluh Nopember, Universitas Muhammadiyah Surakarta, Universitas Sriwijaya, Universitas Lampung, Universitas Diponegoro, Universitas Sebelas Maret (UNS), dan Universitas Hasanuddin.
+
+\subsubsection{Topologi Jaringan DChain}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/topology-dchain.png}
+    \caption{Perbandingan topologi jaringan DChain pada mekanisme konsensus PoA dan PoS.}
+    \label{fig:dchain_topologi}
 \end{figure}
 
+Gambar~\ref{fig:dchain_topologi} menggambarkan perbedaan topologi jaringan \textit{DChain} pada mekanisme konsensus \textit{Proof of Authority} (PoA) dan rencana migrasi ke \textit{Proof of Stake} (PoS). Pada arsitektur PoA, hanya sejumlah \textit{node} otoritatif yang memiliki kewenangan untuk memvalidasi transaksi dan menghasilkan blok baru, sementara \textit{node} lain berfungsi sebagai \textit{full node} untuk sinkronisasi data. Pola ini memberikan efisiensi dengan latensi rendah, tetapi tingkat desentralisasi terbatas karena proses validasi terpusat.
+
+Sebaliknya, pada arsitektur PoS, setiap \textit{node} yang memiliki \textit{stake} dapat berpartisipasi sebagai validator, sehingga struktur jaringan menjadi lebih terdesentralisasi dan bersifat \textit{peer-to-peer}. Dengan mekanisme ini, proses validasi tidak lagi bergantung pada sejumlah \textit{node} tertentu, melainkan didistribusikan berdasarkan jumlah \textit{stake} yang dimiliki. Hal ini meningkatkan skalabilitas dan keamanan jaringan, meskipun berpotensi menambah latensi pada beban transaksi rendah.
+
+\subsection{Proof of Authority (PoA)}
+
+\textit{Proof of Authority} (PoA) merupakan salah satu mekanisme konsensus \textit{blockchain} yang menggunakan validator terbatas dan otoritatif untuk memverifikasi transaksi serta membentuk blok baru. Tidak seperti \textit{Proof of Work} (PoW) yang mengandalkan daya komputasi atau \textit{Proof of Stake} (PoS) yang didasarkan pada jumlah aset, PoA menitikberatkan pada identitas dan reputasi validator yang telah ditunjuk. Model ini menjadikan PoA sangat sesuai untuk \textit{blockchain} privat maupun konsorsium, termasuk aplikasi di sektor pendidikan seperti \textit{DChain}.
+
+Dari sisi kelebihan, PoA memiliki beberapa keunggulan penting. Pertama, efisiensi transaksi yang tinggi karena mampu memproses ribuan transaksi per detik dengan latensi rendah, melampaui kinerja PoW maupun PoS \cite{reshi2025, joshi2021, chikezie2021}. Kedua, konsumsi energi rendah, sebab PoA tidak memerlukan daya komputasi besar untuk melakukan validasi blok, sehingga efisien bagi aplikasi dengan keterbatasan sumber daya \cite{reshi2025, joshi2021, sytnyk2024}. Ketiga, finalitas blok cepat, di mana transaksi segera dianggap sah karena validator telah diotorisasi sejak awal \cite{joshi2021, chikezie2021}.
+
+Namun demikian, PoA juga memiliki sejumlah keterbatasan. Desentralisasi rendah menjadi kritik utama karena jumlah validator yang terbatas dapat menimbulkan risiko sentralisasi kekuasaan \cite{joshi2021, qiu2022}. Selain itu, terdapat potensi kolusi dan serangan internal jika validator bersepakat untuk bertindak jahat, sehingga integritas jaringan dapat terancam \cite{joshi2021, qiu2022}. PoA juga sangat bergantung pada reputasi dan kredibilitas validator, sehingga proses seleksi, pemantauan, dan rotasi validator menjadi aspek strategis yang menentukan keberlanjutan jaringan \cite{joshi2021, qiu2022}.
+
+\begin{table}[ht]
+\centering
+\caption{Perbandingan Mekanisme Konsensus PoA, PoW, dan PoS}
+\label{tab:perbandingan_konsensus}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{1.5cm}|}
+\hline
+\textbf{Aspek} & \textbf{Proof of Authority (PoA)} & \textbf{Proof of Work (PoW)} & \textbf{Proof of Stake (PoS)} & \textbf{Sumber} \\ \hline
+Validator & Terbatas, berbasis otoritas/reputasi & Penambang dengan daya komputasi tinggi & Pemegang token yang dipilih berdasarkan jumlah kepemilikan & \cite{reshi2025, joshi2021, qiu2022} \\ \hline
+Desentralisasi & Rendah – validator terbatas & Tinggi – siapa pun bisa menambang & Tinggi – siapa pun bisa berpartisipasi jika memiliki token & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
+Efisiensi Energi & Sangat tinggi – tidak membutuhkan daya komputasi besar & Sangat rendah – boros energi karena mining & Sedang – lebih hemat energi dibanding PoW & \cite{reshi2025, joshi2021, sytnyk2024} \\ \hline
+Kecepatan Transaksi & Sangat tinggi (latensi rendah, throughput tinggi) & Rendah – konfirmasi transaksi lambat & Sedang–tinggi – lebih cepat dari PoW, lebih lambat dari PoA & \cite{joshi2021, chikezie2021} \\ \hline
+Finalitas Blok & Instan – blok langsung sah karena validator sudah diotorisasi & Probabilistik – membutuhkan beberapa konfirmasi blok & Relatif cepat – finalitas tercapai setelah validator menyetujui & \cite{joshi2021, chikezie2021, sytnyk2024} \\ \hline
+Keamanan & Bergantung pada reputasi validator; rawan kolusi & Sangat tinggi, sulit diserang namun rentan 51\% attack & Tinggi, namun berisiko sentralisasi jika token terkonsentrasi & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
+Risiko Sentralisasi & Tinggi – validator sedikit dan terpusat & Rendah – kompetisi terbuka & Sedang – bergantung pada distribusi token & \cite{joshi2021, qiu2022} \\ \hline
+Kelebihan Utama & Efisiensi, kecepatan, konsumsi energi rendah, finalitas cepat & Keamanan tinggi, desentralisasi penuh, transparan & Hemat energi, mendukung skalabilitas, lebih adil & \cite{reshi2025, joshi2021, chikezie2021, sytnyk2024, qiu2022} \\ \hline
+Keterbatasan Utama & Desentralisasi rendah, rawan kolusi, bergantung reputasi validator & Boros energi, lambat, biaya tinggi & Risiko sentralisasi aset, kompleksitas mekanisme & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
+Cocok untuk & Blockchain privat, konsorsium, pendidikan, IoT & Blockchain publik, cryptocurrency (Bitcoin, Ethereum v1) & Blockchain publik modern, DeFi, NFT, platform berskala besar & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:perbandingan_konsensus} menunjukkan bahwa dibandingkan PoW dan PoS, PoA unggul dalam efisiensi energi dan kecepatan transaksi, namun lemah dalam desentralisasi dan berpotensi menghadapi risiko sentralisasi.
+
+Dalam konteks \textit{DChain}, mekanisme PoA digunakan dengan validator yang berasal dari universitas dan institusi pendidikan tinggi di Indonesia. Model ini mendukung efisiensi penerbitan serta verifikasi dokumen akademik seperti ijazah digital dengan kecepatan tinggi \cite{joshi2021, chikezie2021}. Meskipun demikian, meningkatnya jumlah pengguna \textit{DChain} menuntut adanya mekanisme pengawasan reputasi serta sistem rotasi validator untuk menjaga keamanan, transparansi, dan kepercayaan publik terhadap jaringan \cite{joshi2021, qiu2022}.
+
+Dengan demikian, PoA terbukti efektif untuk \textit{blockchain} privat seperti \textit{DChain} karena efisiensi dan kecepatan yang ditawarkan, namun tetap membutuhkan perhatian terhadap aspek desentralisasi dan keamanan jangka panjang.
 
 
-\textit{Game design document} adalah sebuah bagian penting dalam pembuatan game baik itu elemen-elemen penyusunnya maupun proses pengembangannya. Game design yang telah dibuat, dijabarkan satu persatu mengenai tahapan dalam pembuatan game dan hasilnya disatukan dalam bentuk dokumentasi \textit{game design document} yang digunakan oleh \textit{developer} sebagai buku petunjuk bagaimana membuat \textit{game} \cite{lukito2016}.
+\subsection{Proof of Stake (PoS)}
 
-Dalam buku \textit{Game Design Essentials} disebutkan \textit{game design document} merupakan metode yang menghubungkan elemen-elemen penyusun \textit{game}, baik itu \textit{art, sound, program, 
-gameplay} sehingga semuanya terdokumentasi menjadi satu dan menjadi acuan bagi para \textit{developer} dalam membuat \textit{game} \cite{wibirama2013dual}. 
+\textit{Proof of Stake} (PoS) merupakan mekanisme konsensus \textit{blockchain} yang memilih validator berdasarkan jumlah aset atau \textit{stake} yang dimiliki dan dikunci dalam jaringan. Mekanisme ini hadir sebagai alternatif dari \textit{Proof of Work} (PoW) yang dikenal boros energi, dengan tujuan menghadirkan model validasi yang lebih efisien, hemat energi, dan berpotensi lebih desentralisasi \cite{zhang2025, li2023, feng2023}.
 
-\subsection{Dasar Teori Lainnya}
+Salah satu keunggulan utama PoS adalah efisiensi energi yang jauh lebih baik dibandingkan PoW, karena tidak memerlukan proses \textit{mining} berbasis komputasi intensif. Hal ini menjadikan PoS lebih ramah lingkungan dan berkelanjutan \cite{zhang2025, li2023, wendl2022, mandal2023}. Selain itu, PoS dinilai mampu meningkatkan skalabilitas karena memungkinkan \textit{throughput} transaksi lebih tinggi dan latensi yang lebih rendah pada beban tinggi \cite{zhang2025, ge2022, li2020}. Dari sisi tata kelola jaringan, PoS juga berpotensi menghadirkan desentralisasi yang lebih luas jika didukung oleh desain insentif yang tepat, sehingga partisipasi validator dapat lebih inklusif \cite{li2023, nguyen2019}. Dari segi keamanan, biaya untuk melakukan serangan seperti \textit{51\% attack} menjadi sangat tinggi karena penyerang harus menguasai sebagian besar token yang beredar, sehingga PoS dipandang lebih aman dalam jangka panjang \cite{john2025, li2020}.
+
+Namun, PoS tidak terlepas dari keterbatasan. Distribusi token yang tidak merata dapat menimbulkan risiko sentralisasi, karena pemegang token besar memiliki peluang lebih besar untuk menjadi validator dan memperoleh \textit{reward} \cite{zhao2023, li2023, nguyen2019}. PoS juga rentan terhadap serangan khas seperti \textit{nothing-at-stake} dan \textit{long-range attacks}, di mana validator dapat memvalidasi lebih dari satu cabang blok tanpa biaya tambahan \cite{deirmentzoglou2019, li2020, feng2023}. Dari sisi implementasi, keadilan distribusi \textit{reward} dan mekanisme insentif bagi validator kecil menjadi isu penting yang masih diperdebatkan \cite{li2023, nguyen2019}. Selain itu, migrasi dari konsensus lain ke PoS, misalnya dari PoA ke PoS, menuntut kompleksitas teknis yang tinggi serta penyesuaian parameter jaringan agar tetap stabil dan aman \cite{zhang2025, ge2022}.
+
+Dalam konteks \textit{DChain}, rencana migrasi dari PoA ke PoS didorong oleh kebutuhan untuk meningkatkan desentralisasi, skalabilitas, dan keamanan jangka panjang. Meski demikian, migrasi ini juga membawa tantangan baru, antara lain pengaturan distribusi token, tata kelola insentif, serta potensi \textit{trade-off} antara efisiensi dan stabilitas. Oleh karena itu, pengujian komparatif performa PoA dan PoS menjadi langkah penting untuk menilai kelayakan PoS sebagai fondasi konsensus jangka panjang bagi \textit{DChain}.
+
+
+\subsection{Benchmarking pada Blockchain}
+
+\textit{Benchmarking} dalam konteks \textit{blockchain} merupakan proses sistematis untuk mengukur dan mengevaluasi kinerja jaringan terdistribusi melalui skenario eksperimen yang terkontrol. Tujuan utamanya adalah untuk menilai performa sistem, mengidentifikasi \textit{bottleneck}, serta membandingkan efektivitas mekanisme konsensus atau konfigurasi jaringan tertentu \cite{fan2020, dinh2017, thakkar2018}. Literatur umumnya membedakan dua pendekatan utama, yaitu \textit{micro-benchmarking}, yang berfokus pada metrik teknis spesifik seperti \textit{Transactions Per Second} (TPS), latensi, \textit{throughput}, dan penggunaan sumber daya; serta \textit{macro-benchmarking}, yang mengevaluasi kinerja keseluruhan sistem termasuk aspek skalabilitas, stabilitas, dan \textit{fault tolerance} \cite{dinh2017, nasrulin2022, gramoli2023}.
+
+\subsubsection{Framework Benchmarking Blockchain}
+
+Berbagai \textit{framework benchmarking} telah dikembangkan untuk mendukung penelitian dan pengujian performa \textit{blockchain}. \textit{Blockbench} merupakan salah satu framework awal yang digunakan untuk mengevaluasi \textit{private blockchain} melalui metrik \textit{throughput}, latensi, dan \textit{fault tolerance} \cite{dinh2017}. Framework lain seperti \textit{Hyperledger Caliper}, \textit{DLPS}, \textit{Gromit}, dan \textit{Diablo} memperluas cakupan pengujian dengan pendekatan modular dan ekstensibel, memungkinkan analisis lintas platform dan sistem konsensus \cite{fan2020, gramoli2023, sedlmeir2021}. 
+
+Penggunaan \textit{workload generator} seperti \textit{Caliper}, serta \textit{monitoring tools} seperti \textit{Prometheus} dan \textit{Grafana}, kini menjadi praktik standar dalam eksperimen. Alat-alat ini berfungsi untuk menghasilkan beban transaksi terukur sekaligus merekam konsumsi sumber daya sistem (CPU, memori, dan I/O) secara real-time \cite{thakkar2018, nasrulin2022, ren2023}. Dengan kombinasi tersebut, pengujian dapat dilakukan secara terukur dan dapat direplikasi dalam berbagai konfigurasi jaringan.
+
+\subsubsection{Tantangan dalam Benchmarking Blockchain}
+
+Meskipun telah banyak kemajuan, benchmarking \textit{blockchain} tetap menghadapi sejumlah tantangan metodologis. Perbedaan konfigurasi eksperimen, heterogenitas platform \textit{blockchain}, serta ketiadaan metodologi standar sering kali menyulitkan replikasi hasil penelitian dan membatasi validitas perbandingan antar studi \cite{dinh2017, gramoli2023}. Selain itu, terdapat kesulitan dalam menyeimbangkan realisme \textit{workload} dengan kontrol eksperimen, yang dapat memengaruhi reliabilitas hasil \cite{thakkar2018, ren2023}.
+
+\subsubsection{Praktik Terbaik dalam Benchmarking Blockchain}
+
+Untuk mengatasi keterbatasan tersebut, penelitian terkini merekomendasikan sejumlah praktik terbaik, antara lain:
+\begin{enumerate}[nolistsep]
+    \item Penggunaan \textit{testbed} terbuka berbasis containerisasi seperti \textit{Docker} atau \textit{Kubernetes} untuk menjamin replikasi eksperimen.
+    \item Standarisasi parameter uji, seperti TPS target, jumlah \textit{node}, waktu blok, dan jumlah \textit{worker}.
+    \item Dokumentasi konfigurasi eksperimen secara transparan untuk meningkatkan validitas hasil.
+    \item Replikasi eksperimen dengan variasi beban untuk menguji stabilitas dan \textit{fault tolerance}.
+\end{enumerate}
+
+Dengan penerapan prinsip-prinsip tersebut, benchmarking tidak hanya berfungsi sebagai alat evaluasi performa teknis, tetapi juga menjadi instrumen strategis dalam merancang, mengoptimalkan, dan memvalidasi efektivitas mekanisme konsensus \textit{blockchain} dalam aplikasi dunia nyata.
+
+
+\subsection{Faktor yang Mempengaruhi Performa Blockchain}
+
+Performa \textit{blockchain} sangat dipengaruhi oleh konfigurasi teknis dan lingkungan operasional jaringan. Faktor-faktor seperti jumlah \textit{node} validator, waktu blok, ukuran blok, beban transaksi, konfigurasi \textit{workload generator}, jenis transaksi, serta spesifikasi infrastruktur terbukti memiliki dampak signifikan terhadap metrik utama, yaitu \textit{throughput}, latensi, konsumsi sumber daya, dan stabilitas jaringan \cite{kaur2021, hao2018, shahsavari2022, xu2021, gobel2017}.
+
+Jumlah \textit{node} validator berkorelasi dengan tingkat desentralisasi dan keamanan, tetapi sekaligus menambah \textit{overhead} komunikasi yang dapat menurunkan \textit{throughput} ketika jumlah validator meningkat \cite{kaur2021, hao2018}. Waktu blok (\textit{block time}) berperan penting dalam menentukan latensi transaksi. Interval yang lebih pendek memangkas waktu konfirmasi, namun dapat meningkatkan risiko instabilitas jaringan \cite{shahsavari2022, xu2021}. Ukuran blok (\textit{block size}) memungkinkan pemrosesan transaksi dalam jumlah lebih besar per blok, tetapi dapat memicu keterlambatan propagasi data dan meningkatkan frekuensi \textit{fork} \cite{shahsavari2022, gobel2017}.
+
+Selain itu, beban transaksi (\textit{transaction load}) serta jumlah \textit{worker} dalam \textit{workload generator} seperti \textit{Hyperledger Caliper} sangat menentukan hasil \textit{benchmarking}. \textit{Throughput} umumnya meningkat seiring kenaikan beban hingga titik jenuh, setelah itu latensi meningkat secara drastis \cite{thakkar2018, ucbas2023}. Faktor lain yang turut memengaruhi adalah jenis transaksi: operasi tulis cenderung lebih berat pada I/O, sedangkan transaksi komputasi intensif mengonsumsi CPU lebih besar \cite{dinh2017, gaba2022}.
+
+Dari sisi infrastruktur, spesifikasi CPU, memori, \textit{bandwidth} jaringan, serta penggunaan \textit{containerization} (Docker) dan \textit{orchestration} (Kubernetes) terbukti berpengaruh terhadap efisiensi \textit{deployment} serta skalabilitas sistem \cite{zheng2019, wu2022}. Penelitian juga menunjukkan adanya interaksi antar faktor, misalnya kombinasi waktu blok singkat dengan ukuran blok besar dapat meningkatkan \textit{throughput}, tetapi dengan \textit{trade-off} berupa menurunnya konsistensi jaringan \cite{shahsavari2022, gobel2017}. Oleh karena itu, pengaturan parameter secara sistematis melalui eksperimen \textit{benchmarking} sangat penting agar hasil evaluasi performa valid, representatif, dan dapat direplikasi \cite{kaur2021, thakkar2018, fan2020}.
+
+\begin{table}[ht]
+\centering
+\caption{Faktor Teknis yang Mempengaruhi Performa Blockchain}
+\label{tab:faktor_performa}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|p{2cm}|}
+\hline
+\textbf{Faktor} & \textbf{Dampak Utama} & \textbf{Trade-off} & \textbf{Sumber} \\ \hline
+Jumlah Node Validator & Meningkatkan desentralisasi dan keamanan; menambah redundansi jaringan & Menurunkan throughput karena overhead komunikasi meningkat & \cite{kaur2021, hao2018} \\ \hline
+Waktu Blok (Block Time) & Interval pendek menurunkan latensi dan mempercepat konfirmasi transaksi & Risiko instabilitas jaringan dan meningkatnya frekuensi fork & \cite{shahsavari2022, xu2021} \\ \hline
+Ukuran Blok (Block Size) & Blok lebih besar menampung lebih banyak transaksi, throughput meningkat & Propagasi lebih lambat, risiko fork lebih tinggi & \cite{shahsavari2022, gobel2017} \\ \hline
+Beban Transaksi (Load) & Throughput meningkat seiring beban, hingga titik jenuh & Setelah batas, latensi meningkat drastis, sistem jadi tidak stabil & \cite{thakkar2018, ucbas2023} \\ \hline
+Jumlah Worker (Caliper) & Paralelisme transaksi meningkat, simulasi beban lebih realistis & Terlalu banyak worker dapat memicu overload dan bottleneck & \cite{thakkar2018, ucbas2023} \\ \hline
+Jenis Transaksi & Operasi baca lebih ringan; tulis dan komputasi intensif menambah konsumsi CPU/I/O & Beban tinggi pada operasi tulis/komputasi menurunkan throughput & \cite{dinh2017, gaba2022} \\ \hline
+Infrastruktur (VPS/OS) & CPU, RAM, bandwidth, dan containerization memengaruhi efisiensi dan skalabilitas & Infrastruktur lemah menyebabkan bottleneck; konfigurasi salah menurunkan validitas eksperimen & \cite{zheng2019, wu2022} \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:faktor_performa} merangkum hubungan antara faktor-faktor teknis, dampaknya terhadap performa \textit{blockchain}, serta \textit{trade-off} yang harus dipertimbangkan dalam desain eksperimen maupun implementasi nyata. Visualisasi ini menunjukkan bahwa setiap parameter memiliki konsekuensi ganda: satu sisi memberikan peningkatan performa, sementara di sisi lain dapat menimbulkan keterbatasan. Oleh karena itu, pendekatan \textit{benchmarking} yang sistematis diperlukan untuk menyeimbangkan parameter-parameter tersebut agar hasil evaluasi valid, representatif, dan relevan terhadap konteks aplikasi seperti jaringan \textit{DChain}.
+
+Dengan demikian, pemahaman atas faktor-faktor teknis ini tidak hanya mendukung optimasi performa \textit{blockchain}, tetapi juga membantu menentukan konfigurasi yang sesuai dengan kebutuhan spesifik, terutama dalam konteks penelitian perbandingan mekanisme konsensus PoA dan PoS pada \textit{DChain}.
+
+
+\subsection{Hubungan dengan Penelitian Ini}
+
+Penelitian ini merupakan turunan langsung dari berbagai riset terdahulu yang membandingkan performa mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS). Sebagaimana telah dibahas pada Bab 2.1 Tinjauan Pustaka, literatur sebelumnya banyak mengkaji performa kedua konsensus tersebut dengan menggunakan metrik \textit{benchmarking} utama seperti \textit{throughput} (TPS) dan latensi. Selain itu, teori mengenai karakteristik PoA dan PoS, serta metodologi \textit{benchmarking} dengan alat seperti \textit{Hyperledger Caliper}, menjadi fondasi penting bagi penelitian ini \cite{dinh2017, fan2020, thakkar2018, nguyen2019, li2023}.
+
+Meskipun demikian, riset terdahulu masih memiliki sejumlah keterbatasan. Sebagian besar studi hanya menitikberatkan pada pengujian performa dasar dengan parameter terbatas, sehingga belum mencakup aspek lain yang juga krusial seperti penggunaan sumber daya (CPU, memori, dan disk) maupun stabilitas sistem dalam menghadapi variasi beban dan konfigurasi jaringan \cite{kaur2021, ucbas2023, gramoli2023}. Keterbatasan ini menyebabkan hasil penelitian sebelumnya cenderung bersifat parsial dan sulit digeneralisasi untuk konteks implementasi yang lebih luas, khususnya pada platform berskala nasional.
+
+Penelitian ini hadir untuk mengisi kesenjangan tersebut dengan tiga kontribusi utama. Pertama, cakupan variabel uji diperluas dengan menambahkan \textit{resource usage} dan stabilitas sistem sebagai metrik baru di samping TPS dan latensi. Kedua, penelitian ini secara khusus difokuskan pada \textit{DChain}, yaitu infrastruktur \textit{blockchain} nasional untuk pendidikan tinggi di Indonesia, sehingga relevansi hasilnya lebih kontekstual dan strategis. Ketiga, eksperimen dilakukan dengan \textit{multi-skenario benchmarking} yang lebih komprehensif, mencakup variasi beban transaksi (\textit{transaction load}), jumlah \textit{node} validator, waktu blok (\textit{block time}), serta jumlah \textit{worker} pada \textit{Caliper}.
+
+Dengan pendekatan ini, penelitian diharapkan tidak hanya memperkuat temuan literatur terdahulu, tetapi juga memberikan landasan empiris yang lebih menyeluruh untuk mendukung pengambilan keputusan terkait migrasi konsensus dari PoA ke PoS pada jaringan \textit{DChain}.
+
 
 \section{Analisis Perbandingan Metode}
 
-Di dalam tinjauan pustaka hasil akhirnya adalah analisis secara kualitatif atau pun secara kuantitatif kelebihan dan kekurangan metode jika dikaitkan dengan masalah, batasan-batasan masalah dan solusi yang dinginkan. Analisis kuantitatif tidak wajib teapi mempunyai nilai tambah di dalam tugas akhir saudara. Bagian ini menjelaskan kenapa metode tersebut dipilih dan uraikan dengan lebih jelas metode pelaksanaan tugas akhir yang ingin Anda lakukan. 
+\subsection{Metode Penelitian Terdahulu}
 
-\section{Pertanyaan Tugas Akhir (Jika Perlu)}
+Penelitian performa \textit{blockchain} telah menggunakan berbagai pendekatan metodologis, mulai dari studi literatur, simulasi matematis, hingga eksperimen nyata. Setiap metode memiliki keunggulan dan keterbatasan dalam merepresentasikan kinerja jaringan \textit{blockchain}.
 
-Pertanyaan tugas akhir bersifat opsional dan dapat ditambahkan untuk menekankan hal-hal yang hendak diketahui dari tugas akhir berdasar pada tujuan tugas akhir. Pertanyaan tugas akhir dikenal dengan RQ (\textit{Research Question}) dan harus memiliki keterkaitan dengan RO (\textit{Research Objective}). Satu RO dapat memiliki satu atau lebih dari satu RQ. 
+Pendekatan studi literatur dan survei banyak digunakan untuk merangkum teori, perkembangan teknologi, serta tantangan utama \textit{blockchain}, khususnya dalam aspek keamanan, desentralisasi, dan mekanisme konsensus. Namun, metode ini cenderung bersifat konseptual dan tidak menghasilkan data empiris langsung terkait performa jaringan \cite{fan2020, dabbagh2021, bamakan2020}.
+
+Pendekatan simulasi berbasis model matematis juga banyak digunakan, misalnya dengan memanfaatkan teori antrian atau model graf untuk mengevaluasi pengaruh parameter teknis seperti ukuran blok, waktu blok, dan jumlah \textit{node} terhadap \textit{throughput} maupun latensi. Keunggulannya adalah fleksibilitas dan biaya rendah, tetapi keterbatasannya terletak pada representasi yang sering kali terlalu sederhana sehingga tidak sepenuhnya mencerminkan kompleksitas sistem \textit{blockchain} nyata \cite{xu2021, zhou2020, shahsavari2022, huang2018}.
+
+Pendekatan yang semakin dominan adalah eksperimen nyata melalui \textit{benchmarking}, di mana peneliti membangun jaringan uji (\textit{testnet}) menggunakan \textit{framework} seperti \textit{Blockbench} atau \textit{Hyperledger Caliper} untuk mengukur metrik performa seperti \textit{Transactions Per Second} (TPS), latensi, penggunaan sumber daya, skalabilitas, dan stabilitas \cite{dinh2017, esmaili2024, abreu2022, misra2021}. Studi-studi tersebut dianggap lebih representatif karena langsung memodelkan kondisi implementasi \textit{blockchain} nyata.
+
+Sebagai contoh, penelitian oleh Palguno Wicaksono dkk. \cite{wicaksono2021} melakukan eksperimen performa pada jaringan Ethereum privat untuk membandingkan mekanisme konsensus PoA dan PoS. Namun, pengujian mereka masih terbatas pada metrik TPS dan latensi, tanpa mempertimbangkan penggunaan sumber daya maupun stabilitas jaringan. Hal ini menunjukkan adanya ruang penelitian lanjutan untuk memperluas metrik evaluasi agar lebih komprehensif.
+
+Jika dibandingkan dengan penelitian sebelumnya, desain eksperimen dalam penelitian ini lebih komprehensif karena melibatkan variabel tambahan seperti jumlah \textit{node}, waktu blok (\textit{block time}), jumlah \textit{worker}, serta jenis transaksi. Selain itu, fokus penelitian diarahkan pada \textit{DChain} sebagai platform \textit{blockchain} nasional, sehingga hasilnya memiliki relevansi kontekstual yang tinggi. Dengan demikian, penelitian ini tidak hanya mengadopsi pendekatan \textit{benchmarking} yang telah terbukti relevan, tetapi juga memperluas cakupan pengujian untuk mengisi kekosongan yang masih ada dalam penelitian terdahulu.
+
+
+\subsection{Kelebihan dan Kekurangan Berbagai Metode}
+
+Penelitian mengenai performa \textit{blockchain} secara umum menggunakan tiga pendekatan utama, yaitu studi literatur atau survei, simulasi atau model matematis, dan eksperimen atau \textit{benchmarking} nyata. Setiap metodologi memiliki keunggulan sekaligus keterbatasan dalam menggambarkan karakteristik performa sistem \textit{blockchain}.
+
+Studi literatur atau survei banyak digunakan untuk memetakan perkembangan teknologi, teori konsensus, serta tantangan yang ada dalam riset \textit{blockchain}. Pendekatan ini, seperti \textit{systematic literature review} (SLR) dan \textit{bibliometric analysis}, memungkinkan pemahaman yang cepat, menyeluruh, dan hemat biaya terhadap tren riset. Namun, karena bersifat konseptual, metode ini tidak dapat memberikan data empiris langsung mengenai performa aktual \textit{blockchain} \cite{fan2020, rico2023, bellucci2022, zheng2019}.
+
+Simulasi berbasis model matematis menjadi pendekatan lain yang banyak dipakai untuk menilai dampak parameter teknis seperti ukuran blok, waktu blok, atau jumlah \textit{node} terhadap performa jaringan. Contohnya adalah penggunaan model antrian Poisson, simulasi Monte Carlo, maupun \textit{Markov chains}. Metode ini relatif murah dan fleksibel karena memungkinkan pengujian banyak parameter sekaligus. Akan tetapi, hasil simulasi sering kali tidak sepenuhnya mencerminkan kondisi nyata karena banyaknya asumsi penyederhanaan yang digunakan \cite{fan2020, bellucci2022, cao2021}.
+
+Eksperimen nyata atau \textit{benchmarking} dinilai sebagai pendekatan paling representatif dalam mengevaluasi performa \textit{blockchain}. Dengan memanfaatkan \textit{framework} seperti \textit{Blockbench} atau \textit{Hyperledger Caliper}, penelitian dapat menghasilkan data empiris terkait metrik utama seperti \textit{throughput}, latensi, \textit{scalability}, dan \textit{fault tolerance}. Pendekatan ini memberikan hasil yang lebih realistis dan relevan terhadap implementasi \textit{blockchain} di dunia nyata. Namun, keterbatasannya terletak pada kebutuhan sumber daya yang lebih besar, baik dari sisi infrastruktur, waktu, maupun biaya. Selain itu, eksperimen nyata cenderung lebih kompleks karena variabel lingkungan sering sulit dikendalikan sepenuhnya \cite{fan2020, cao2021}.
+
+Berdasarkan analisis tersebut, dapat disimpulkan bahwa tidak ada satu metode yang sempurna untuk mengevaluasi performa \textit{blockchain}. Meski demikian, metode eksperimen dipilih dalam penelitian ini karena mampu memberikan data empiris yang paling sesuai untuk menjawab rumusan masalah, khususnya dalam mengevaluasi efisiensi dan efektivitas konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) di jaringan \textit{DChain}.
+
+\begin{table}[H]
+\centering
+\caption{Perbandingan Kelebihan dan Kekurangan Berbagai Metode Evaluasi Blockchain}
+\label{tab:metode_perbandingan}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|p{2cm}|}
+\hline
+\textbf{Metode Penelitian} & \textbf{Kelebihan Utama} & \textbf{Kekurangan Utama} & \textbf{Sumber} \\ \hline
+Studi Literatur / Survei & Komprehensif, cepat, biaya rendah, memberikan gambaran teori dan tren riset & Tidak menghasilkan data empiris; sulit menilai performa aktual & \cite{fan2020, rico2023, bellucci2022, zheng2019} \\ \hline
+Simulasi / Model Matematis & Fleksibel, murah, memungkinkan analisis parameter teknis kompleks & Banyak asumsi penyederhanaan, hasil kurang realistis terhadap kondisi implementasi nyata & \cite{fan2020, bellucci2022, cao2021} \\ \hline
+Eksperimen / Benchmarking Nyata & Memberikan data empiris; hasil lebih representatif dan kontekstual terhadap implementasi \textit{blockchain} & Membutuhkan sumber daya besar (waktu, biaya, infrastruktur); kompleksitas tinggi & \cite{fan2020, cao2021} \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:metode_perbandingan} merangkum perbandingan antara ketiga metode utama yang digunakan dalam penelitian performa \textit{blockchain}. Berdasarkan pertimbangan empiris dan relevansi, pendekatan eksperimen dipilih karena paling sesuai untuk menilai efektivitas mekanisme konsensus \textit{PoA} dan \textit{PoS} pada jaringan \textit{DChain}.
+
+
+\subsection{Alasan Pemilihan Metode Eksperimen dalam Penelitian Ini}
+
+Penelitian ini secara sadar memilih metode eksperimen (\textit{benchmarking} nyata) dibandingkan studi literatur atau simulasi. Pendekatan literatur, seperti \textit{systematic review} atau \textit{bibliometric analysis}, memang bermanfaat untuk memetakan teori dan tren penelitian \textit{blockchain}, tetapi tidak mampu memberikan bukti kuantitatif terkait performa aktual jaringan \cite{fan2020, rico2023}. Sementara itu, simulasi berbasis model matematis, seperti antrian Poisson atau simulasi Monte Carlo, menawarkan fleksibilitas dan biaya rendah untuk mengevaluasi parameter teknis, namun sering kali terlalu menyederhanakan kompleksitas sistem nyata sehingga hasilnya kurang representatif \cite{zhou2020, shahsavari2022}.
+
+Sebaliknya, \textit{benchmarking} eksperimental memungkinkan pengukuran langsung terhadap metrik performa inti \textit{blockchain}, termasuk \textit{Transactions Per Second} (TPS), latensi, penggunaan sumber daya, skalabilitas, dan stabilitas. Metrik ini bersifat objektif, dapat diukur, serta mencerminkan efisiensi dan efektivitas mekanisme konsensus dalam kondisi operasional yang menyerupai implementasi nyata \cite{dinh2017, zheng2019}.
+
+Selain itu, fokus penelitian ini adalah pada perbandingan \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS), sejalan dengan \textit{roadmap} DChain yang memang dirancang untuk bermigrasi dari PoA ke PoS. Konsensus lain seperti PBFT atau DPoS, meskipun menarik secara akademis, tidak relevan secara praktis karena tidak digunakan dalam implementasi DChain \cite{lashkari2021, zhang2020}. Oleh karena itu, pengujian empiris berbasis eksperimen dipandang sebagai metode yang paling tepat untuk mengisi \textit{gap} penelitian terdahulu yang umumnya hanya mengukur TPS dan latensi, tanpa mencakup penggunaan sumber daya dan stabilitas jaringan \cite{wicaksono2022}.
+
+Dengan demikian, metode eksperimen dipilih bukan hanya karena memberikan hasil yang paling representatif, tetapi juga karena merupakan satu-satunya pendekatan yang \textit{feasible} untuk menjawab rumusan masalah penelitian ini.
+
+
+\subsection{Kriteria Evaluasi Alat Benchmarking}
+
+\textit{Benchmarking} merupakan aspek penting dalam evaluasi performa \textit{blockchain} karena mampu memberikan data empiris yang terukur mengenai \textit{throughput}, \textit{latency}, \textit{resource usage}, \textit{scalability}, dan stabilitas konsensus. Untuk menghasilkan evaluasi yang kredibel, alat \textit{benchmarking} harus memenuhi sejumlah kriteria fundamental. Literatur menekankan bahwa dukungan multi-metrik, variasi \textit{workload}, integrasi \textit{monitoring}, \textit{reproducibility}, dan portabilitas merupakan dimensi utama dalam menilai kualitas sebuah alat \textit{benchmarking} \cite{fan2020, beyer2017, martinez2022}.
+
+Pertama, dukungan multi-metrik sangat penting, karena performa \textit{blockchain} tidak dapat direduksi hanya pada satu indikator seperti TPS. Alat yang baik harus mampu menangkap metrik komprehensif, termasuk \textit{latency}, konsumsi CPU/RAM, utilisasi \textit{bandwidth}, hingga konsumsi energi \cite{fan2020, zheng2019}. Kedua, variasi \textit{workload} memungkinkan evaluasi pada skenario berbeda, baik sintetis maupun realistis (misalnya transaksi token, kontrak pintar, atau simulasi IoT) \cite{dinh2017, beyer2017}. Ketiga, \textit{reproducibility} dan dokumentasi yang jelas merupakan kunci agar hasil eksperimen dapat diverifikasi dan diulang oleh peneliti lain \cite{beyer2017, beyer2024}. Keempat, portabilitas dan aksesibilitas—misalnya melalui \textit{Docker} atau \textit{Kubernetes}—menjadi nilai tambah agar eksperimen dapat dijalankan di berbagai lingkungan tanpa konfigurasi kompleks \cite{martinez2022, quetschlich2022}. Terakhir, pemeliharaan aktif dan dukungan komunitas penting untuk memastikan alat tetap relevan mengikuti perkembangan teknologi \textit{blockchain} \cite{zheng2019}.
+
+Berdasarkan analisis literatur, dapat diidentifikasi perbedaan karakteristik antara beberapa \textit{framework} populer yang digunakan untuk \textit{benchmarking blockchain}. \textit{Hyperledger Caliper} menonjol karena bersifat \textit{open-source}, modular, mendukung berbagai platform (\textit{Ethereum}, \textit{Fabric}, \textit{Besu}, \textit{Quorum}), serta terintegrasi dengan \textit{monitoring tools} seperti \textit{Prometheus} dan \textit{Grafana} \cite{fan2020, zheng2019}. \textit{Blockbench} lebih berfokus pada \textit{private blockchain} seperti \textit{Hyperledger Fabric} dan \textit{Ethereum privat}, dengan kekuatan pada \textit{micro-benchmarking} komponen spesifik, meskipun dokumentasi dan pembaruan sudah jarang dilakukan sejak 2022 \cite{dinh2017}. \textit{PERSECUS} dan \textit{Diablo} menonjol pada aspek \textit{reproducibility} dengan dukungan \textit{workload generator} realistis, sementara \textit{Gromit} dan \textit{BlockCompass} mengarah ke \textit{macro-benchmarking} sistem utuh lintas platform \cite{beyer2024, martinez2022}.
+
+\begin{table}[H]
+\centering
+\caption{Perbandingan Alat Benchmarking Blockchain}
+\label{tab:benchmarking_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{2.8cm}|p{3.5cm}|p{3cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Alat} & \textbf{Metrik Utama} & \textbf{Platform Didukung} & \textbf{Kelebihan} & \textbf{Keterbatasan} \\ \hline
+\textbf{Hyperledger Caliper} & TPS, latency, resource usage, scalability, stability & Ethereum, Fabric, Besu, Quorum & \textit{Open-source}, modular, integrasi \textit{Prometheus/Grafana}, aktif dipelihara & Instalasi kompleks, kurva belajar tinggi \\ \hline
+\textbf{Blockbench} & Throughput, latency, scalability, fault tolerance & Ethereum (geth), Parity, Fabric & \textit{Framework} komprehensif, cocok untuk \textit{private blockchain} & Tidak aktif dikembangkan, \textit{workload} terbatas \\ \hline
+\textbf{PERSECUS} & TPS, latency, CPU/RAM, gas, energi & Ethereum, Fabric & Fokus pada \textit{reproducibility}, \textit{stress testing} modular & Dokumentasi publik minim \\ \hline
+\textbf{Diablo} & Latency, gas cost, error resilience & Ethereum, Fabric, Tendermint & Kuat dalam skenario \textit{fault injection}, \textit{workload} scripting fleksibel & Masih tahap pengembangan awal \\ \hline
+\textbf{Gromit} & Throughput, storage overhead, metadata cost & Ethereum, Fabric & Analisis makro lintas platform, fokus metadata & Komunitas kecil, kurang populer \\ \hline
+\textbf{BlockCompass} & Throughput, resource efficiency & Enterprise Blockchain & Integrasi \textit{enterprise}, dukungan \textit{workload} realistis & Tidak \textit{open-source}, akses terbatas \\ \hline
+\textbf{Grafana + Prometheus} & CPU, RAM, bandwidth (monitoring eksternal) & Agnostik (umum) & Visualisasi kuat, fleksibel lintas platform & Tidak menghasilkan \textit{workload}, hanya \textit{monitoring} \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:benchmarking_comparison} menunjukkan bahwa \textit{Hyperledger Caliper} memenuhi hampir semua kriteria evaluasi alat \textit{benchmarking}: mendukung multi-metrik, variasi \textit{workload}, integrasi \textit{monitoring}, \textit{reproducibility} melalui containerization, serta pemeliharaan aktif \cite{fan2020, martinez2022, zheng2019}. Selain itu, Caliper telah banyak digunakan dalam penelitian empiris untuk mengevaluasi performa konsensus PoA dan PoS pada platform \textit{Ethereum} dan turunannya, termasuk \textit{DChain}. Oleh karena itu, pemilihan \textit{Hyperledger Caliper} dalam penelitian ini dinilai paling sesuai secara ilmiah dan praktis dibandingkan dengan alat lain yang tersedia.
+
+
+\subsection{Perbandingan Desain dan Skenario Eksperimen dengan Penelitian Terdahulu}
+
+Riset \textit{benchmarking blockchain} telah mengalami perkembangan signifikan dari eksperimen sederhana menuju \textit{framework} yang lebih komprehensif, dengan fokus pada penggunaan multi-metrik dan skenario uji yang beragam. Pada tahap awal, beberapa penelitian cenderung terbatas dalam desain eksperimen. Misalnya, Wicaksono \textit{dkk.} hanya menggunakan satu \textit{worker} serta menguji metrik dasar berupa \textit{throughput} (TPS) dan \textit{latency}, tanpa mempertimbangkan parameter lain yang dapat memengaruhi performa sistem. Studi lain oleh Choi dan Hong \cite{choi2020}, serta Arslan \textit{dkk.} \cite{arslan2020}, lebih berfokus pada jaringan Ethereum privat dengan beban sederhana, sehingga hasilnya masih jauh dari gambaran performa komprehensif dalam kondisi nyata.
+
+Perkembangan lebih lanjut ditunjukkan oleh munculnya \textit{framework benchmarking} generik seperti Blockchain Benchmarking Framework (BBF), BCTMark, BlockCompass, dan Diablo yang memungkinkan pengujian lintas platform (\textit{Ethereum}, \textit{Hyperledger}, \textit{Quorum}, dll.) dengan konfigurasi parameter yang lebih luas, termasuk simulasi serangan, \textit{node failure}, dan \textit{workload} dinamis \cite{touloupou2024, saingre2020, rasolroveicy2024, lebedev2024}. Studi-studi terbaru juga mulai mengadopsi multi-metrik, tidak hanya mengukur \textit{throughput} dan \textit{latency}, tetapi juga \textit{resource usage} (CPU, RAM, \textit{bandwidth}), \textit{scalability}, \textit{fault tolerance}, dan bahkan konsumsi energi \cite{fan2020, pradhan2022, li2024, chacko2023}. Beberapa penelitian menggunakan pendekatan simulasi atau eksperimen independen untuk mengevaluasi dampak parameter tertentu, seperti \textit{network delay}, beban IoT, hingga aplikasi pada \textit{supply chain} dan kesehatan \cite{chen2021, longo2019, purusottama2024, kuo2021}.
+
+Sebaliknya, penelitian ini menawarkan desain eksperimen yang lebih komprehensif dan relevan dengan konteks platform nasional DChain. Lingkungan uji (\textit{testnet}) dibangun khusus menggunakan dua konsensus, yaitu PoA dan PoS, bukan sekadar menguji jaringan Ethereum generik. Parameter eksperimen diperluas mencakup jumlah \textit{node}, ukuran blok, \textit{block time}, beban TPS, jumlah \textit{worker}, dan jenis transaksi (read, write, compute-intensive). Selain itu, penelitian ini secara eksplisit menggunakan \textit{smart contract} yang benar-benar diterapkan di jaringan DChain, menjadikannya lebih relevan secara praktis. Untuk memastikan validitas hasil, setiap eksperimen diulang dalam beberapa skenario berbeda. Dengan demikian, penelitian ini tidak hanya mengisi keterbatasan studi terdahulu, tetapi juga menyajikan analisis yang lebih empiris, kontekstual, dan berkontribusi langsung pada \textit{roadmap} migrasi konsensus dari PoA ke PoS di DChain.
+
+\begin{table}[H]
+\centering
+\caption{Perbandingan Desain dan Skenario Eksperimen Penelitian Terdahulu vs Penelitian Ini}
+\label{tab:perbandingan_penelitian}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{4cm}|p{5.5cm}|p{5.5cm}|}
+\hline
+\textbf{Aspek} & \textbf{Penelitian Terdahulu} & \textbf{Penelitian Ini (DChain)} \\ \hline
+\textbf{Lingkungan Uji} & Testnet Ethereum privat, simulasi sederhana & Testnet DChain khusus dengan konsensus PoA \& PoS \\ \hline
+\textbf{Metrik yang Diuji} & Terbatas: TPS \& latency \cite{wicaksono2021} & Komprehensif: TPS, latency, resource usage, scalability, stability \\ \hline
+\textbf{Jumlah Worker} & Biasanya hanya satu worker \cite{wicaksono2021} & Multi-worker untuk variasi beban transaksi \\ \hline
+\textbf{Variabel Bebas} & Beban transaksi sederhana, ukuran blok statis \cite{choi2020, arslan2020} & Jumlah node, block time, block size, worker, jenis transaksi \\ \hline
+\textbf{Framework/Tools} & Eksperimen mandiri, tanpa framework standar & Hyperledger Caliper (workload generator), Prometheus \& Grafana (monitoring), replikasi eksperimen \\ \hline
+\textbf{Fokus Platform} & Ethereum umum (privat/mainnet) & DChain (platform nasional, relevan dengan roadmap PoA $\rightarrow$ PoS) \\ \hline
+\textbf{Smart Contract} & Workload sintetis (token transfer, kontrak sederhana) \cite{chen2021, longo2019} & Smart contract aktual dari jaringan DChain \\ \hline
+\textbf{Validitas Hasil} & Eksperimen jarang direplikasi, dokumentasi terbatas \cite{pradhan2022, kuo2021} & Replikasi dilakukan, dokumentasi parameter lengkap untuk reproduksibilitas \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:perbandingan_penelitian} menegaskan bahwa penelitian ini memiliki keunggulan dari sisi desain eksperimental, kedalaman metrik evaluasi, serta relevansi kontekstual. Dengan menguji langsung performa PoA dan PoS di jaringan DChain, hasil penelitian ini diharapkan memberikan kontribusi empiris yang signifikan bagi pengembangan konsensus dan kebijakan implementasi \textit{blockchain} nasional di Indonesia.
+
+
+\subsection{Justifikasi Variabel dan Metrik yang Digunakan}
+
+Pemilihan variabel dan metrik dalam penelitian ini berangkat dari prinsip netralitas, generalisasi, dan replikasi, sehingga hasil eksperimen dapat digunakan tidak hanya untuk konteks spesifik DChain, tetapi juga relevan bagi penelitian \textit{blockchain} lainnya. Lima metrik utama yang digunakan adalah \textit{throughput} (TPS), \textit{latency}, \textit{resource usage} (CPU, memori, dan bandwidth), \textit{scalability}, serta \textit{stability}. Pemilihan kelima metrik ini dilakukan karena sifatnya yang umum, bebas bias, dan dapat diaplikasikan pada berbagai mekanisme konsensus \cite{fan2020, dinh2017}.
+
+Metrik tambahan seperti \textit{fairness}, insentif ekonomi, maupun distribusi \textit{reward} tidak dimasukkan dalam penelitian ini. Alasannya, metrik tersebut cenderung spesifik terhadap desain konsensus tertentu serta sulit untuk direplikasi dalam eksperimen berbeda, sehingga berpotensi menimbulkan bias \cite{fan2020}.
+
+Nilai dari parameter eksperimen ditentukan berdasarkan standar yang telah digunakan dalam literatur sebelumnya. Misalnya, parameter seperti waktu blok, ukuran blok, dan variasi jumlah node diambil dari konfigurasi umum yang banyak diuji pada studi \textit{benchmarking} terdahulu \cite{dinh2017, thakkar2018}. Apabila tidak tersedia acuan langsung dari literatur, maka penetapan nilai dilakukan secara metodologis melalui uji awal (\textit{trial-and-error}), kemudian divalidasi dengan replikasi untuk menjaga validitas dan transparansi hasil \cite{kaur2021}.
+
+Selain itu, pengulangan eksperimen dilakukan secara sistematis untuk meminimalkan pengaruh faktor acak dan meningkatkan reliabilitas data. Variasi parameter seperti beban transaksi per detik (TPS load), jumlah node validator, ukuran blok, \textit{block time}, dan jumlah \textit{worker} sengaja dimasukkan agar eksperimen lebih mencerminkan kondisi nyata \cite{thakkar2018, kuzlu2019}. Hal ini penting karena dalam implementasi riil, \textit{blockchain} akan dihadapkan pada skenario peningkatan jumlah pengguna, volume transaksi tinggi, serta heterogenitas infrastruktur.
+
+\begin{table}[H]
+\centering
+\caption{Ringkasan Variabel, Metrik, dan Alasan Penggunaan}
+\label{tab:variables_metrics}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{3.2cm}|p{4.2cm}|p{6.5cm}|p{1.5cm}|}
+\hline
+\textbf{Variabel/Metrik} & \textbf{Definisi} & \textbf{Alasan Penggunaan} & \textbf{Referensi} \\ \hline
+\textbf{Throughput (TPS)} & Jumlah transaksi yang diproses per detik & Indikator utama efisiensi sistem; mudah dibandingkan antar konsensus tanpa bias & \cite{fan2020, dinh2017} \\ \hline
+\textbf{Latency} & Waktu tunda antara pengiriman transaksi hingga konfirmasi blok & Penting untuk aplikasi \textit{real-time} dan menilai responsivitas jaringan & \cite{fan2020, thakkar2018} \\ \hline
+\textbf{Resource Usage} & Konsumsi CPU, memori, dan bandwidth & Menggambarkan efisiensi pemanfaatan infrastruktur; relevan untuk biaya operasional & \cite{dinh2017, kuzlu2019} \\ \hline
+\textbf{Scalability} & Kemampuan sistem menangani peningkatan jumlah node atau transaksi & Penting untuk keberlanjutan sistem \textit{blockchain} pada skala besar & \cite{fan2020, kaur2021} \\ \hline
+\textbf{Stability} & Konsistensi performa saat diuji dengan beban tinggi dan kondisi ekstrem & Menunjukkan ketahanan sistem terhadap lonjakan transaksi dan kegagalan node & \cite{thakkar2018, kuzlu2019} \\ \hline
+\textbf{Block Time} & Interval waktu antara pembuatan blok baru & Mempengaruhi \textit{throughput}, \textit{latency}, dan stabilitas; relevan dalam \textit{tuning} parameter DChain & \cite{dinh2017, kaur2021} \\ \hline
+\textbf{Block Size} & Kapasitas data dalam setiap blok & Berkaitan dengan \textit{throughput} vs risiko \textit{fork}; penting untuk simulasi kondisi nyata & \cite{thakkar2018, kuzlu2019} \\ \hline
+\textbf{Jumlah Node Validator} & Jumlah node yang berperan dalam konsensus & Merepresentasikan \textit{trade-off} antara desentralisasi, \textit{throughput}, dan overhead komunikasi & \cite{dinh2017, kaur2021} \\ \hline
+\textbf{Jumlah Worker (Caliper)} & Klien/worker yang mengirim transaksi dalam eksperimen & Menentukan variasi beban transaksi; mereplikasi kondisi multi-klien dalam sistem nyata & \cite{thakkar2018, kuzlu2019} \\ \hline
+\textbf{Jenis Transaksi} & Tulis (I/O-intensive), baca (read-only), komputasi (CPU-intensive) & Menilai performa pada beban yang berbeda sesuai tipe aplikasi \textit{blockchain} & \cite{dinh2017, kuzlu2019} \\ \hline
+\end{tabular}}
+\end{table}
+
+Tabel~\ref{tab:variables_metrics} merangkum variabel dan metrik utama yang digunakan dalam penelitian ini beserta alasan metodologis pemilihannya. Dengan menitikberatkan pada metrik umum seperti \textit{throughput}, \textit{latency}, \textit{resource usage}, \textit{scalability}, dan \textit{stability}, penelitian ini memastikan evaluasi tetap netral, representatif, dan dapat direplikasi. Variabel tambahan seperti \textit{block time}, \textit{block size}, jumlah node, dan jumlah \textit{worker} dipilih untuk memberikan gambaran lebih realistis terhadap dinamika sistem \textit{blockchain} dalam kondisi nyata. Pendekatan ini memungkinkan analisis \textit{trade-off} performa yang lebih tajam antara PoA dan PoS, sehingga hasil eksperimen dapat menjadi dasar ilmiah yang kredibel untuk menilai efisiensi dan efektivitas konsensus dalam konteks DChain maupun aplikasi \textit{blockchain} nasional lainnya.
 
