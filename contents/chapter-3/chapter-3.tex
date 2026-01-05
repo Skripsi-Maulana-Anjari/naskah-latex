@@ -4,31 +4,175 @@ Bab ini menjelaskan metode atau cara yang digunakan dalam penelitian ini untuk m
 
 \section{Alat dan Bahan Tugas Akhir}
 
+Bagian ini menjelaskan seluruh perangkat keras, perangkat lunak, serta bahan penelitian yang digunakan dalam eksperimen perbandingan kinerja mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) pada jaringan DChain. Spesifikasi yang tercantum memungkinkan peneliti lain untuk mereplikasi eksperimen ini dengan konfigurasi yang serupa.
+
 \subsection{Alat Tugas Akhir}
 
-Alat-alat yang digunakan pada tugas akhir ini berupa perangkat keras maupun perangkat lunak sebagai sarana pendukung antara lain. Kemukakan secara detail sesuai dengan kebutuhan tugas akhir dan juga tambahkan spesifikasi minumum sehingga peneliti lain yang hendak melakukan hal yang sama bisa melakukannya :
+\subsubsection{Perangkat Keras dan Infrastruktur}
 
 \begin{enumerate}
-	\item \textit{Notebook} dengan spesifikasi minumum sistem operasi Windows 8, \textit{processor} Intel Core i3 2330M CPU @ 2,2 GHz, memori 4GB DDR3, grafis NVIDIA GeForce GT 610 (4GB), hardisk 500GB. Pada tugas akhir ini digunakan Windows 10, Intel Core i7 4570M CPU, Memori 4GB DDR 3, grafis Intel HD4300. 
-	\item \textit{Smartphone} dengan spesifikasi tipe minimum, OS Android OS v4.1.2 (Jelly Bean),CPU Dual-core 800 MHz, GPU Mali-400, Internal 4 GB, 768 MB RAM. Pada tugas akhir ini digunakan ....
-	\item \textit{Game creation platform} versi 3.3.2 untuk Stencyl dan Construct2.
-	\item CORELDRAW X7, Tiled dan GIMP 2
+	\item \textbf{Laptop Pengembangan}
+	
+	Laptop yang digunakan untuk pengembangan, konfigurasi, dan monitoring eksperimen memiliki spesifikasi sebagai berikut:
+	\begin{itemize}
+		\item Model: Lenovo Ideapad Gaming 3 15ARH05
+		\item Prosesor: AMD Ryzen™ 5 4600H (6 Cores, 12 Threads @ 3,0 GHz) dengan Radeon RX Vega 6 Graphics
+		\item RAM: 16 GB DDR4
+		\item Sistem Operasi: Ubuntu 24.04.3 LTS (64-bit)
+		\item GPU Diskrit: NVIDIA GeForce GTX 1650 Ti Mobile
+	\end{itemize}
+	
+	\item \textbf{Virtual Private Server (VPS)}
+	
+	Infrastruktur jaringan blockchain dan \textit{benchmarking} dijalankan pada VPS dari vendor Contabo dengan konfigurasi sebagai berikut:
+	\begin{itemize}
+		\item \textbf{VPS Manager} (1 unit): Contabo Cloud VPS 30 dengan spesifikasi 8 vCPU, 24 GB RAM, 200 GB NVMe, dan \textit{bandwidth unlimited}. VPS ini berfungsi sebagai \textit{control plane} dan \textit{worker manager} untuk orkestrasi Kubernetes.
+		\item \textbf{VPS Worker} (5 unit): Contabo Cloud VPS 20 dengan spesifikasi 6 vCPU, 12 GB RAM, 200 GB SSD, dan \textit{bandwidth unlimited}. Kelima VPS ini digunakan untuk menjalankan \textit{node} blockchain dengan spesifikasi yang identik guna menjaga konsistensi dan validitas hasil eksperimen.
+	\end{itemize}
+\end{enumerate}
+
+\subsubsection{Perangkat Lunak}
+
+Perangkat lunak yang digunakan dalam penelitian ini meliputi:
+
+\begin{enumerate}
+	\item \textbf{Blockchain Client Software}
+	
+	Penelitian ini menggunakan dua konfigurasi node blockchain yang berbeda untuk masing-masing mekanisme konsensus:
+	\begin{itemize}
+		\item \textbf{Node Blockchain PoA (Clique)}:
+		\begin{itemize}
+			\item Geth (\textit{Execution Client}): ethereum/client-go:alltools-v1.13.15
+			\item Clef (\textit{Account Management}): ethereum/client-go:alltools-v1.13.15
+		\end{itemize}
+		\item \textbf{Node Blockchain PoS (Gasper)}:
+		\begin{itemize}
+			\item \textit{Execution Layer}: Geth versi ethereum/client-go:latest (v1.16.7-stable)
+			\item \textit{Consensus Layer}: Prysm Beacon Chain versi prysmaticlabs/prysm-beacon-chain:latest (v6.0.4) dan Prysm Validator versi prysmaticlabs/prysm-validator:latest (v6.0.4)
+		\end{itemize}
+	\end{itemize}
+	
+	\item \textbf{Docker dan Docker Compose}
+	
+	Digunakan untuk kontainerisasi node blockchain dan seluruh \textit{tools} pendukung, sehingga memudahkan deployment, isolasi lingkungan, dan portabilitas eksperimen.
+	
+	\item \textbf{Kubernetes (K3s versi 1.33.4+k3s1)}
+	
+	Digunakan sebagai platform orkestrasi kontainer untuk mengelola deployment dan \textit{scaling} node blockchain pada infrastruktur multi-VPS.
+	
+	\item \textbf{Kurtosis versi 1.13.2}
+	
+	Digunakan sebagai \textit{platform} untuk membangun dan mengelola lingkungan pengujian blockchain PoS dengan konfigurasi yang kompleks.
+	
+	\item \textbf{Hyperledger Caliper versi 0.6.0}
+	
+	Berfungsi sebagai \textit{workload generator} dan \textit{benchmarking framework} untuk menghasilkan beban transaksi yang terkontrol dan mengukur metrik kinerja seperti \textit{throughput} (TPS), \textit{latency}, dan \textit{success ratio}.
+	
+	\item \textbf{Prometheus versi 3.7.3}
+	
+	Digunakan untuk monitoring dan pengumpulan metrik penggunaan sumber daya (\textit{resource usage}) seperti CPU, RAM, Disk I/O, dan \textit{Network Bandwidth} dari setiap node blockchain.
+	
+	\item \textbf{Grafana versi 11.4.8}
+	
+	Digunakan untuk visualisasi data metrik performa secara \textit{real-time} melalui \textit{dashboard} interaktif.
+	
+	\item \textbf{Pushgateway versi 1.11.2}
+	
+	Berfungsi sebagai \textit{gateway} untuk menerima metrik dari \textit{batch jobs} dan eksperimen yang bersifat \textit{short-lived}.
+	
+	\item \textbf{Node Exporter versi 1.10.2}
+	
+	Digunakan untuk mengekspor metrik perangkat keras dan sistem operasi dari setiap VPS ke Prometheus.
+	
+	\item \textbf{cAdvisor versi v0.53.0}
+	
+	Digunakan untuk monitoring penggunaan sumber daya dan kinerja \textit{container} Docker secara detail.
+	
+	\item \textbf{Goerli Ethstats Server versi terbaru}
+	
+	Digunakan untuk monitoring status jaringan blockchain secara \textit{real-time}.
+	
+	\item \textbf{PostgreSQL versi 17}
+	
+	Digunakan sebagai basis data untuk menyimpan hasil \textit{benchmarking} dan konfigurasi eksperimen.
+	
+	\item \textbf{Visual Studio Code versi 1.105.1 dan Antigravity}
+	
+	Digunakan sebagai \textit{Integrated Development Environment} (IDE) untuk pengembangan PoA agar dapat diproduksi berulang dan dijalankan di beberapa VPS, pengembangan konfigurasi PoS, pengembangan \textit{pipeline caliper benchmark}, konfigurasi \textit{workload}, pengembangan alat \textit{monitoring}, dan analisis data.
 \end{enumerate}
 
 \subsection{Bahan Tugas Akhir}
 
-Bahan tugas akhir adalah segala sesuatu yang bersifat fisik atau digital yang digunakan untuk kebutuhan tugas akhir. Bahan tugas akhir dapat berupa:
+Bahan-bahan yang digunakan dalam penelitian ini bersifat digital dan mencakup data, konfigurasi, serta \textit{image container} yang diperlukan untuk eksperimen:
 
 \begin{enumerate}
-	\item Bahan habis pakai. Bahan yang digunakan untuk tugas akhir. Sebagai contoh 
-	mungkin dibutuhkan kertas transparansi, baterai, atau yang lain 
-	\item Bahan yang berupa data atau informasi yang menjadi dataset tugas akhir. Dataset tugas akhir dapat berupa:
+	\item \textbf{Dataset Transaksi untuk \textit{Workload}}
+	
+	Dataset transaksi sintetis yang dibangkitkan oleh Hyperledger Caliper untuk menguji kinerja jaringan blockchain. Dataset ini mencakup berbagai jenis operasi transaksi seperti:
+	\begin{itemize}
+		\item Operasi tulis (\textit{I/O-Intensive})
+		\item \textit{Minting} sertifikat digital (NFT)
+		\item Operasi baca (\textit{Read-Only})
+		\item Operasi komputasi (\textit{CPU-Intensive})
+	\end{itemize}
+	
+	Selain itu, digunakan juga \textit{smart contract} dari DChain yang telah disesuaikan untuk simulasi \textit{use case} pendidikan tinggi.
+	
+	\item \textbf{Repository DChain dan \textit{Smart Contract}}
+	
+	Repository dari organisasi Dikti-Blockchain-and-Metaverse di GitHub yang berfungsi sebagai acuan dan referensi utama untuk memahami implementasi DChain. Repository yang digunakan terbagi menjadi dua kategori:
+	
+	\textbf{Repository Publik:}
+	\begin{itemize}
+		\item \textit{dchain-mainnet-non-authority-public} \cite{dchain-mainnet-non-authority}: Implementasi node non-authority untuk DChain mainnet
+		\item \textit{dchain-mainnet-public} \cite{dchain-mainnet-public}: Konfigurasi dan dokumentasi DChain mainnet
+		\item \textit{dchain-clef-public} \cite{dchain-clef-public}: Implementasi dan konfigurasi Clef untuk manajemen akun DChain
+	\end{itemize}
+	
+	\textbf{Repository Private:}
+	\begin{itemize}
+		\item Implementasi DChain mainnet authority dan non-authority
+		\item Konfigurasi DChain Clef untuk validator
+		\item Kode sumber \textit{smart contract}: PIN Contract dan LAM NFT Certificate
+		\item Penelitian dan dokumentasi implementasi DChain PoS
+	\end{itemize}
+	
+	Repository-repository ini menyediakan:
+	\begin{itemize}
+		\item Kode sumber dan implementasi referensi jaringan blockchain DChain
+		\item Dokumentasi teknis dan konfigurasi \textit{deployment}
+		\item Contoh \textit{use case} untuk sistem pendidikan tinggi
+		\item Konfigurasi jaringan dan parameter konsensus untuk PoA dan PoS
+	\end{itemize}
+	
+	\item \textbf{\textit{Container Image} Blockchain Client}
+	
+	\textit{Image} Docker yang digunakan untuk menjalankan node blockchain:
+	\begin{itemize}
+		\item \textit{Image} Geth dan Clef untuk jaringan PoA (Clique)
+		\item \textit{Image} Geth dan Prysm (Beacon Chain + Validator) untuk jaringan PoS (Gasper)
+	\end{itemize}
+	
+	\item \textbf{Konfigurasi Hyperledger Caliper}
+	
+	File konfigurasi YAML dan JavaScript yang mendefinisikan skenario \textit{benchmarking}, termasuk:
+	\begin{itemize}
+		\item Konfigurasi koneksi ke jaringan blockchain
+		\item Definisi \textit{workload} dan \textit{transaction rate}
+		\item Parameter \textit{worker} dan durasi eksperimen
+		\item \textit{Smart contract} ABI dan alamat kontrak yang digunakan
+	\end{itemize}
+	
+	\item \textbf{Dokumen Referensi dan Standar}
+	
+	Dokumen dan literatur ilmiah yang menjadi acuan penelitian, termasuk:
+	\begin{itemize}
+		\item \textit{Whitepaper} dan dokumentasi teknis DChain
+		\item Artikel ilmiah terkait \textit{benchmarking} blockchain dan perbandingan mekanisme konsensus
+		\item Dokumentasi resmi Ethereum, Hyperledger Caliper, Prometheus, dan Grafana
+		\item Standar \textit{blockchain benchmarking framework} dari penelitian terdahulu
+	\end{itemize}
 \end{enumerate}
-\begin{itemize}
-	\item Dataset pihak lain yang diperoleh dengan izin atau dalam lisensi yang diizinkan untuk digunakan secara langsung 
-	\item Dataset pihak pertama yang disusun sendiri melalui quisioner, observasi, atau interview 
-	\item Dokumen panduan yang mengacu pada standar, hasil tugas akhir, atau artikel yang disitasi dan digunakan.
-\end{itemize}
 
 
 \section{Metode yang Digunakan}
