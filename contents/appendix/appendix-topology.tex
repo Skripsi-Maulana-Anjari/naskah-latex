@@ -1,0 +1,97 @@
+\clearpage
+\begin{landscape}
+\chapter*{LAMPIRAN D: PEMETAAN TOPOLOGI DAN INFRASTRUKTUR}
+\addcontentsline{toc}{section}{LAMPIRAN D: PEMETAAN TOPOLOGI DAN INFRASTRUKTUR}
+
+Tabel berikut merincikan pemetaan alokasi \textit{node} ke dalam infrastruktur VPS yang digunakan untuk setiap skenario topologi.
+
+\scriptsize
+\begin{longtable}{|p{2.5cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\caption{Pemetaan Node ke Infrastruktur VPS} \label{tab:topology_mapping} \\
+\hline
+\textbf{Topologi} & \textbf{Control Plane} & \textbf{VPS A} & \textbf{VPS B} & \textbf{VPS C} & \textbf{VPS D} & \textbf{VPS E} \\
+& (77.237.244.170) & (89.117.50.181) & (185.194.216.132) & (155.133.23.145) & (109.199.99.164) & (109.199.118.220) \\
+\hline
+\endfirsthead
+\hline
+\textbf{Topologi} & \textbf{Control Plane} & \textbf{VPS A} & \textbf{VPS B} & \textbf{VPS C} & \textbf{VPS D} & \textbf{VPS E} \\
+\hline
+\endhead
+\hline
+\endlastfoot
+
+\textbf{Skenario 1} \newline
+PoA: 3 Signer + 1 Non \newline
+PoS: 3 Val + 1 Non
+& 
+Database: PostgreSQL \newline
+(Tidak digunakan di akhir)
+& 
+\textbf{PoA}: Signer-UGM \newline
+\textbf{PoS}: Validator-UGM
+& 
+\textbf{PoA}: Signer-ITB \newline
+\textbf{PoS}: Validator-ITB
+& 
+\textbf{PoA}: Signer-UI \newline
+\textbf{PoS}: Validator-UI
+& 
+\textbf{PoA}: Non-Signer-UNIMED \newline
+\textbf{PoS}: Non-Validator-UNIMED
+& 
+Standby Node \newline
+(Sync/Snapshot)
+\\ \hline
+
+\textbf{Skenario 2} \newline
+PoA: 3 Signer + 3 Non \newline
+PoS: 3 Val + 3 Non
+& 
+\textbf{Monitoring}: \newline
+- Ethstats \newline
+- Prometheus (SUT/Caliper) \newline
+- Grafana (SUT/Caliper)
+& 
+\textbf{PoA}: Signer-UGM + \newline Non-Signer-UT \newline
+\textbf{PoS}: Validator-UGM + \newline Non-Validator-UT
+& 
+\textbf{PoA}: Signer-ITB + \newline Non-Signer-UNUD \newline
+\textbf{PoS}: Validator-ITB + \newline Non-Validator-UNUD
+& 
+\textbf{PoA}: Signer-UI \newline
+\textbf{PoS}: Validator-UI
+& 
+\textbf{PoA}: Non-Signer-UNIMED \newline
+\textbf{PoS}: Non-Validator-UNIMED
+& 
+Archive/Standby Node
+\\ \hline
+
+\textbf{Skenario 3} \newline
+PoA: 5 Signer + 5 Non \newline
+PoS: 5 Val + 5 Non
+& 
+\textbf{Orchestration}: \newline
+- k3s Kubernetes \newline
+- Hyperledger Caliper \newline
+- Reports Generator \newline
+- Data Analytics
+& 
+\textbf{PoA}: Signer-UGM + \newline Non-Signer-UT \newline
+\textbf{PoS}: Validator-UGM + \newline Non-Validator-UT
+& 
+\textbf{PoA}: Signer-ITB + \newline Non-Signer-UNUD \newline
+\textbf{PoS}: Validator-ITB + \newline Non-Validator-UNUD
+& 
+\textbf{PoA}: Signer-UI + \newline Non-Signer-Gundar \newline
+\textbf{PoS}: Validator-UI + \newline Non-Validator-Gundar
+& 
+\textbf{PoA}: Signer-UB + \newline Non-Signer-UNIMED \newline
+\textbf{PoS}: Validator-UB + \newline Non-Validator-UNIMED
+& 
+\textbf{PoA}: Signer-ITS + \newline Non-Signer-UNDIP \newline
+\textbf{PoS}: Validator-ITS + \newline Non-Validator-UNDIP
+\\ \hline
+
+\end{longtable}
+\end{landscape}

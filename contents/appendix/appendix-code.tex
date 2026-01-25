@@ -1,74 +1,101 @@
-\chapter*{LAMPIRAN}
+\chapter*{LAMPIRAN C: SPESIFIKASI PERANGKAT KERAS}
+\addcontentsline{toc}{section}{LAMPIRAN C: SPESIFIKASI PERANGKAT KERAS}
 
-\section{Contoh Source Code}
+Berikut adalah output terminal (\texttt{lscpu} dan \texttt{free -h}) yang menunjukkan spesifikasi teknis detail dari infrastruktur yang digunakan dalam eksperimen.
 
-\subsection{Sample algorithm}
-\begin{algorithm}
-	\caption{Kruskal's Algorithm}\label{alg:kruskal}
-	\begin{algorithmic}[1]
-		\Procedure{MakeSet}{$v$}
-			\State Create new set containing $v$
-		\EndProcedure \\
-		
-		\Function{FindSet}{$v$} 
-			\State\Return a set containing $v$
-		\EndFunction \\
-		
-		\Procedure{Union}{$u$,$v$}
-			\State Unites the set that contain $u$ and $v$ into a new set
-		\EndProcedure \\
-		
-		\Function{Kruskal}{$V,E,w$}
-			\State $A \gets \{\}$
-			\For {each vertex $v$ in $V$}
-				\State MakeSet($v$)
-			\EndFor
-			\State Arrange $E$ in increasing costs, ordered by $w$
-			\For {each ($u$,$v$) taken from the sorted list}
-				\If {FindSet($u$) $\neq$ FindSet($v$)}
-					\State $A \gets A \cup \{(u,v)\}$
-					\State Union($u,v$)
-				\EndIf
-			\EndFor
-			\State \Return A
-		\EndFunction
-	\end{algorithmic}
-\end{algorithm}
+\section*{1. Control Plane (AMD EPYC - 8 vCPU, 24GB RAM)}
+{\small
+\begin{verbatim}
+maul@vmi2833588:~$ lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+CPU(s):                   8
+Vendor ID:                AuthenticAMD
+  Model name:             AMD EPYC Processor (with IBPB)
+    CPU family:           23
+    Model:                1
+    Thread(s) per core:   1
+    Core(s) per socket:   8
+    Socket(s):            1
+    Stepping:             2
+    BogoMIPS:             5589.49
+Virtualization features:  
+  Hypervisor vendor:      KVM
+  Virtualization type:    full
+Caches (sum of all):      
+  L1d:                    256 KiB (8 instances)
+  L1i:                    512 KiB (8 instances)
+  L2:                     4 MiB (8 instances)
+  L3:                     8 MiB (1 instance)
 
-\newpage
-\subsection{Sample Python code}
-\begin{lstlisting}[language=Python]
-import numpy as np
+maul@vmi2833588:~$ free -h
+               total    used    free  shared  buff/cache  available
+Mem:            23Gi   4.5Gi    17Gi    22Mi       1.6Gi       18Gi
+Swap:             0B      0B      0B
+\end{verbatim}
+}
+\vspace{1cm}
 
-def incmatrix(genl1,genl2):
-	m = len(genl1)
-	n = len(genl2)
-	M = None #to become the incidence matrix
-	VT = np.zeros((n*m,1), int)  #dummy variable
+\section*{2. VPS Node A \& B (AMD EPYC - 6 vCPU, 12GB RAM)}
+{\small
+\begin{verbatim}
+maul@vmi2837308:~$ lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+CPU(s):                   6
+Vendor ID:                AuthenticAMD
+  Model name:             AMD EPYC Processor (with IBPB)
+    CPU family:           23
+    Model:                1
+    Thread(s) per core:   1
+    Core(s) per socket:   6
+    Socket(s):            1
+Virtualization features:  
+  Hypervisor vendor:      KVM
+  Virtualization type:    full
+Caches (sum of all):      
+  L1d:                    192 KiB (6 instances)
+  L1i:                    384 KiB (6 instances)
+  L2:                     3 MiB (6 instances)
+  L3:                     8 MiB (1 instance)
 
-	#compute the bitwise xor matrix
-	M1 = bitxormatrix(genl1)
-	M2 = np.triu(bitxormatrix(genl2),1) 
+maul@vmi2837308:~$ free -h
+               total    used    free  shared  buff/cache  available
+Mem:            11Gi   3.1Gi   8.0Gi   2.0Mi       947Mi      8.6Gi
+Swap:             0B      0B      0B
+\end{verbatim}
+}
+\vspace{1cm}
 
-	for i in range(m-1):
-		for j in range(i+1, m):
-			[r,c] = np.where(M2 == M1[i,j])
-			for k in range(len(r)):
-				VT[(i)*n + r[k]] = 1;
-				VT[(i)*n + c[k]] = 1;
-				VT[(j)*n + r[k]] = 1;
-				VT[(j)*n + c[k]] = 1;
+\section*{3. VPS Node C, D, E (Intel Broadwell - 6 vCPU, 12GB RAM)}
+{\small
+\begin{verbatim}
+maul@vmi2852834:~$ lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+CPU(s):                   6
+Vendor ID:                GenuineIntel
+  Model name:             Intel Core Processor (Broadwell, 
+                          no TSX, IBRS)
+    CPU family:           6
+    Model:                61
+    Thread(s) per core:   1
+    Core(s) per socket:   6
+    Socket(s):            1
+    Stepping:             2
+    BogoMIPS:             4399.99
+Virtualization features:  
+  Hypervisor vendor:      KVM
+  Virtualization type:    full
+Caches (sum of all):      
+  L1d:                    192 KiB (6 instances)
+  L1i:                    192 KiB (6 instances)
+  L2:                     24 MiB (6 instances)
+  L3:                     16 MiB (1 instance)
 
-	if M is None:
-		M = np.copy(VT)
-	else:
-		M = np.concatenate((M, VT), 1)
-
-	VT = np.zeros((n*m,1), int)
-
-	return M
-\end{lstlisting}
-
-\newpage
-\subsection{Sample Matlab code}
-\lstinputlisting[language=Octave]{sample/sample-code.m}
+maul@vmi2852834:~$ free -h
+               total    used    free  shared  buff/cache  available
+Mem:            11Gi   2.0Gi   9.2Gi   2.0Mi       892Mi      9.7Gi
+Swap:             0B      0B      0B
+\end{verbatim}
+}

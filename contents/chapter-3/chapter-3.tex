@@ -10,8 +10,8 @@ Perangkat keras dan infrastruktur yang digunakan dalam penelitian ini meliputi:
     \item \textbf{Laptop Pengembangan}: Lenovo Ideapad Gaming 3 (AMD Ryzen 5 4600H, 16GB RAM, Ubuntu 24.04 LTS). Digunakan untuk pengembangan skrip, manajemen klaster, dan analisis data.
     \item \textbf{Cloud VPS (Virtual Private Server)}:
     \begin{itemize}
-        \item 1x \textbf{VPS Control Plane} (Contabo Cloud VPS 30): 8 vCPU, 24 GB RAM, 200 GB NVMe. Berfungsi sebagai \textit{host} untuk Caliper, Prometheus, Grafana, dan PostgreSQL.
-        \item 5x \textbf{VPS Nodes} (Contabo Cloud VPS 20): 6 vCPU, 12 GB RAM, 200 GB SSD. Berfungsi sebagai \textit{worker nodes} (System Under Test) yang menjalankan node blockchain PoA dan PoS.
+        \item 1x \textbf{VPS Control Plane} (Contabo Cloud VPS 30): Processor \textbf{AMD EPYC}, 8 vCPU, 24 GB RAM, 200 GB NVMe. Berfungsi sebagai \textit{host} untuk orkestrator Caliper, Prometheus, Grafana, dan PostgreSQL.
+        \item 5x \textbf{VPS Nodes} (Contabo Cloud VPS 20): Spesifikasi dasar 6 vCPU, 12 GB RAM, 200 GB SSD. Infrastruktur ini bersifat heterogen yang terdiri dari 2 node berbasis \textbf{AMD EPYC} dan 3 node berbasis \textbf{Intel Broadwell}. Node ini berfungsi sebagai \textit{worker nodes} (System Under Test) yang menjalankan protokol konsensus PoA dan PoS.
     \end{itemize}
 \end{itemize}
 
@@ -156,6 +156,8 @@ Visualisasi arsitektur eksperimen secara keseluruhan dapat dilihat pada Gambar \
     \item \textbf{Validator Nodes (Signers/Proposers)}: 5 node utama (V1--V5) yang memiliki hak untuk memvalidasi transaksi dan menyusun blok baru. Dalam konsensus PoA, node-node ini terhubung dalam topologi cincin (\textit{ring}) untuk rotasi \textit{proposer} secara \textit{Round-Robin} untuk PoA dan acak untuk PoS.
     \item \textbf{Observer Nodes (Non-Validators)}: 5 node tambahan (O1--O5) yang tidak memproduksi blok tetapi berpartisipasi dalam sinkronisasi data melalui protokol \textit{gossip} (P2P). Node ini mensimulasikan institusi anggota konsorsium yang hanya memegang salinan \textit{ledger} tanpa hak validasi. Node ini berfungsi sebagai pintu masuk (\textit{gateway}) bagi transaksi yang dikirimkan oleh Control Plane. Meskipun tidak memiliki validasi blok, Observer Node bertanggung jawab untuk menerima beban transaksi injeksi dari Caliper dan mempropagasi transaksi tersebut ke seluruh jaringan (termasuk ke Validator Node) agar dapat diproses dan dimasukkan ke dalam blok baru.
 \end{enumerate}
+
+Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP yang digunakan untuk setiap topologi dapat dilihat secara lengkap pada \textbf{Lampiran D}.
 
 \begin{figure}[htbp]
     \centering
