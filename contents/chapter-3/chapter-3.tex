@@ -1,195 +1,213 @@
 \chapter{Metode Penelitian}
 
-Bab ini menjelaskan metode atau cara yang digunakan dalam penelitian ini untuk membandingkan kinerja dua mekanisme konsensus, yakni \textit{Proof of Authority (PoA)} dan \textit{Proof of Stake (PoS)}, pada jaringan DChain dengan menggunakan \textit{use case smart contract} dan skenario pembandingan performa terstandar, sehingga dapat diperoleh konsensus yang paling efisien, stabil, dan efektif untuk mendukung transformasi digital pendidikan tinggi di Indonesia.
+\section{Alat dan Bahan}
 
-\section{Alat dan Bahan Tugas Akhir}
+Penelitian ini membutuhkan perangkat keras dan perangkat lunak yang spesifik untuk membangun lingkungan \textit{testbed} blockchain yang terisolasi dan terkendali.
 
-Bagian ini menjelaskan seluruh perangkat keras, perangkat lunak, serta bahan penelitian yang digunakan dalam eksperimen perbandingan kinerja mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) pada jaringan DChain. Spesifikasi yang tercantum memungkinkan peneliti lain untuk mereplikasi eksperimen ini dengan konfigurasi yang serupa.
+\subsection{Alat Penelitian}
+Perangkat keras dan infrastruktur yang digunakan dalam penelitian ini meliputi:
+\begin{itemize}
+    \item \textbf{Laptop Pengembangan}: Lenovo Ideapad Gaming 3 (AMD Ryzen 5 4600H, 16GB RAM, Ubuntu 24.04 LTS). Digunakan untuk pengembangan skrip, manajemen klaster, dan analisis data.
+    \item \textbf{Cloud VPS (Virtual Private Server)}:
+    \begin{itemize}
+        \item 1x \textbf{VPS Control Plane} (Contabo Cloud VPS 30): 8 vCPU, 24 GB RAM, 200 GB NVMe. Berfungsi sebagai \textit{host} untuk Caliper, Prometheus, Grafana, dan PostgreSQL.
+        \item 5x \textbf{VPS Nodes} (Contabo Cloud VPS 20): 6 vCPU, 12 GB RAM, 200 GB SSD. Berfungsi sebagai \textit{worker nodes} (System Under Test) yang menjalankan node blockchain PoA dan PoS.
+    \end{itemize}
+\end{itemize}
 
-\subsection{Alat Tugas Akhir}
+Perangkat lunak yang digunakan terdiri dari:
+\begin{itemize}
+    \item \textbf{Docker \& Docker Compose}: Platform kontainerisasi untuk isolasi lingkungan node.
+    \item \textbf{Kubernetes (k3s)}: Orkestrator untuk manajemen kluster \textit{multi-node}.
+    \item \textbf{Go-Ethereum (Geth)} v1.13.15 (PoA) \& v1.16.7 (PoS): Klien eksekusi blockchain Ethereum.
+    \item \textbf{Prysm} v6.0.4: Klien konsensus (Beacon Chain) untuk PoS.
+    \item \textbf{Clef}: Manajemen akun dan penandatanganan transaksi untuk PoA.
+    \item \textbf{Hyperledger Caliper} v0.6.0: \textit{Workload generator} untuk \textit{benchmarking}.
+    \item \textbf{Prometheus, Grafana, Pushgateway, Node-Exporter}: Stack monitoring untuk metrik sistem dan blockchain.
+    \item \textbf{PostgreSQL} v17: Basis data untuk menyimpan hasil eksperimen mentah.
+    \item \textbf{Kurtosis} v1.13.2: Alat orkestrasi untuk \textit{deployment} jaringan PoS yang kompleks.
+\end{itemize}
 
-\subsubsection{Perangkat Keras dan Infrastruktur}
-
-\begin{enumerate}
-	\item \textbf{Laptop Pengembangan}
-	
-	Laptop yang digunakan untuk pengembangan, konfigurasi, dan monitoring eksperimen memiliki spesifikasi sebagai berikut:
-	\begin{itemize}
-		\item Model: Lenovo Ideapad Gaming 3 15ARH05
-		\item Prosesor: AMD Ryzen™ 5 4600H (6 Cores, 12 Threads @ 3,0 GHz) dengan Radeon RX Vega 6 Graphics
-		\item RAM: 16 GB DDR4
-		\item Sistem Operasi: Ubuntu 24.04.3 LTS (64-bit)
-		\item GPU Diskrit: NVIDIA GeForce GTX 1650 Ti Mobile
-	\end{itemize}
-	
-	\item \textbf{Virtual Private Server (VPS)}
-	
-	Infrastruktur jaringan blockchain dan \textit{benchmarking} dijalankan pada VPS dari vendor Contabo dengan konfigurasi sebagai berikut:
-	\begin{itemize}
-		\item \textbf{VPS Manager} (1 unit): Contabo Cloud VPS 30 dengan spesifikasi 8 vCPU, 24 GB RAM, 200 GB NVMe, dan \textit{bandwidth unlimited}. VPS ini berfungsi sebagai \textit{control plane} dan \textit{worker manager} untuk orkestrasi Kubernetes.
-		\item \textbf{VPS Worker} (5 unit): Contabo Cloud VPS 20 dengan spesifikasi 6 vCPU, 12 GB RAM, 200 GB SSD, dan \textit{bandwidth unlimited}. Kelima VPS ini digunakan untuk menjalankan \textit{node} blockchain dengan spesifikasi yang identik guna menjaga konsistensi dan validitas hasil eksperimen.
-	\end{itemize}
-\end{enumerate}
-
-\subsubsection{Perangkat Lunak}
-
-Perangkat lunak yang digunakan dalam penelitian ini meliputi:
-
-\begin{enumerate}
-	\item \textbf{Blockchain Client Software}
-	
-	Penelitian ini menggunakan dua konfigurasi node blockchain yang berbeda untuk masing-masing mekanisme konsensus:
-	\begin{itemize}
-		\item \textbf{Node Blockchain PoA (Clique)}:
-		\begin{itemize}
-			\item Geth (\textit{Execution Client}): ethereum/client-go:alltools-v1.13.15
-			\item Clef (\textit{Account Management}): ethereum/client-go:alltools-v1.13.15
-		\end{itemize}
-		\item \textbf{Node Blockchain PoS (Gasper)}:
-		\begin{itemize}
-			\item \textit{Execution Layer}: Geth versi ethereum/client-go:latest (v1.16.7-stable)
-			\item \textit{Consensus Layer}: Prysm Beacon Chain versi prysmaticlabs/prysm-beacon-chain:latest (v6.0.4) dan Prysm Validator versi prysmaticlabs/prysm-validator:latest (v6.0.4)
-		\end{itemize}
-	\end{itemize}
-	
-	\item \textbf{Docker dan Docker Compose}
-	
-	Digunakan untuk kontainerisasi node blockchain dan seluruh \textit{tools} pendukung, sehingga memudahkan deployment, isolasi lingkungan, dan portabilitas eksperimen.
-	
-	\item \textbf{Kubernetes (K3s versi 1.33.4+k3s1)}
-	
-	Digunakan sebagai platform orkestrasi kontainer untuk mengelola deployment dan \textit{scaling} node blockchain pada infrastruktur multi-VPS.
-	
-	\item \textbf{Kurtosis versi 1.13.2}
-	
-	Digunakan sebagai \textit{platform} untuk membangun dan mengelola lingkungan pengujian blockchain PoS dengan konfigurasi yang kompleks.
-	
-	\item \textbf{Hyperledger Caliper versi 0.6.0}
-	
-	Berfungsi sebagai \textit{workload generator} dan \textit{benchmarking framework} untuk menghasilkan beban transaksi yang terkontrol dan mengukur metrik kinerja seperti \textit{throughput} (TPS), \textit{latency}, dan \textit{success ratio}.
-	
-	\item \textbf{Prometheus versi 3.7.3}
-	
-	Digunakan untuk monitoring dan pengumpulan metrik penggunaan sumber daya (\textit{resource usage}) seperti CPU, RAM, Disk I/O, dan \textit{Network Bandwidth} dari setiap node blockchain.
-	
-	\item \textbf{Grafana versi 11.4.8}
-	
-	Digunakan untuk visualisasi data metrik performa secara \textit{real-time} melalui \textit{dashboard} interaktif.
-	
-	\item \textbf{Pushgateway versi 1.11.2}
-	
-	Berfungsi sebagai \textit{gateway} untuk menerima metrik dari \textit{batch jobs} dan eksperimen yang bersifat \textit{short-lived}.
-	
-	\item \textbf{Node Exporter versi 1.10.2}
-	
-	Digunakan untuk mengekspor metrik perangkat keras dan sistem operasi dari setiap VPS ke Prometheus.
-	
-	\item \textbf{cAdvisor versi v0.53.0}
-	
-	Digunakan untuk monitoring penggunaan sumber daya dan kinerja \textit{container} Docker secara detail.
-	
-	\item \textbf{Goerli Ethstats Server versi terbaru}
-	
-	Digunakan untuk monitoring status jaringan blockchain secara \textit{real-time}.
-	
-	\item \textbf{PostgreSQL versi 17}
-	
-	Digunakan sebagai basis data untuk menyimpan hasil \textit{benchmarking} dan konfigurasi eksperimen.
-	
-	\item \textbf{Visual Studio Code versi 1.105.1 dan Antigravity}
-	
-	Digunakan sebagai \textit{Integrated Development Environment} (IDE) untuk pengembangan PoA agar dapat diproduksi berulang dan dijalankan di beberapa VPS, pengembangan konfigurasi PoS, pengembangan \textit{pipeline caliper benchmark}, konfigurasi \textit{workload}, pengembangan alat \textit{monitoring}, dan analisis data.
-\end{enumerate}
-
-\subsection{Bahan Tugas Akhir}
-
-Bahan-bahan yang digunakan dalam penelitian ini bersifat digital dan mencakup data, konfigurasi, serta \textit{image container} yang diperlukan untuk eksperimen:
-
-\begin{enumerate}
-	\item \textbf{Dataset Transaksi untuk \textit{Workload}}
-	
-	Dataset transaksi sintetis yang dibangkitkan oleh Hyperledger Caliper untuk menguji kinerja jaringan blockchain. Dataset ini mencakup berbagai jenis operasi transaksi seperti:
-	\begin{itemize}
-		\item Operasi tulis (\textit{I/O-Intensive})
-		\item \textit{Minting} sertifikat digital (NFT)
-		\item Operasi baca (\textit{Read-Only})
-		\item Operasi komputasi (\textit{CPU-Intensive})
-	\end{itemize}
-	
-	Selain itu, digunakan juga \textit{smart contract} dari DChain yang telah disesuaikan untuk simulasi \textit{use case} pendidikan tinggi.
-	
-	\item \textbf{Repository DChain dan \textit{Smart Contract}}
-	
-	Repository dari organisasi Dikti-Blockchain-and-Metaverse di GitHub yang berfungsi sebagai acuan dan referensi utama untuk memahami implementasi DChain. Repository yang digunakan terbagi menjadi dua kategori:
-	
-	\textbf{Repository Publik:}
-	\begin{itemize}
-		\item \textit{dchain-mainnet-non-authority-public} \cite{dchain-mainnet-non-authority}: Implementasi node non-authority untuk DChain mainnet
-		\item \textit{dchain-mainnet-public} \cite{dchain-mainnet-public}: Konfigurasi dan dokumentasi DChain mainnet
-		\item \textit{dchain-clef-public} \cite{dchain-clef-public}: Implementasi dan konfigurasi Clef untuk manajemen akun DChain
-	\end{itemize}
-	
-	\textbf{Repository Private:}
-	\begin{itemize}
-		\item Implementasi DChain mainnet authority dan non-authority
-		\item Konfigurasi DChain Clef untuk validator
-		\item Kode sumber \textit{smart contract}: PIN Contract dan LAM NFT Certificate
-		\item Penelitian dan dokumentasi implementasi DChain PoS
-	\end{itemize}
-	
-	Repository-repository ini menyediakan:
-	\begin{itemize}
-		\item Kode sumber dan implementasi referensi jaringan blockchain DChain
-		\item Dokumentasi teknis dan konfigurasi \textit{deployment}
-		\item Contoh \textit{use case} untuk sistem pendidikan tinggi
-		\item Konfigurasi jaringan dan parameter konsensus untuk PoA dan PoS
-	\end{itemize}
-	
-	\item \textbf{\textit{Container Image} Blockchain Client}
-	
-	\textit{Image} Docker yang digunakan untuk menjalankan node blockchain:
-	\begin{itemize}
-		\item \textit{Image} Geth dan Clef untuk jaringan PoA (Clique)
-		\item \textit{Image} Geth dan Prysm (Beacon Chain + Validator) untuk jaringan PoS (Gasper)
-	\end{itemize}
-	
-	\item \textbf{Konfigurasi Hyperledger Caliper}
-	
-	File konfigurasi YAML dan JavaScript yang mendefinisikan skenario \textit{benchmarking}, termasuk:
-	\begin{itemize}
-		\item Konfigurasi koneksi ke jaringan blockchain
-		\item Definisi \textit{workload} dan \textit{transaction rate}
-		\item Parameter \textit{worker} dan durasi eksperimen
-		\item \textit{Smart contract} ABI dan alamat kontrak yang digunakan
-	\end{itemize}
-	
-	\item \textbf{Dokumen Referensi dan Standar}
-	
-	Dokumen dan literatur ilmiah yang menjadi acuan penelitian, termasuk:
-	\begin{itemize}
-		\item \textit{Whitepaper} dan dokumentasi teknis DChain
-		\item Artikel ilmiah terkait \textit{benchmarking} blockchain dan perbandingan mekanisme konsensus
-		\item Dokumentasi resmi Ethereum, Hyperledger Caliper, Prometheus, dan Grafana
-		\item Standar \textit{blockchain benchmarking framework} dari penelitian terdahulu
-	\end{itemize}
-\end{enumerate}
-
+\subsection{Bahan Penelitian}
+Bahan yang digunakan dalam penelitian ini meliputi:
+\begin{itemize}
+    \item \textbf{Dataset Transaksi Sintetis}: Beban kerja yang dihasilkan secara deterministik oleh Caliper.
+    \item \textbf{Smart Contract DChain}: Kontrak pintar riil yang digunakan di DChain (CertificateContract, SertifikatLAM) untuk simulasi kasus penggunaan nyata.
+    \item \textbf{Image Kontainer}: Docker image resmi untuk Geth, Prysm, dan tools pendukung.
+\end{itemize}
 
 \section{Metode yang Digunakan}
 
-Bagian ini membahas metode atau cara yang akan digunakan dalam penelitian, tahapan 
-penerapan metode, dan desain penelitian (misalnya apakah penelitian akan menggunakan 
-eksperimen di Laboratorium atau di lapangan, misalkan saja penelitian biomedis atau 
-penelitian alat ukur hama yang dapat dilakukan di laboratorium ataupun di lapangan, atau menggunakan metode survei (misalnya untuk teknologi Informasi), studi kasus, atau analisis dengan perangkat lunak (ETAP, LTSpice, dst), atau \textit{prototyping} (pembuatan perangkat keras).
+\subsection{Pendekatan Penelitian}
+Penelitian ini menggunakan pendekatan **kuantitatif eksperimental** dengan metode \textit{benchmarking} terkomputerisasi. Fokus utama adalah membandingkan kinerja mekanisme konsensus PoA dan PoS pada platform DChain melalui serangkaian uji beban terkontrol. Pendekatan ini dipilih karena mampu memberikan data empiris yang objektif mengenai metrik performa sistem terdistribusi. Eksperimen dilakukan dalam lingkungan \textit{testbed} terisolasi untuk meminimalkan gangguan eksternal.
 
-Bagian ini juga membahas bagaimana data [akan] dianalisis, apakah dengan membandingkan keluaran beberapa alat ukur, membandingkan dengan standar atau bagaimana.
+\subsection{Desain Eksperimen}
 
-\section{Alur Tugas Akhir}
+Desain eksperimen dirancang untuk menjawab pertanyaan penelitian mengenai perbandingan \textit{throughput}, latensi, penggunaan sumber daya, dan stabilitas.
 
-Menguraikan prosedur yang akan digunakan dan jadwal atau alur penyelesaian setiap 
-tahap. Alur penelian ini dapat disajikan dalam bentuk diagram. Diagram dapat disusun dengan aturan yang baik semisal menggunakan \textit{flowchart}. Aturan dan tutorial pembuatan \textit{flowchart} dapat dilihat di \textcolor{blue}{http://ugm.id/flowcharttutorial}. Setelah menggambarkannya, penulis wajib menjelaskan langkah-langkah setiap alur tugas akhir dalam sub bab tersendiri sesuai dengan kebutuhan.
+\subsubsection{Variabel Penelitian}
 
-\section{Etika, Masalah, dan Keterbatasan Penelitian (Opsional))}
+\begin{longtable}{|p{4cm}|p{3cm}|p{8cm}|}
+\caption{Variabel Bebas} \label{tab:variabel_bebas} \\
+\hline
+\textbf{Variabel} & \textbf{Nilai} & \textbf{Deskripsi} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Variabel} & \textbf{Nilai} & \textbf{Deskripsi} \\
+\hline
+\endhead
+\hline
+\endlastfoot
 
-Bagian ini membahas pertimbangan etis penelitian dan [potensi] masalah serta
-keterbatasannya. Jika menyangkut penelitian dengan makhluk hidup, maka dibutuhkan adanya \textit{ethical clearance}, di bagian ini hal itu akan dibahas. Demikian juga tentang keterbatasan ataupun masalah yang akan timbul.
+Mekanisme Konsensus & PoA, PoS & Konsensus utama yang dibandingkan. \\
+\hline
+Topologi Jaringan & 3N-1NS, 3N-3NS, 5N-5NS & Variasi jumlah node validator (Signer/Validator) dan non-validator (Observer). \\
+\hline
+Jumlah Worker & 1, 3, 5 & Tingkat paralelisasi klien pengirim transaksi (Caliper). \\
+\hline
+Jenis Beban & Fixed-load, Fixed-rate & Metode kontrol laju transaksi (antrean tetap vs TPS tetap). \\
+\hline
+Jenis Transaksi & Mint, Read, Burn, CPU Stress & Operasi pada \textit{smart contract} (tulis, baca, hapus, komputasi). \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{4cm}|p{4cm}|p{7cm}|}
+\caption{Variabel Terikat (Metrik)} \label{tab:variabel_terikat} \\
+\hline
+\textbf{Kategori} & \textbf{Metrik} & \textbf{Deskripsi} \\
+\hline
+\endfirsthead
+\hline
+\endhead
+\hline
+\endlastfoot
+
+Kinerja Transaksi & Throughput (TPS) & Jumlah transaksi berhasil per detik. \\
+& Latency (Avg, P95) & Waktu tunda rata-rata dan persentil ke-95. \\
+& Success Rate & Persentase transaksi berhasil. \\
+\hline
+Sumber Daya & CPU Usage (\%) & Rata-rata penggunaan CPU node. \\
+& Memory Usage (MB) & Rata-rata penggunaan RAM node. \\
+& Network I/O & Throughput jaringan masuk/keluar. \\
+& Disk I/O & Throughput baca/tulis disk. \\
+\hline
+Stabilitas & Stability Index & Konsistensi TPS dalam durasi panjang (Soak Test). \\
+\hline
+\end{longtable}
+
+\textbf{Variabel Kontrol}:
+Untuk memastikan validitas internal, parameter berikut dijaga konstan:
+\begin{itemize}
+    \item \textbf{Block Time}: 5 detik (PoA) dan 12 detik (PoS - Slot Time standar Ethereum 2.0). 
+    \item \textbf{Gas Limit}: 30.000.000 gas per blok.
+    \item \textbf{Spesifikasi VPS}: Identik untuk semua trial.
+    \item \textbf{Durasi Pemanasan (\textit{Pre-warm})}: Dilakukan sebelum setiap sesi pengukuran untuk menghilangkan efek \textit{cold start}.
+    \item \textbf{Mempool Cleaning}: Memastikan antrean transaksi kosong sebelum memulai skenario baru.
+\end{itemize}
+
+\subsection{Skenario Benchmarking}
+Penelitian ini menerapkan lima skenario utama untuk menguji berbagai aspek kinerja:
+
+\begin{enumerate}
+    \item \textbf{Throughput Capacity (Step Load)}:
+    \begin{itemize}
+        \item Tujuan: Mencari titik jenuh (\textit{knee point}) sistem.
+        \item Metode: Meningkatkan beban TPS secara bertahap (5, 10, ..., 100 TPS) hingga latensi melonjak drastis.
+    \end{itemize}
+
+    \item \textbf{Fixed Load (Baseline)}:
+    \begin{itemize}
+        \item Tujuan: Mengukur kapasitas maksimum teoretis tanpa jeda pengiriman.
+        \item Metode: Mempertahankan antrean transaksi tetap (\textit{backlog} 20 tx) selama 180 detik.
+    \end{itemize}
+
+    \item \textbf{Worker Scalability}:
+    \begin{itemize}
+        \item Tujuan: Menguji efisiensi penanganan klien konkuren.
+        \item Metode: Menjalankan beban TPS optimal dengan variasi 1, 3, dan 5 \textit{worker}.
+    \end{itemize}
+
+    \item \textbf{Read Intensive}:
+    \begin{itemize}
+        \item Tujuan: Mengukur kinerja operasi baca (RPC) yang dominan pada aplikasi nyata.
+        \item Metode: Beban baca tinggi (200, 400, 600 TPS) pada data yang sudah ada.
+    \end{itemize}
+    
+    \item \textbf{Functional Lifecycle \& Stability}:
+    \begin{itemize}
+        \item Tujuan: Menguji fungsi penuh (Mint-Read-Burn) dan stabilitas jangka panjang.
+        \item Metode: \textit{Soak Test} selama 15 menit pada 60\% beban optimal.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Konfigurasi Testbed}
+\subsubsection{Jaringan PoA (Proof of Authority)}
+Menggunakan protokol Clique dengan Geth + Clef. Topologi didistribusikan ke 5 VPS menggunakan Kubernetes (Host Network). Setiap \textit{signer} (validator) diamankan dengan Clef yang menyimpan \textit{private key} secara terekstraksi.
+
+\subsubsection{Jaringan PoS (Proof of Stake)}
+Menggunakan protokol Gasper (LMD-GHOST + Casper FFG) dengan arsitektur Geth (Execution Layer) dan Prysm (Consensus Layer). 
+
+Orkestrasi dilakukan menggunakan Kurtosis untuk mengelola kompleksitas \textit{peering} antara EL dan CL. Setiap node validator menjalankan 22 validator keys (total 110 validator untuk 5 node) untuk mensimulasikan beban jaringan nyata.
+
+Visualisasi arsitektur eksperimen secara keseluruhan dapat dilihat pada Gambar \ref{fig:experimental_topology}. Topologi ini menerapkan skema **10 Node** yang terdiri dari:
+\begin{enumerate}
+    \item \textbf{Control Plane}: Bertindak sebagai orkestrator yang mengirimkan beban transaksi (\textit{RPC Load}) ke node observer menggunakan Hyperledger Caliper.
+    \item \textbf{Validator Nodes (Signers/Proposers)}: 5 node utama (V1--V5) yang memiliki hak untuk memvalidasi transaksi dan menyusun blok baru. Dalam konsensus PoA, node-node ini terhubung dalam topologi cincin (\textit{ring}) untuk rotasi \textit{proposer} secara \textit{Round-Robin} untuk PoA dan acak untuk PoS.
+    \item \textbf{Observer Nodes (Non-Validators)}: 5 node tambahan (O1--O5) yang tidak memproduksi blok tetapi berpartisipasi dalam sinkronisasi data melalui protokol \textit{gossip} (P2P). Node ini mensimulasikan institusi anggota konsorsium yang hanya memegang salinan \textit{ledger} tanpa hak validasi. Node ini berfungsi sebagai pintu masuk (\textit{gateway}) bagi transaksi yang dikirimkan oleh Control Plane. Meskipun tidak memiliki validasi blok, Observer Node bertanggung jawab untuk menerima beban transaksi injeksi dari Caliper dan mempropagasi transaksi tersebut ke seluruh jaringan (termasuk ke Validator Node) agar dapat diproses dan dimasukkan ke dalam blok baru.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/experimental-topology.png}
+    \caption{Topologi Eksperimen 10 Node dengan Infrastruktur Terdistribusi}
+    \label{fig:experimental_topology}
+\end{figure}
+
+\subsection{Monitoring dan Pengumpulan Data}
+Sistem monitoring dibangun menggunakan Prometheus yang mengumpulkan metrik dari tiga sumber:
+\begin{enumerate}
+    \item \textbf{Geth/Prysm}: Metrik internal blockchain (peer count, block height, tx pool).
+    \item \textbf{Node Exporter/cAdvisor}: Metrik infrastruktur (CPU, RAM, Network container).
+    \item \textbf{Hyperledger Caliper}: Metrik transaksi (TPS, Latency, Errors) yang dikirim via Pushgateway.
+\end{enumerate}
+Data disimpan di PostgreSQL untuk analisis lebih lanjut.
+
+\section{Alur Penelitian}
+
+Penelitian ini dilaksanakan dalam beberapa tahapan sistematis, mulai dari studi pendahuluan hingga penarikan kesimpulan.
+
+\begin{enumerate}
+    \item \textbf{Fase 1: Studi Pendahuluan}. Identifikasi masalah, studi literatur mengenai PoA dan PoS, serta analisis arsitektur DChain \textit{existing}.
+    \item \textbf{Fase 2: Pengembangan Lingkungan PoA}. Replikasi jaringan PoA DChain ke lingkungan lokal dan VPS, serta pembuatan skrip otomasi.
+    \item \textbf{Fase 3: Pengembangan Lingkungan PoS}. Studi implementasi PoS Ethereum, replikasi menggunakan Kurtosis, dan validasi konektivitas.
+    \item \textbf{Fase 4: Pengembangan Sistem Benchmarking}. Konfigurasi Hyperledger Caliper, pengembangan \textit{workload script}, dan integrasi sistem monitoring (Prometheus/Grafana).
+    \item \textbf{Fase 5: Eksekusi dan Analisis}. Pelaksanaan eksperimen pada infrastruktur \textit{cloud}, pengumpulan data metrik, analisis statistik, dan penyusunan laporan.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    % Placeholder image.
+    \includegraphics[width=0.8\textwidth]{images/flowchart-penelitian.png}
+    \caption{Diagram Alir Tahapan Penelitian}
+    \label{fig:alur_penelitian}
+\end{figure}
+
+\section{Etika, Masalah, dan Keterbatasan Penelitian}
+
+\subsection{Etika Penelitian}
+Penelitian ini menekankan pada integritas ilmiah dan transparansi. Seluruh kode konfigurasi, skrip \textit{benchmark}, dan data hasil eksperimen dibuka (\textit{open source}) untuk mendukung reproduksibilitas. Penggunaan infrastruktur \textit{cloud} dilakukan secara terisolasi (Private Testnet) agar tidak mengganggu jaringan publik.
+
+\subsection{Masalah Potensial}
+\begin{itemize}
+    \item \textbf{Variabilitas Jaringan}: Penggunaan VPS publik rentan terhadap fluktuasi latensi (\textit{network jitter}). Mitigasi dilakukan dengan teknik statistik robust (Median) dan pengulangan eksperimen ($N=5$).
+    \item \textbf{Saturasi Sumber Daya}: Beban tinggi dapat menyebabkan \textit{throttling}. Mitigasi dilakukan dengan jeda \textit{cooldown} 10 menit antar trial.
+\end{itemize}
+
+\subsection{Keterbatasan Penelitian}
+\begin{itemize}
+    \item \textbf{Skala Jaringan}: Dibatasi maksimal 10 node, belum mencerminkan skala ribuan node publik.
+    \item \textbf{Beban Sintetis}: Pola transaksi Caliper bersifat deterministik, mungkin berbeda dengan trafik organik pengguna asli.
+    \item \textbf{Spesifikasi Hardware}: Hasil performa terikat pada spesifikasi VPS kelas menengah yang digunakan, bukan server \textit{enterprise}.
+    \item \textbf{Lingkungan Terisolasi}: Tidak mencakup aspek serangan keamanan (\textit{slashing}, \textit{double spending}) atau insentif ekonomi riil.
+\end{itemize}

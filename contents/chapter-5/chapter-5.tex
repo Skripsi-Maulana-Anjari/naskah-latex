@@ -1,3 +1,38 @@
-\chapter{Tambahan (Opsional)}
+\chapter{Kesimpulan dan Saran}
 
-Anda boleh menambahkan Bab jika diperlukan. Jumlah Bab tidak harus sesuai dengan \textit{template}. 
+\section{Kesimpulan}
+
+Penelitian ini bertujuan untuk mengevaluasi dan membandingkan kinerja mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) dalam konteks implementasi infrastruktur sertifikat elektronik perguruan tinggi (DChain). Melalui serangkaian pengujian \textit{benchmarking} yang komprehensif menggunakan Hyperledger Caliper pada lingkungan \textit{multi-node} terdistribusi, penelitian ini telah berhasil menjawab rumusan masalah dan menguji hipotesis yang diajukan.
+
+Berdasarkan analisis data empiris yang diperoleh dari 300+ iterasi uji coba, dapat ditarik beberapa kesimpulan utama sebagai berikut:
+
+\begin{enumerate}
+    \item \textbf{Trade-off Antara Kapasitas dan Responsivitas} \\
+    Hasil penelitian menunjukkan adanya karakteristik kinerja yang bertolak belakang di antara kedua algoritma. \textbf{PoS unggul dalam aspek kapasitas} (\textit{throughput}) dengan capaian puncak hingga $\approx$60 TPS, hampir dua kali lipat lebih tinggi dibandingkan PoA yang mengalami saturasi pada $\approx$30--40 TPS. Namun, keunggulan ini harus dibayar dengan responsivitas yang lebih rendah. \textbf{PoA terbukti jauh lebih unggul dalam latensi}, mencatatkan waktu konfirmasi rata-rata 4.6 detik, yang secara signifikan lebih cepat dibandingkan PoS ($\approx$8 detik). Temuan ini memverifikasi bahwa PoA lebih cocok untuk aplikasi yang menuntut interaksi pengguna yang cepat (\textit{user-interactive}), sedangkan PoS lebih sesuai untuk pemrosesan data volume tinggi (\textit{batch processing}).
+
+    \item \textbf{Efisiensi Sumber Daya} \\
+    Dalam hal efisiensi operasional, \textbf{PoA menunjukkan superioritas} dalam pemanfaatan sumber daya komputasi. PoA mampu menghasilkan transaksi per detik per unit CPU (TPS/\%CPU) yang lebih tinggi dibandingkan PoS. Hal ini disebabkan oleh arsitektur PoS yang lebih kompleks, yang melibatkan dua lapisan proses (\textit{Execution Layer} dan \textit{Consensus Layer}) serta lalu lintas komunikasi \textit{gossip} antar-validator yang intensif, sehingga menciptakan \textit{overhead} komputasi tambahan.
+
+    \item \textbf{Kesesuaian dengan Karakteristik DChain} \\
+    Mengingat karakteristik sistem sertifikat akademik yang bersifat \textit{Read-Heavy} (dominasi verifikasi dibandingkan penerbitan), \textit{User-Centric} (memerlukan respons cepat saat verifikasi), dan memiliki volume transaksi moderat (penerbitan musiman), maka \textbf{mekanisme konsensus PoA dinilai lebih relevan dan efektif} untuk diimplementasikan pada tahap awal konsorsium DChain. Meskipun memiliki \textit{throughput} maksimal yang lebih rendah, kapasitas 30 TPS sudah sangat memadai untuk menangani beban operasional harian perguruan tinggi, sementara keunggulan latensi dan efisiensinya memberikan nilai tambah yang lebih krusial bagi pengalaman pengguna dan biaya operasional.
+\end{enumerate}
+
+Secara keseluruhan, penelitian ini menyimpulkan bahwa meskipun PoS menawarkan janji skalabilitas jangka panjang dan desentralisasi yang lebih luas, \textbf{PoA tetap menjadi solusi teknis yang paling optimal} untuk kebutuhan DChain saat ini, menyeimbangkan kinerja, efisiensi biaya, dan kecepatan respons.
+
+\section{Saran}
+
+Penelitian ini memiliki batasan tertentu yang membuka peluang bagi pengembangan lebih lanjut di masa depan. Beberapa aspek yang disarankan untuk diteliti pada studi selanjutnya meliputi:
+
+\begin{enumerate}
+    \item \textbf{Eksplorasi Variabel Jaringan yang Lebih Luas} \\
+    Penelitian ini dibatasi pada topologi maksimal 10 node dan latensi jaringan yang disimulasikan. Disarankan bagi peneliti selanjutnya untuk menguji skalabilitas pada jaringan dengan jumlah node yang lebih besar ($>20$ node) dan kondisi geografis \textit{Wide Area Network} (WAN) riil antar-pulau atau antar-negara untuk melihat dampak propagasi blok secara lebih nyata.
+
+    \item \textbf{Optimasi Parameter Konsensus} \\
+    Temuan bahwa \textit{throughput} PoA dibatasi oleh konfigurasi waktu blok (\textit{block time}) 5 detik membuka peluang optimasi. Penelitian selanjutnya dapat bereksperimen dengan menurunkan waktu blok (misal: 2 atau 3 detik) atau meningkatkan batas gas blok (\textit{block gas limit}) untuk mencari titik optimal baru yang dapat meningkatkan kapasitas tanpa mengorbankan stabilitas.
+
+    \item \textbf{Analisis Keamanan dan Serangan (\textit{Security Robustness})} \\
+    Penelitian ini berfokus pada kinerja teknis dalam kondisi normal. Studi lanjutan sangat disarankan untuk menguji ketahanan kedua mekanisme konsensus terhadap skenario serangan siber, seperti serangan 51\%, \textit{Distributed Denial of Service} (DDoS) pada validator, atau perilaku validator jahat (\textit{Byzantine faults}), guna melengkapi analisis dari perspektif keamanan.
+
+    \item \textbf{Kajian Model Hybrid (PoA-PoS)} \\
+    Mengingat kelebihan masing-masing algoritma, penelitian mengenai arsitektur \textit{hybrid} dapat menjadi terobosan menarik. Misalnya, menggunakan PoA sebagai \textit{sidechain} untuk operasi harian yang cepat dan murah, yang secara berkala melakukan \textit{checkpointing} ke jaringan PoS utama untuk keamanan jangka panjang.
+\end{enumerate}

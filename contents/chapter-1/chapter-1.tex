@@ -2,142 +2,116 @@
 
 \section{Latar Belakang}
 
-Teknologi \textit{blockchain} pertama kali diperkenalkan melalui Bitcoin pada tahun 2009 dengan tujuan menghadirkan sistem transaksi elektronik yang terdesentralisasi, transparan, dan aman tanpa perantara. Sejak saat itu, teknologi \textit{blockchain} berkembang pesat dan banyak diadopsi dalam berbagai sektor karena karakteristiknya yang mampu menjamin keamanan data serta integritas transaksi. Inovasi ini kemudian diperluas melalui Ethereum pada tahun 2015 dengan hadirnya konsep smart contract, yang memungkinkan eksekusi otomatis aplikasi desentralisasi (dApps) di atas \textit{blockchain}. Perkembangan ini mendorong munculnya berbagai penelitian mengenai mekanisme konsensus alternatif yang lebih efisien dibandingkan proof-of-work (PoW), seperti Proof of Authority (PoA) dan Proof of Stake (PoS).
+Teknologi \textit{blockchain} pertama kali diperkenalkan melalui Bitcoin pada tahun 2009 dengan tujuan menghadirkan sistem transaksi elektronik yang terdesentralisasi, transparan, dan aman tanpa perantara. Sejak saat itu, \textit{blockchain} berkembang pesat dan banyak diadopsi dalam berbagai sektor karena karakteristiknya yang mampu menjamin keamanan data serta integritas transaksi. Inovasi ini kemudian diperluas melalui Ethereum pada tahun 2015 dengan hadirnya konsep \textit{smart contract}, yang memungkinkan eksekusi otomatis aplikasi desentralisasi (dApps) di atas \textit{blockchain}. Perkembangan ini mendorong munculnya berbagai penelitian mengenai mekanisme konsensus alternatif yang lebih efisien dibandingkan \textit{proof-of-work} (PoW), seperti \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS).
 
-Selain pada sektor finansial, \textit{blockchain} juga mulai diterapkan dalam bidang pendidikan. Salah satu implementasi di Indonesia adalah DChain (Dikti Chain), sebuah jaringan \textit{blockchain} nasional yang dirancang untuk mendukung ekosistem pendidikan tinggi yang dibuat oleh tim gabungan di bawah naungan Kementrian Pendidikan Tinggi, Sains, dan Teknologi Republik Indonesia. DChain berfungsi sebagai infrastruktur digital terdesentralisasi yang memungkinkan penerbitan, penyimpanan, dan verifikasi dokumen akademik—seperti ijazah digital, sertifikat kompetensi, dan transkrip—dengan jaminan integritas data. Salah satu komponen krusial yang menentukan kinerja DChain adalah mekanisme konsensus yang digunakan untuk memvalidasi transaksi dan menjaga integritas jaringan.
+Selain pada sektor finansial, \textit{blockchain} juga mulai diterapkan dalam bidang pendidikan. Salah satu implementasi di Indonesia adalah DChain (Dikti Chain), sebuah jaringan \textit{blockchain} nasional yang dirancang untuk mendukung ekosistem pendidikan tinggi. DChain berfungsi sebagai infrastruktur digital terdesentralisasi yang memungkinkan penerbitan, penyimpanan, dan verifikasi dokumen akademik—seperti ijazah digital, sertifikat kompetensi, dan transkrip—dengan jaminan integritas data. Salah satu komponen krusial yang menentukan kinerja DChain adalah mekanisme konsensus yang digunakan untuk memvalidasi transaksi dan menjaga integritas jaringan.
 
 Saat ini DChain mengimplementasikan konsensus PoA, yang dikenal efisien karena hanya node terotorisasi yang dapat memvalidasi transaksi. Namun, meningkatnya skala penggunaan dan kompleksitas jaringan mendorong perlunya mekanisme yang lebih terdesentralisasi dan skalabel, seperti PoS, yang memberikan kesempatan kepada seluruh pemegang token untuk berpartisipasi dalam proses validasi. Relevansi isu ini juga sejalan dengan tren global, di mana Ethereum sebagai salah satu \textit{blockchain} publik terbesar telah bermigrasi dari PoW ke PoS pada tahun 2022.
 
-Rencana migrasi dari PoA ke PoS pada DChain menimbulkan pertanyaan strategis mengenai dampaknya terhadap performa jaringan. Sejauh ini, belum ada kajian komprehensif yang mengevaluasi migrasi konsensus pada DChain dengan menggunakan parameter pengujian yang terstandar. Oleh karena itu, penelitian ini dirancang untuk menganalisis dan membandingkan kinerja DChain pada kedua mekanisme konsensus, dengan fokus pada metrik seperti Transactions Per Second (TPS), latensi, penggunaan sumber daya komputasi, skalabilitas, dan stabilitas sistem.
+Rencana migrasi dari PoA ke PoS pada DChain menimbulkan pertanyaan strategis mengenai dampaknya terhadap performa jaringan. Sejauh ini, belum ada kajian komprehensif yang mengevaluasi migrasi konsensus pada DChain dengan menggunakan parameter pengujian yang terstandar. Oleh karena itu, penelitian ini dirancang untuk menganalisis dan membandingkan kinerja DChain pada kedua mekanisme konsensus, dengan fokus pada metrik seperti \textit{Transactions Per Second} (TPS), latensi, penggunaan sumber daya komputasi, skalabilitas, dan stabilitas sistem.
 
 Dengan demikian, penelitian ini penting untuk mengisi kesenjangan tersebut dengan memberikan landasan empiris bagi pengambil kebijakan dan pengembang dalam menentukan strategi konsensus yang optimal guna mendukung transformasi digital pendidikan tinggi di Indonesia.
 
 \section{Rumusan Masalah}
 
-Berdasarkan uraian latar belakang, penelitian ini dirancang untuk menjawab pertanyaan-pertanyaan berikut.
-\begin{itemize}
-	\item Bagaimana performa jaringan DChain dengan mekanisme konsensus \textit{Proof of Authority (PoA)}, jika diukur menggunakan metrik \textit{benchmarking} seperti \textit{transactions per second} (TPS), \textit{latency}, penggunaan sumber daya, skalabilitas, dan stabilitas melalui variasi parameter pengujian?
-	\item Bagaimana performa jaringan DChain dengan mekanisme konsensus \textit{Proof of Stake (PoS)} pada parameter \textit{benchmarking} yang sama?
-	\item Di antara kedua mekanisme konsensus tersebut, manakah yang memberikan tingkat efisiensi dan efektivitas kinerja lebih baik dalam konteks jaringan DChain?
-\end{itemize}
+Berdasarkan uraian latar belakang, penelitian ini dirancang untuk menjawab pertanyaan-pertanyaan berikut:
 
-%-------------------------------------------------	
+\begin{enumerate}
+    \item Bagaimana performa jaringan DChain dengan mekanisme konsensus \textit{Proof of Authority} (PoA), jika diukur menggunakan metrik \textit{benchmarking} seperti \textit{Transactions Per Second} (TPS), \textit{latency}, penggunaan sumber daya, skalabilitas, dan stabilitas melalui variasi parameter pengujian?
+    \item Bagaimana performa jaringan DChain dengan mekanisme konsensus \textit{Proof of Stake} (PoS) pada parameter \textit{benchmarking} yang sama?
+    \item Di antara kedua mekanisme konsensus tersebut, manakah yang memberikan tingkat efisiensi dan efektivitas kinerja lebih baik dalam konteks jaringan DChain?
+\end{enumerate}
 
 \section{Tujuan Penelitian}
 
-Secara umum, penelitian ini bertujuan untuk membandingkan kinerja dua mekanisme konsensus, yakni \textit{Proof of Authority (PoA)} dan \textit{Proof of Stake (PoS)}, pada jaringan DChain dengan menggunakan \textit{use case smart contract} dan skenario pembandingan performa terstandar, sehingga dapat diperoleh konsensus yang paling efisien, stabil, dan efektif untuk mendukung transformasi digital pendidikan tinggi di Indonesia.
+Secara umum, penelitian ini bertujuan untuk membandingkan kinerja dua mekanisme konsensus yaitu \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) menggunakan \textit{use case smart contract} dan skenario pembandingan kinerja jaringan \textit{blockchain} DChain, sehingga dapat ditentukan konsensus yang paling efisien, efektif, dan sesuai untuk mendukung pengelolaan data pendidikan tinggi di Indonesia.
 
 Untuk mencapai tujuan umum tersebut, penelitian ini memiliki tujuan khusus sebagai berikut:
 
 \begin{enumerate}
-    \item Melakukan pengukuran performa jaringan DChain dengan konsensus PoA menggunakan metrik \textit{benchmarking} yang mencakup:
-    \begin{itemize}
-        \item \textit{Throughput} (Transactions per Second / TPS),
-        \item \textit{Latency} rata-rata transaksi,
-        \item penggunaan sumber daya (\textit{CPU}, \textit{RAM}, dan \textit{storage}),
-        \item serta aspek \textit{scalability} dan \textit{stability} pada berbagai variasi parameter pengujian.
-    \end{itemize}
-    \item Melakukan pengukuran performa jaringan DChain dengan konsensus PoS menggunakan metrik dan variasi parameter \textit{benchmarking} yang sama dengan pengujian PoA untuk memastikan kesetaraan kondisi eksperimen.
-    \item Membandingkan hasil pengujian PoA dan PoS untuk mengidentifikasi perbedaan performa utama, menilai keunggulan relatif serta \textit{trade-off} dari masing-masing mekanisme konsensus, dan memberikan interpretasi terhadap dampaknya bagi efisiensi serta reliabilitas jaringan DChain.
-    \item Menyusun rekomendasi teknis dan ilmiah terkait mekanisme konsensus yang paling optimal bagi DChain dengan mempertimbangkan hasil pengukuran performa, stabilitas sistem, serta potensi pengembangan jangka panjang.
-    \item Menyediakan bukti empiris berbasis data \textit{benchmarking} untuk memperkuat arah pengembangan kebijakan teknologi \textit{blockchain} nasional di bidang pendidikan tinggi, khususnya dalam konteks interoperabilitas, keamanan, dan efisiensi.
+    \item Melakukan pengukuran performa jaringan DChain dengan konsensus PoA berdasarkan metrik \textit{benchmarking} meliputi TPS, \textit{latency}, penggunaan sumber daya, skalabilitas, dan stabilitas pada berbagai variasi parameter pengujian.
+    \item Melakukan pengukuran performa jaringan DChain dengan konsensus PoS menggunakan metrik dan variasi parameter \textit{benchmarking} yang sama.
+    \item Membandingkan hasil pengujian PoA dan PoS untuk mengidentifikasi perbedaan kinerja, potensi keunggulan, serta \textit{trade-off} yang relevan bagi pengembangan DChain di masa depan.
 \end{enumerate}
-
-%-------------------------------------------------	
 
 \section{Batasan Penelitian}
 
-Penelitian ini dibatasi pada ruang lingkup tertentu untuk menjaga fokus terhadap perbandingan performa mekanisme konsensus \textit{Proof of Authority (PoA)} dan \textit{Proof of Stake (PoS)} dalam jaringan DChain. Adapun batasan penelitian ini adalah sebagai berikut:
+Penelitian ini dibatasi pada ruang lingkup tertentu untuk menjaga fokus pada perbandingan performa mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) dalam jaringan DChain. Adapun batasan penelitian ini adalah sebagai berikut:
 
 \begin{enumerate}
     \item \textbf{Objek Penelitian} \\
-    Objek yang diteliti adalah performa jaringan DChain yang dibangun menggunakan teknologi \textit{go-ethereum} dan dijalankan dengan dua mekanisme konsensus, yaitu PoA (Clique) dan PoS (Prysm).
-
+    Objek yang diteliti adalah performa jaringan DChain menggunakan teknologi go-ethereum yang dijalankan dengan dua mekanisme konsensus, yaitu PoA (Clique) dan PoS (Prysm).
+    
     \item \textbf{Metode Penelitian} \\
-    Penelitian ini menggunakan pendekatan eksperimental berbasis simulasi yang dijalankan pada lingkungan terkontainerisasi (\textit{Docker}, \textit{Kubernetes}, dan \textit{Kurtosis}). Infrastruktur pengujian terdiri atas satu VPS utama sebagai \textit{control plane} dan \textit{worker manager}, serta lima VPS dengan spesifikasi identik sebagai mesin untuk menjalankan \textit{nodes} jaringan. Proses pengujian dilakukan dengan membangun pipeline otomatis menggunakan \textit{benchmarking tools} seperti Hyperledger Caliper, Prometheus, dan Grafana untuk mengukur performa secara kuantitatif.
-
+    Penelitian ini menggunakan pendekatan eksperimental berbasis simulasi, yang dijalankan pada lingkungan terkontainerisasi (Docker, Kubernetes, dan Kurtosis) yang terdiri dari 1 VPS utama sebagai \textit{control plane} dan \textit{worker manager} dan juga 5 VPS dengan spesifikasi identik sebagai mesin untuk menjalankan \textit{nodes} jaringan. Proses pengujian dilakukan dengan membangun \textit{pipeline} dengan bantuan \textit{benchmarking tools} seperti Hyperledger Caliper, Prometheus, dan Grafana.
+    
     \item \textbf{Waktu dan Tempat Penelitian} \\
-    Penelitian dan pengujian dilakukan pada bulan Agustus hingga November 2025 menggunakan infrastruktur berbasis VPS yang disiapkan khusus sebagai lingkungan uji eksperimental.
-
+    Pengujian dilakukan di bulan Agustus-Desember 2025 dengan infrastruktur berbasis VPS yang disiapkan khusus sebagai lingkungan uji.
+    
     \item \textbf{Populasi dan Sampel} \\
-    Populasi penelitian ini adalah jaringan DChain dengan dua mekanisme konsensus (PoA dan PoS) yang terdiri atas 15 \textit{nodes} validator aktif. Sampel yang digunakan dalam pengujian terdiri dari 10 \textit{nodes} yang merepresentasikan variasi konfigurasi jaringan pada kondisi terkendali.
-
+    Populasi adalah jaringan PoA dan PoS dengan jumlah node sebanyak node validator DChain saat ini (15 nodes) dan sampel diambil sebanyak 10 nodes.
+    
     \item \textbf{Variabel Penelitian} \\
-    Variabel penelitian terdiri atas variabel bebas, variabel yang dijaga konstan, dan variabel terikat, yang dijelaskan sebagai berikut:
-
-    \begin{enumerate}[label*=\alph*.]
-        \item \textit{Variabel Bebas (Independent Variables)} \\
-        Faktor yang diubah untuk melihat pengaruhnya terhadap performa jaringan, mencakup:
-        \begin{itemize}
-            \item \textbf{Jenis Mekanisme Konsensus:} PoA dan PoS.
-            \item \textbf{Topologi Jaringan (Jumlah Node):} variasi konfigurasi 4, 6, dan 10 \textit{nodes}.
-            \item \textbf{Beban Kerja (Transaction Load):} jumlah transaksi per detik (TPS) dengan tingkat beban rendah, menengah, dan tinggi.
-            \item \textbf{Jenis Operasi Transaksi:} meliputi operasi tulis (I/O-intensive), pencetakan NFT (\textit{minting}), baca (read-only), dan komputasi (CPU-intensive).
-            \item \textbf{Jumlah Worker pada Hyperledger Caliper:} variasi 1 \textit{worker} (beban rendah), 3 \textit{workers} (beban menengah), dan 5 \textit{workers} (beban tinggi).
-        \end{itemize}
-
-        \item \textit{Variabel yang Dijaga Konstan (Controlled Variables)} \\
-        Beberapa faktor dikendalikan agar tidak memengaruhi hasil eksperimen, antara lain:
-        \begin{itemize}
-            \item Konfigurasi dan versi \textit{smart contract} yang digunakan.
-            \item Parameter skenario dan konfigurasi jaringan di luar variabel bebas.
-            \item Lingkungan infrastruktur pengujian (spesifikasi VPS, sistem operasi, dan versi perangkat lunak).
-        \end{itemize}
-
-        \item \textit{Variabel Terikat (Dependent Variables)} \\
-        Metrik performa yang diukur untuk menilai hasil eksperimen, yaitu:
-        \begin{itemize}
-            \item \textbf{Throughput (TPS):} jumlah transaksi yang berhasil diproses per detik.
-            \item \textbf{Latency:} waktu rata-rata pemrosesan transaksi.
-            \item \textbf{Success Ratio:} persentase transaksi yang berhasil divalidasi.
-            \item \textbf{Resource Usage:} konsumsi sumber daya sistem (CPU dan memori).
-        \end{itemize}
-    \end{enumerate}
-
-    \item \textbf{Hipotesis Penelitian} \\
-    Hipotesis yang diajukan adalah bahwa konsensus \textit{Proof of Stake (PoS)} menunjukkan kinerja yang lebih efektif dan efisien dibandingkan \textit{Proof of Authority (PoA)} dalam konteks jaringan DChain.
-
-    \item \textbf{Keterbatasan Penelitian} \\
+    Variabel bebas adalah faktor yang diubah untuk melihat pengaruhnya terhadap performa jaringan. Dalam penelitian ini, variabel bebas mencakup:
     \begin{itemize}
-        \item Penelitian ini tidak membahas aspek keamanan, privasi, maupun ketahanan terhadap serangan pada jaringan \textit{blockchain}.
+        \item \textbf{Jenis Mekanisme Konsensus}: PoA dan PoS.
+        \item \textbf{Topologi Jaringan (Jumlah Nodes)}: variasi konfigurasi:
+        \begin{itemize}
+            \item 4 node (3 Signer/Validator + 1 Non-Signer/Observer)
+            \item 6 node (3 Signer/Validator + 3 Non-Signer/Observer)
+            \item 10 node (5 Signer/Validator + 5 Non-Signer/Observer)
+        \end{itemize}
+        \item \textbf{Beban Kerja (\textit{Transaction Load})}: jumlah transaksi per detik (TPS) dengan beban bervariasi dan disesuaikan.
+        \item \textbf{Jenis Operasi Transaksi}: meliputi operasi tulis (\textit{I/O-Intensive}), \textit{minting} NFT, baca (\textit{Read-Only}), dan komputasi (\textit{CPU-Intensive}).
+        \item \textbf{Jumlah Worker Hyperledger Caliper}: jumlah \textit{worker} sebagai proses pengirim transaksi, divariasikan antara 1 \textit{worker} (beban rendah), 3 \textit{worker} (beban menengah), dan 5 \textit{worker} (beban tinggi).
+    \end{itemize}
+    
+    \item \textbf{Variabel yang Dijaga Konstan} \\
+    Beberapa faktor dikendalikan agar tidak memengaruhi hasil eksperimen, antara lain:
+    \begin{itemize}
+        \item Konfigurasi \textit{smart contract} yang digunakan.
+        \item Konfigurasi dan parameter skenario.
+        \item Parameter jaringan selain yang menjadi variabel bebas.
+        \item Lingkungan infrastruktur pengujian (spesifikasi VPS, sistem operasi, serta versi perangkat lunak).
+    \end{itemize}
+    
+    \item \textbf{Variabel Terikat}: TPS, \textit{latency}, \textit{success ratio}, \textit{resource usage}.
+    
+    \item \textbf{Hipotesis}: bahwa konsensus PoS lebih efektif dan efisien dibandingkan PoA.
+    
+    \item \textbf{Keterbatasan Penelitian}
+    \begin{itemize}
+        \item Penelitian ini tidak membahas aspek keamanan dan privasi jaringan \textit{blockchain}.
         \item Penelitian tidak menguji performa jangka panjang di luar periode eksperimen.
-        \item Penelitian tidak menelaah parameter spesifik PoS seperti tingkat partisipasi validator.
-        \item Keterbatasan sumber daya VPS menyebabkan kapasitas uji berskala terbatas.
-        \item Pengujian dilakukan hanya pada jaringan uji (*testnet*) dan tidak melibatkan jaringan utama (*mainnet*).
+        \item Penelitian tidak menelaah parameter spesifik PoS (misalnya tingkat partisipasi validator).
+        \item Sumber daya VPS yang terbatas.
+        \item Penelitian tidak melakukan \textit{benchmarking} di jaringan \textit{mainnet}.
     \end{itemize}
 \end{enumerate}
 
 \section{Manfaat Penelitian}
-
-Penelitian ini diharapkan memberikan manfaat yang dapat ditinjau dari tiga perspektif, yaitu manfaat teoritis, manfaat praktis, serta manfaat ekonomi dan industri.
+Penelitian ini diharapkan memberikan manfaat yang dapat dilihat dari tiga perspektif, yaitu teoritis, praktis, serta ekonomi dan industri.
 
 \begin{enumerate}
     \item \textbf{Manfaat Teoritis} \\
-    Secara teoritis, penelitian ini berkontribusi dalam memperkaya literatur ilmiah mengenai perbandingan mekanisme konsensus \textit{Proof of Authority (PoA)} dan \textit{Proof of Stake (PoS)} pada platform \textit{blockchain}. Selain itu, penelitian ini memberikan kontribusi metodologis berupa kerangka evaluasi performa \textit{blockchain} berbasis parameter teknis yang terukur, seperti \textit{Transactions Per Second} (TPS), \textit{latency}, penggunaan sumber daya, skalabilitas, dan stabilitas. Hasil penelitian ini diharapkan dapat menjadi referensi akademik bagi penelitian selanjutnya yang mengkaji efisiensi, efektivitas, maupun optimasi mekanisme konsensus pada berbagai konteks penerapan \textit{blockchain}.
+    Secara teoritis, penelitian ini berkontribusi dalam memperkaya literatur ilmiah mengenai perbandingan mekanisme konsensus \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS) pada platform \textit{blockchain}. Selain itu, penelitian ini juga memberikan kontribusi metodologis berupa kerangka evaluasi performa \textit{blockchain} berbasis parameter teknis yang terukur, seperti \textit{Transactions Per Second} (TPS), \textit{latency}, penggunaan sumber daya, skalabilitas, dan stabilitas. Hasil penelitian ini diharapkan dapat menjadi referensi akademik untuk penelitian selanjutnya yang ingin mengkaji efisiensi, efektivitas, maupun optimasi mekanisme konsensus di berbagai konteks aplikasi \textit{blockchain}.
 
     \item \textbf{Manfaat Praktis} \\
-    Dari sisi praktis, penelitian ini menyediakan data empiris yang dapat digunakan sebagai dasar pengambilan keputusan dalam proses migrasi mekanisme konsensus pada jaringan DChain. Hasil pengujian yang diperoleh diharapkan dapat membantu pengembang dan pengelola jaringan \textit{blockchain} dalam menentukan mekanisme konsensus yang paling sesuai dengan kebutuhan performa, efisiensi sumber daya, serta tingkat skalabilitas sistem. Selain itu, penelitian ini juga memberikan pemahaman yang lebih mendalam mengenai \textit{trade-off} antara PoA dan PoS, sehingga dapat menjadi bahan pertimbangan dalam perancangan strategi pengelolaan jaringan yang optimal.
+    Dari sisi praktis, penelitian ini menyediakan data empiris yang dapat digunakan sebagai dasar pengambilan keputusan dalam proses migrasi konsensus pada jaringan DChain. Hasil pengujian yang diperoleh dapat membantu pengembang dan pengelola jaringan \textit{blockchain} dalam menentukan mekanisme konsensus yang paling sesuai dengan kebutuhan performa, efisiensi sumber daya, dan tingkat skalabilitas. Selain itu, penelitian ini juga memberikan wawasan mengenai \textit{trade-off} yang muncul antara PoA dan PoS, sehingga dapat menjadi bahan pertimbangan dalam merancang strategi pengelolaan jaringan yang optimal.
 
     \item \textbf{Manfaat Ekonomi dan Industri} \\
-    Dari perspektif ekonomi dan industri, penelitian ini berpotensi mendukung pengembangan jaringan \textit{blockchain} yang lebih efisien, andal, dan dapat diskalakan untuk mendukung transformasi digital, tidak hanya pada sektor pendidikan, tetapi juga sektor publik dan industri lainnya. Dengan adanya hasil evaluasi performa yang komprehensif, penelitian ini diharapkan dapat meningkatkan tingkat kepercayaan terhadap stabilitas dan efektivitas teknologi \textit{blockchain}, sehingga mendorong percepatan adopsi teknologi tersebut pada berbagai sektor strategis di Indonesia.
+    Dari perspektif ekonomi dan industri, penelitian ini berpotensi mendukung pengembangan jaringan \textit{blockchain} yang lebih efisien, andal, dan dapat diskalakan untuk mendukung transformasi digital, tidak hanya di sektor pendidikan tetapi juga sektor publik dan industri lainnya. Dengan adanya hasil evaluasi performa yang komprehensif, penelitian ini diharapkan dapat meningkatkan tingkat kepercayaan terhadap stabilitas dan efektivitas teknologi \textit{blockchain}, sehingga mendorong percepatan adopsi di berbagai sektor strategis.
 \end{enumerate}
 
 \section{Sistematika Penulisan}
+Skripsi ini disusun dengan sistematika sebagai berikut:
 
-Skripsi ini disusun dengan sistematika penulisan sebagai berikut:
+\textbf{Bab I} membahas pendahuluan yang berisi latar belakang, perumusan masalah, tujuan penelitian, batasan penelitian, manfaat penelitian, dan sistematika penulisan.
 
-\noindent
-Bab I Pendahuluan membahas latar belakang penelitian, perumusan masalah, tujuan penelitian, batasan penelitian, manfaat penelitian, serta sistematika penulisan. Bagian ini memberikan gambaran umum mengenai konteks, arah, dan ruang lingkup penelitian.
+\textbf{Bab II} berisi tinjauan pustaka dan dasar teori yang memuat kajian literatur serta teori-teori yang relevan terkait \textit{blockchain}, DChain, mekanisme konsensus PoA dan PoS, serta parameter \textit{benchmarking} yang digunakan.
 
-\noindent
-Bab II Tinjauan Pustaka dan Dasar Teori berisi kajian literatur dan teori-teori yang relevan dengan topik penelitian, meliputi konsep dasar teknologi \textit{blockchain}, jaringan DChain, mekanisme konsensus \textit{Proof of Authority (PoA)} dan \textit{Proof of Stake (PoS)}, serta parameter-parameter \textit{benchmarking} yang digunakan dalam analisis performa.
+\textbf{Bab III} menjelaskan metode penelitian yang meliputi alat dan bahan penelitian, metode yang digunakan, rancangan eksperimen, serta alur pelaksanaan penelitian.
 
-\noindent
-Bab III Metode Penelitian menjelaskan metode penelitian yang digunakan, mencakup alat dan bahan penelitian, pendekatan dan rancangan eksperimen, serta alur pelaksanaan penelitian yang dilakukan untuk memperoleh hasil yang valid dan terukur.
+\textbf{Bab IV} menyajikan hasil pengujian dan pembahasan yang memuat analisis perbandingan kinerja PoA dan PoS pada jaringan DChain berdasarkan parameter \textit{benchmarking}.
 
-\noindent
-Bab IV Hasil dan Pembahasan menyajikan hasil pengujian dan analisis perbandingan kinerja antara mekanisme konsensus PoA dan PoS pada jaringan DChain berdasarkan parameter \textit{benchmarking}. Pembahasan dilakukan secara kuantitatif dan kualitatif untuk menilai efisiensi, stabilitas, dan skalabilitas dari masing-masing mekanisme konsensus.
-
-\noindent
-Bab V Kesimpulan dan Saran memuat kesimpulan yang diperoleh dari hasil penelitian serta saran yang dapat dijadikan acuan bagi pengembangan jaringan DChain maupun penelitian lanjutan terkait evaluasi performa mekanisme konsensus pada sistem \textit{blockchain}.
-
+\textbf{Bab V} memuat kesimpulan yang diperoleh dari hasil penelitian dan saran untuk pengembangan serta penelitian selanjutnya.

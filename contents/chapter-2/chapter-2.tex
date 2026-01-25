@@ -68,7 +68,7 @@ Dengan demikian, penelitian ini menegaskan posisinya sebagai perluasan dari stud
 
 8 & Ali \textit{et al.} (2020) & Evaluasi performa dan skalabilitas konsensus & Eksperimen & TPS, Skalabilitas & PoS stabil di beban tinggi & Tidak ukur sumber daya & Analisis komparatif PoA–PoS \\ \hline
 
-9 & Gaikwad \& Patel (2019) & Sistem verifikasi ijazah & Implementasi aplikasi & Waktu transaksi & Blockchain meningkatkan keamanan verifikasi & Tidak bahas konsensus & Aplikasi awal blockchain di pendidikan \\ \hline
+9 & Gaikwad & Patel (2019) & Sistem verifikasi ijazah & Implementasi aplikasi & Waktu transaksi & Blockchain meningkatkan keamanan verifikasi & Tidak bahas konsensus & Aplikasi awal blockchain di pendidikan \\ \hline
 
 10 & Singh \& Chatterjee (2019) & Keamanan data akademik & Studi implementatif & Integritas data & PoA efisien untuk kontrol otoritatif & Tidak bandingkan PoS & Penerapan PoA di sistem akademik \\ \hline
 
@@ -323,6 +323,16 @@ Namun, PoS tidak terlepas dari keterbatasan. Distribusi token yang tidak merata 
 Dalam konteks \textit{DChain}, rencana migrasi dari PoA ke PoS didorong oleh kebutuhan untuk meningkatkan desentralisasi, skalabilitas, dan keamanan jangka panjang. Meski demikian, migrasi ini juga membawa tantangan baru, antara lain pengaturan distribusi token, tata kelola insentif, serta potensi \textit{trade-off} antara efisiensi dan stabilitas. Oleh karena itu, pengujian komparatif performa PoA dan PoS menjadi langkah penting untuk menilai kelayakan PoS sebagai fondasi konsensus jangka panjang bagi \textit{DChain}.
 
 
+\subsection{Algoritma Konsensus Spesifik}
+
+Penelitian ini membandingkan dua implementasi spesifik dari keluarga konsensus PoA dan PoS, yaitu \textit{Clique} (standar Ethereum Geth PoA) dan \textit{Gasper} (standar Ethereum 2.0 PoS). Pemahaman mendalam tentang kedua protokol ini diperlukan untuk menginterpretasikan metrik \textit{finality} dan stabilitas.
+
+\subsubsection{Clique (Proof of Authority)}
+\textit{Clique} adalah protokol konsensus PoA yang digunakan secara luas pada jaringan uji (\textit{testnet}) Ethereum. Dalam Clique, node dibagi menjadi \textit{Signers} (validator terotorisasi) dan \textit{Non-Signers}. Clique menggunakan periode \textit{Epoch} (default 30.000 blok) untuk \textit{reset} hak \textit{voting} \textit{signers}, mencegah akumulasi data \textit{checkpoint} yang berlebihan \cite{eip225}. Blok diproduksi secara bergiliran (\textit{Round Robin}). Validator yang baru saja membuat blok tidak boleh membuat blok berikutnya segera (\textit{in-turn} vs \textit{out-of-turn}). Clique menawarkan \textit{Probabilistic Finality}. Secara teknis, reorganisasi rantai (\textit{reorg}) pendek dimungkinkan jika terjadi partisi jaringan, namun dalam kondisi normal dengan $N$ validator jujur, finalitas dianggap tercapai setelah $N/2 + 1$ blok \cite{eip225}.
+
+\subsubsection{Gasper (Proof of Stake)}
+\textit{Gasper} adalah protokol konsensus hibrida yang menggabungkan LMD-GHOST (\textit{Latest Message Driven Greediest Heaviest Observed Subtree}) sebagai aturan pemilihan cabang (\textit{fork choice rule}) dan Casper FFG (\textit{Friendly Finality Gadget}) sebagai mekanisme finalisasi \cite{buterin2020}. Waktu dibagi menjadi \textit{Slot} (12 detik) dan \textit{Epoch} (32 slot atau 6.4 menit). Setiap slot memiliki satu validator pengusul (\textit{proposer}) dan komite \textit{attester} yang memvoting validitas blok. Berbeda dengan PoW atau PoA Clique, Gasper memberikan \textit{Deterministic Finality}. Sebuah pasangan epoch dianggap \textit{Justified} jika mendapat 2/3 suara, dan \textit{Finalized} jika epoch berikutnya juga terjustifikasi. Transaksi pada blok yang \textit{Finalized} secara matematis tidak dapat dibatalkan tanpa membakar setidaknya 1/3 dari total ETH yang di-\textit{stake} \cite{saltini2021}.
+
 \subsection{Benchmarking pada Blockchain}
 
 \textit{Benchmarking} dalam konteks \textit{blockchain} merupakan proses sistematis untuk mengukur dan mengevaluasi kinerja jaringan terdistribusi melalui skenario eksperimen yang terkontrol. Tujuan utamanya adalah untuk menilai performa sistem, mengidentifikasi \textit{bottleneck}, serta membandingkan efektivitas mekanisme konsensus atau konfigurasi jaringan tertentu \cite{fan2020, dinh2017, thakkar2018}. Literatur umumnya membedakan dua pendekatan utama, yaitu \textit{micro-benchmarking}, yang berfokus pada metrik teknis spesifik seperti \textit{Transactions Per Second} (TPS), latensi, \textit{throughput}, dan penggunaan sumber daya; serta \textit{macro-benchmarking}, yang mengevaluasi kinerja keseluruhan sistem termasuk aspek skalabilitas, stabilitas, dan \textit{fault tolerance} \cite{dinh2017, nasrulin2022, gramoli2023}.
@@ -349,6 +359,43 @@ Untuk mengatasi keterbatasan tersebut, penelitian terkini merekomendasikan sejum
 
 Dengan penerapan prinsip-prinsip tersebut, benchmarking tidak hanya berfungsi sebagai alat evaluasi performa teknis, tetapi juga menjadi instrumen strategis dalam merancang, mengoptimalkan, dan memvalidasi efektivitas mekanisme konsensus \textit{blockchain} dalam aplikasi dunia nyata.
 
+
+\subsection{Arsitektur Hyperledger Caliper}
+
+\textit{Hyperledger Caliper} adalah alat \textit{benchmarking} \textit{blockchain} yang dikembangkan oleh Linux Foundation untuk mengukur kinerja spesifik dari berbagai implementasi \textit{blockchain} \cite{hyperledger_caliper}. Caliper dirancang dengan arsitektur modular yang memisahkan lapisan aplikasi uji (\textit{benchmark layer}) dari lapisan antarmuka \textit{blockchain} (\textit{adaptation layer}), memungkinkannya digunakan untuk berbagai platform seperti Ethereum (\textit{Besu}, \textit{Geth}) dan Hyperledger Fabric.
+
+Arsitektur Caliper terdiri dari dua komponen proses utama:
+\begin{itemize}[nolistsep]
+    \item \textbf{Manager Process}: Bertindak sebagai orkestrator pusat yang membaca \textit{file} konfigurasi, menginisialisasi jaringan, dan membagi beban kerja kepada proses pekerja. \textit{Manager} juga bertanggung jawab untuk mengumpulkan hasil statistik dari pekerja dan menghasilkan laporan akhir \cite{kumar2020}.
+    \item \textbf{Worker Process}: Proses independen yang bertugas mengeksekusi beban kerja (\textit{workload}). Masing-masing \textit{worker} menjalankan \textit{loop} transaksi secara mandiri. Penggunaan banyak \textit{worker} memungkinkan simulasi konkurensi klien, di mana \textit{throughput} total sistem dihitung dari agregasi \textit{output} seluruh \textit{worker} \cite{kumar2020}.
+\end{itemize}
+
+Pentingnya fitur \textit{Worker Scaling} dalam Caliper terletak pada hukum Amdahl: jika pembangkitan beban dilakukan oleh satu proses, maka CPU klien sering kali menjadi \textit{bottleneck} sebelum kapasitas jaringan \textit{blockchain} tercapai. Dengan mendistribusikan beban ke \textit{multi-worker}, Caliper dapat membanjiri jaringan hingga titik jenuh, memastikan validitas pengukuran kapasitas maksimum \cite{hyperledger_caliper, nasir2022}.
+
+\subsection{Observabilitas Sistem Terdistribusi}
+
+Dalam pengelolaan sistem terdistribusi kompleks seperti \textit{blockchain}, pendekatan observabilitas melampaui \textit{monitoring} tradisional. Jika \textit{monitoring} menjawab pertanyaan "apakah sistem sehat?", observabilitas menjawab "mengapa sistem tidak sehat?" dengan menganalisis \textit{output} eksternal sistem \cite{picco2021}. Tiga pilar utama observabilitas adalah \textit{Metrics}, \textit{Logs}, dan \textit{Traces}. Penelitian ini secara spesifik berfokus pada pilar \textit{Metrics} untuk analisis performa kuantitatif.
+
+Untuk menangkap dinamika performa \textit{blockchain} yang berubah cepat, digunakan \textit{Time-Series Database} (TSDB) seperti Prometheus. Berbeda dengan \textit{database} relasional yang dioptimalkan untuk integritas transaksional, TSDB dioptimalkan untuk penulisan data berkecepatan tinggi dan kueri berbasis rentang waktu \cite{prometheus_docs}. Prometheus bekerja dengan mekanisme \textit{scraping}, di mana server secara periodik menarik data dari target melalui protokol HTTP \cite{prometheus_docs}. Grafana berperan sebagai lapisan visualisasi yang mengubah data mentah dari TSDB menjadi dasbor interaktif, memungkinkan analisis korelasi data \cite{chakravarthy2019}.
+
+\subsection{Virtualisasi Berbasis Kontainer}
+
+Infrastruktur penelitian ini dibangun di atas teknologi virtualisasi berbasis kontainer, yang menawarkan pendekatan lebih ringan dibandingkan mesin virtual (VM) tradisional. Kontainer mengemas aplikasi beserta seluruh dependensinya dalam satu unit terisolasi yang berjalan di atas kernel OS \textit{host} yang sama. Hal ini menghilangkan \textit{overhead} sistem operasi tamu yang ada pada VM, memungkinkan efisiensi sumber daya yang jauh lebih tinggi \cite{bernstein2014}.
+
+Untuk mengelola siklus hidup kontainer di banyak \textit{host}, digunakan \textit{Kubernetes}, khususnya distribusi K3s yang ringan \cite{k3s_io}. Unit eksekusi terkecil adalah \textit{Pod}, yang membungkus satu atau lebih kontainer. Dalam arsitektur konsensus PoS, pola \textit{sidecar} sering digunakan, di mana kontainer klien eksekusi (Geth) dan klien konsensus (Prysm) berjalan dalam satu \textit{Pod} untuk komunikasi \textit{low-latency} \cite{singh2020}.
+
+\subsection{Metrik dan Konsep Evaluasi Performa}
+
+Evaluasi kinerja \textit{blockchain} memerlukan pemahaman mendalam tentang berbagai metrik dan fenomena unik. Berikut adalah terminologi teknis yang digunakan:
+
+\begin{enumerate}
+    \item \textbf{Knee Point}: Titik kritis dalam kurva kinerja di mana sistem mencapai kapasitas pemrosesan maksimumnya. Setelah titik ini, penambahan beban menyebabkan lonjakan drastis pada latensi \cite{avritzer2020}.
+    \item \textbf{Hockey Stick Curve}: Pola grafik hubungan antara beban (TPS) dan latensi. Pada beban rendah, latensi stabil (seluncuran hoki), namun meningkat eksponensial saat mendekati kapasitas maksimum (gagang hoki) \cite{gregg2020}.
+    \item \textbf{Soak Test}: Pengujian durabilitas untuk memvalidasi stabilitas sistem dalam jangka panjang, mendeteksi masalah seperti kebocoran memori \cite{hyperledger_caliper}.
+    \item \textbf{Coefficient of Variation (CV)}: Ukuran statistik untuk mengevaluasi konsistensi \textit{throughput}. Nilai CV rendah menunjukkan performa stabil \cite{jain1991}.
+    \item \textbf{Steady State vs Cold Start}: \textit{Steady State} adalah fase di mana sistem berjalan stabil, sedangkan \textit{Cold Start} adalah fase inisialisasi yang sering kali bias \cite{spec2021}.
+    \item \textbf{Sub-linear Scaling}: Fenomena di mana penambahan sumber daya tidak menghasilkan peningkatan performa yang sebanding karena adanya bagian proses yang sekuensial (Hukum Amdahl) \cite{amdahl1967}.
+\end{enumerate}
 
 \subsection{Faktor yang Mempengaruhi Performa Blockchain}
 
@@ -542,4 +589,3 @@ Selain itu, pengulangan eksperimen dilakukan secara sistematis untuk meminimalka
 \end{table}
 
 Tabel~\ref{tab:variables_metrics} merangkum variabel dan metrik utama yang digunakan dalam penelitian ini beserta alasan metodologis pemilihannya. Dengan menitikberatkan pada metrik umum seperti \textit{throughput}, \textit{latency}, \textit{resource usage}, \textit{scalability}, dan \textit{stability}, penelitian ini memastikan evaluasi tetap netral, representatif, dan dapat direplikasi. Variabel tambahan seperti \textit{block time}, \textit{block size}, jumlah node, dan jumlah \textit{worker} dipilih untuk memberikan gambaran lebih realistis terhadap dinamika sistem \textit{blockchain} dalam kondisi nyata. Pendekatan ini memungkinkan analisis \textit{trade-off} performa yang lebih tajam antara PoA dan PoS, sehingga hasil eksperimen dapat menjadi dasar ilmiah yang kredibel untuk menilai efisiensi dan efektivitas konsensus dalam konteks DChain maupun aplikasi \textit{blockchain} nasional lainnya.
-
