@@ -94,4 +94,23 @@ PoS: 5 Val + 5 Non
 \\ \hline
 
 \end{longtable}
+
+\section*{2. Latensi Baseline Jaringan}
+Tabel berikut menunjukkan hasil pengukuran RTT (\textit{Round Trip Time}) menggunakan protokol ICMP dari Control Plane ke masing-masing nodes. Pengukuran dilakukan sebanyak 5 paket per node untuk memastikan konektivitas dasar yang stabil.
+
+\begin{table}[h]
+\centering
+\caption{Hasil Pengukuran Latensi (Ping) dari Control Plane}
+\label{tab:latency_ping}
+\begin{tabular}{|l|l|l|c|c|c|c|}
+\hline
+\textbf{Node} & \textbf{Label Institusi} & \textbf{IP Address} & \textbf{Min (ms)} & \textbf{Avg (ms)} & \textbf{Max (ms)} & \textbf{Mdev (ms)} \\ \hline
+VPS A & UGM \& UT & 89.117.50.181 & 0.654 & 1.297 & 3.407 & 1.058 \\ \hline
+VPS B & ITB \& UNUD & 185.194.216.132 & 0.536 & 1.243 & 2.071 & 0.664 \\ \hline
+VPS C & UI \& Gundar & 155.133.23.145 & 1.042 & 1.804 & 2.695 & 0.638 \\ \hline
+VPS D & UB \& UNIMED & 109.199.99.164 & 1.961 & 2.384 & 2.935 & 0.319 \\ \hline
+VPS E & ITS \& UNDIP & 109.199.118.220 & 0.780 & 2.345 & 5.576 & 1.738 \\ \hline
+\end{tabular}
+\end{table}
+
 \end{landscape}

@@ -1,0 +1,155 @@
+\chapter*{LAMPIRAN E: KODE KONFIGURASI BENCHMARK}
+\addcontentsline{toc}{section}{LAMPIRAN E: KODE KONFIGURASI BENCHMARK}
+
+Berikut adalah potongan kode konfigurasi dan skrip \textit{workload} yang digunakan dalam pengujian benchmark menggunakan Hyperledger Caliper.
+
+\section*{1. Konfigurasi Skenario (scenarios.json)}
+Potongan konfigurasi ini menunjukkan definisi skenario untuk pengujian \textit{Throughput Step} (peningkatan beban bertahap) dan \textit{Fault Injection}.
+
+\begin{lstlisting}[language=json, caption={Definisi Skenario Throughput dan Fault Injection}, label={lst:scenarios_json}]
+{
+  "scenarios": {
+    "throughput-step": {
+      "description": "Skenario throughput-step meningkatkan laju transaksi mint secara bertahap (5-100 TPS) guna menemukan titik jenuh pemrosesan.",
+      "rounds": [
+        { "id": "A1", "tps": 5 },
+        { "id": "A2", "tps": 10 },
+        { "id": "A3", "tps": 15 },
+        { "id": "A4", "tps": 20 },
+        { "id": "A5", "tps": 25 },
+        { "id": "A6", "tps": 30 },
+        { "id": "A7", "tps": 35 },
+        { "id": "A8", "tps": 40 },
+        { "id": "A9", "tps": 45 },
+        { "id": "A10", "tps": 50 },
+        { "id": "A11", "tps": 55 },
+        { "id": "A12", "tps": 60 },
+        { "id": "A13", "tps": 65 },
+        { "id": "A14", "tps": 70 }
+      ],
+      "commonConfig": {
+        "txDuration": 60,
+        "rateControllerType": "fixed-rate",
+        "workloadModule": "benchmarks/workload/mint-certificate-workload.js"
+      }
+    },
+    "fault-injection": {
+      "description": "Skenario fault-injection mengevaluasi ketahanan jaringan ketika salah satu validator/pod diberi gangguan terkontrol.",
+      "rounds": [
+        {
+          "id": "F1",
+          "label": "fault-tolerance",
+          "rateTps": "OPTIMAL",
+          "txDuration": 420,
+          "workload": {
+            "module": "benchmarks/workload/mint-certificate-workload.js",
+            "arguments": {
+              "batchId": "FAULT",
+              "codeUniv": "FAULT"
+            }
+          }
+        }
+      ],
+      "commonConfig": { "workers": 3 }
+    }
+  }
+}
+\end{lstlisting}
+
+\section*{2. Workload Minting (mint-certificate-workload.js)}
+Skrip ini mengatur logika pembuatan transaksi penulisan (\textit{write}) untuk pencetakan sertifikat NFT dengan ID unik.
+
+\begin{lstlisting}[language=JavaScript, caption={Workload Module untuk Minting Sertifikat}, label={lst:mint_workload}]
+"use strict";
+
+const { WorkloadModuleBase } = require("@hyperledger/caliper-core");
+const { resolveAccountInfos } = require("./account-utils");
+
+class MintSertifikatWorkload extends WorkloadModuleBase {
+  constructor() {
+    super();
+    this.txIndex = 0;
+    this.accountInfos = [];
+    this.selectedAccountInfo = undefined;
+  }
+
+  async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
+    await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
+    this.accountInfos = await resolveAccountInfos(this.sutAdapter.web3, totalWorkers);
+    this.selectedAccountInfo = this.accountInfos[this.workerIndex % this.accountInfos.length];
+  }
+
+  async submitTransaction() {
+    this.txIndex++;
+    const recipientAddress = this.selectedAccountInfo.address;
+    
+    // Create a unique ID for each new token
+    const uniqueId = this.workerIndex * 1000000 + this.txIndex;
+
+    const contractName = "MintCertificate";
+    const myArgs = {
+      contract: contractName,
+      contractId: contractName,
+      verb: "benchmarkMint",
+      args: [recipientAddress, uniqueId],
+      readOnly: false,
+      from: this.selectedAccountInfo.address,
+    };
+
+    await this.sutAdapter.sendRequests(myArgs);
+  }
+}
+
+function createWorkloadModule() {
+  return new MintSertifikatWorkload();
+}
+
+module.exports.createWorkloadModule = createWorkloadModule;
+\end{lstlisting}
+
+\section*{3. Workload Reading (read-certificate-workload.js)}
+Skrip ini mengatur logika pembacaan (\textit{read}) data sertifikat secara acak dari blockchain.
+
+\begin{lstlisting}[language=JavaScript, caption={Workload Module untuk Reading Sertifikat}, label={lst:read_workload}]
+"use strict";
+
+const { WorkloadModuleBase } = require("@hyperledger/caliper-core");
+
+class ReadSertifikatWorkload extends WorkloadModuleBase {
+  constructor() { super(); }
+
+  async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
+    await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
+    
+    if (!this.roundArguments.totalTokens || this.roundArguments.totalTokens === 0) {
+      throw new Error("Read workload requires 'totalTokens' argument > 0.");
+    }
+  }
+
+  async submitTransaction() {
+    const offset = Number(this.roundArguments.tokenIdOffset || 1);
+    let minId = offset;
+    let maxId = offset + Number(this.roundArguments.totalTokens) - 1;
+
+    // Generate a random token ID within [minId, maxId]
+    const randomTokenId = Math.floor(Math.random() * (maxId - minId + 1)) + minId;
+
+    const contractName = "MintCertificate";
+    const myArgs = {
+      contract: contractName,
+      contractId: contractName,
+      verb: "getCertificateNumber",
+      args: [randomTokenId],
+      readOnly: true,
+    };
+
+    await this.sutAdapter.sendRequests(myArgs);
+  }
+}
+
+function createWorkloadModule() {
+  return new ReadSertifikatWorkload();
+}
+
+module.exports.createWorkloadModule = createWorkloadModule;
+\end{lstlisting}
