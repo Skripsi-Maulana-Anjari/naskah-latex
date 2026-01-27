@@ -113,4 +113,56 @@ VPS E & ITS \& UNDIP & 109.199.118.220 & 0.780 & 2.345 & 5.576 & 1.738 \\ \hline
 \end{tabular}
 \end{table}
 
+\section*{3. Penggunaan Penyimpanan Blockchain (Disk Usage)}
+Berdasarkan pengukuran pada direktori \texttt{chaindata} (data leveldb), berikut adalah penggunaan ruang penyimpanan per \textit{node} di akhir pengujian. Terlihat adanya perbedaan ukuran antara \textit{Signer/Validator} (rata-rata 1.6 GB) dan \textit{Non-Signer/Non-Validator} (rata-rata 6 GB), yang mengindikasikan beban akumulasi state yang berbeda pada node RPC publik.
+
+\begin{table}[h]
+\centering
+\caption{Penggunaan Disk Penyimpanan Blockchain (\texttt{chaindata})}
+\label{tab:storage_usage}
+\begin{tabular}{|l|l|l|c|}
+\hline
+\textbf{VPS Node} & \textbf{Label Institusi} & \textbf{Peran (Role)} & \textbf{Ukuran Data} \\ \hline
+\multirow{2}{*}{VPS A} & UGM & Signer / Validator & 1.7 GB \\ \cline{2-4} 
+ & UT & Non-Signer / Sentry & 6.0 GB \\ \hline
+\multirow{2}{*}{VPS B} & ITB & Signer / Validator & 1.7 GB \\ \cline{2-4} 
+ & UNUD & Non-Signer / Sentry & 6.1 GB \\ \hline
+\multirow{2}{*}{VPS C} & UI & Signer / Validator & 1.7 GB \\ \cline{2-4} 
+ & Gunadarma & Non-Signer / Sentry & 5.7 GB \\ \hline
+\multirow{2}{*}{VPS D} & UB & Signer / Validator & 1.5 GB \\ \cline{2-4} 
+ & UNIMED & Non-Signer / Sentry & 5.8 GB \\ \hline
+\multirow{2}{*}{VPS E} & ITS & Signer / Validator & 1.5 GB \\ \cline{2-4} 
+ & UNDIP & Non-Signer / Sentry & 5.7 GB \\ \hline
+\end{tabular}
+\end{table}
+
+\end{table}
+
+\section*{4. Struktur Direktori Node}
+Contoh struktur direktori pada \textbf{VPS A} di akhir pengujian. Struktur ini menunjukkan pemisahan folder antara \textit{Signer} (UGM) dan \textit{Non-Signer} (UT), di mana setiap direktori \texttt{geth} menyimpan data blockchain yang tumbuh seiring beban transaksi.
+
+\begin{small}
+\begin{verbatim}
+/var/lib/poa
+├── ugm
+│   ├── clef
+│   │   └── d6cad8dd3b43fa311d9c
+│   └── geth
+│       ├── geth
+│       │   ├── blobpool
+│       │   ├── chaindata (1.7 GB)
+│       │   ├── lightchaindata
+│       │   └── nodes
+│       └── keystore
+└── ut
+    └── geth
+        ├── geth
+        │   ├── blobpool
+        │   ├── chaindata (6.0 GB)
+        │   ├── lightchaindata
+        │   └── nodes
+        └── keystore
+\end{verbatim}
+\end{small}
+
 \end{landscape}
