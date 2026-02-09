@@ -167,12 +167,6 @@
 %    the filename and location of the files inputted
 \bibliography{references}
 
-%Hapus bagian di bawah setelah tidak diperlukan
-\begin{center}
-	\textcolor{red}{
-	Catatan: Daftar pustaka adalah apa yang dirujuk atau disitasi, bukan apa yang telah dibaca, jika tidak ada dalam sitasi maka tidak perlu dituliskan dalam daftar pustaka.}
-\end{center}
-
 %======================================
 
 %======================================
@@ -184,15 +178,14 @@
 %    use \chapterappendixadd for the next page
 
 \appendix
+\renewcommand{\thesection}{L.\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 
 \cleardoublepage \phantomsection
-\chapterappendix{contents/appendix/appendix-isi-lampiran}
-\chapterappendixadd{contents/appendix/appendix-topology}
-\chapterappendixadd{contents/appendix/appendix-benchmark-code}
-\chapterappendixadd{contents/appendix/appendix-latex}
-\chapterappendixadd{contents/appendix/appendix-penulisan-referensi}
-\chapterappendixadd{contents/appendix/appendix-code}
-\chapterappendixadd{contents/appendix/appendix-dokumentasi}
+\input{contents/appendix/appendix-topology}
+\input{contents/appendix/appendix-benchmark-code}
+\input{contents/appendix/appendix-code}
+\input{contents/appendix/appendix-dokumentasi}
 
 
 

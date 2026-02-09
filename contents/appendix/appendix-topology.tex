@@ -1,10 +1,13 @@
 \clearpage
 \begin{landscape}
-\chapter*{LAMPIRAN D: PEMETAAN TOPOLOGI DAN INFRASTRUKTUR}
-\addcontentsline{toc}{section}{LAMPIRAN D: PEMETAAN TOPOLOGI DAN INFRASTRUKTUR}
+\chapter*{LAMPIRAN}
+%\addcontentsline{toc}{chapter}{LAMPIRAN}	
+\section{Pemetaan Topologi dan Infrastruktur}
 
-Tabel berikut merincikan pemetaan alokasi \textit{node} ke dalam infrastruktur VPS yang digunakan untuk setiap skenario topologi.
+\subsection{Alokasi Node}
+Tabel \ref{tab:topology_mapping} berikut merincikan pemetaan alokasi \textit{node} ke dalam infrastruktur VPS yang digunakan untuk setiap skenario topologi.
 
+{
 \scriptsize
 \begin{longtable}{|p{2.5cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
 \caption{Pemetaan Node ke Infrastruktur VPS} \label{tab:topology_mapping} \\
@@ -94,9 +97,12 @@ PoS: 5 Val + 5 Non
 \\ \hline
 
 \end{longtable}
+}
+\end{landscape}
 
-\section*{2. Latensi Baseline Jaringan}
-Tabel berikut menunjukkan hasil pengukuran RTT (\textit{Round Trip Time}) menggunakan protokol ICMP dari Control Plane ke masing-masing nodes. Pengukuran dilakukan sebanyak 5 paket per node untuk memastikan konektivitas dasar yang stabil.
+\clearpage
+\subsection{Latensi Baseline Jaringan}
+Tabel \ref{tab:latency_ping} berikut menunjukkan hasil pengukuran RTT (\textit{Round Trip Time}) menggunakan protokol ICMP dari Control Plane ke masing-masing nodes. Pengukuran dilakukan sebanyak 5 paket per node untuk memastikan konektivitas dasar yang stabil.
 
 \begin{table}[h]
 \centering
@@ -113,8 +119,8 @@ VPS E & ITS \& UNDIP & 109.199.118.220 & 0.780 & 2.345 & 5.576 & 1.738 \\ \hline
 \end{tabular}
 \end{table}
 
-\section*{3. Penggunaan Penyimpanan Blockchain (Disk Usage)}
-Berdasarkan pengukuran pada direktori \texttt{chaindata} (data leveldb), berikut adalah penggunaan ruang penyimpanan per \textit{node} di akhir pengujian. Terlihat adanya perbedaan ukuran antara \textit{Signer/Validator} (rata-rata 1.6 GB) dan \textit{Non-Signer/Non-Validator} (rata-rata 6 GB), yang mengindikasikan beban akumulasi state yang berbeda pada node RPC publik.
+\subsection{Penggunaan Penyimpanan Blockchain (Disk Usage)}
+Berdasarkan pengukuran pada direktori \texttt{chaindata} (data leveldb), berikut adalah penggunaan ruang penyimpanan per \textit{node} di akhir pengujian yang dirincikan pada Tabel \ref{tab:storage_usage}. Terlihat adanya perbedaan ukuran antara \textit{Signer/Validator} (rata-rata 1.6 GB) and \textit{Non-Signer/Non-Validator} (rata-rata 6 GB), yang mengindikasikan beban akumulasi state yang berbeda pada node RPC publik.
 
 \begin{table}[h]
 \centering
@@ -136,33 +142,30 @@ Berdasarkan pengukuran pada direktori \texttt{chaindata} (data leveldb), berikut
 \end{tabular}
 \end{table}
 
-\end{table}
-
-\section*{4. Struktur Direktori Node}
+\clearpage
+\subsection{Struktur Direktori Node}
 Contoh struktur direktori pada \textbf{VPS A} di akhir pengujian. Struktur ini menunjukkan pemisahan folder antara \textit{Signer} (UGM) dan \textit{Non-Signer} (UT), di mana setiap direktori \texttt{geth} menyimpan data blockchain yang tumbuh seiring beban transaksi.
 
 \begin{small}
 \begin{verbatim}
 /var/lib/poa
-├── ugm
-│   ├── clef
-│   │   └── d6cad8dd3b43fa311d9c
-│   └── geth
-│       ├── geth
-│       │   ├── blobpool
-│       │   ├── chaindata (1.7 GB)
-│       │   ├── lightchaindata
-│       │   └── nodes
-│       └── keystore
-└── ut
-    └── geth
-        ├── geth
-        │   ├── blobpool
-        │   ├── chaindata (6.0 GB)
-        │   ├── lightchaindata
-        │   └── nodes
-        └── keystore
+|-- ugm
+|   |-- clef
+|   |   |-- d6cad8dd3b43fa311d9c
+|   |-- geth
+|   |   |-- geth
+|   |   |   |-- blobpool
+|   |   |   |-- chaindata (1.7 GB)
+|   |   |   |-- lightchaindata
+|   |   |   |-- nodes
+|   |   |-- keystore
+|-- ut
+|   |-- geth
+|   |    |-- geth
+|   |    |   |-- blobpool
+|   |    |   |-- chaindata (6.0 GB)
+|   |    |   |-- lightchaindata
+|   |    |   |-- nodes
+|   |    |-- keystore
 \end{verbatim}
 \end{small}
-
-\end{landscape}

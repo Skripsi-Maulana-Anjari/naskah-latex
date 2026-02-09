@@ -1,9 +1,9 @@
-\chapter*{LAMPIRAN E: KODE KONFIGURASI BENCHMARK}
-\addcontentsline{toc}{section}{LAMPIRAN E: KODE KONFIGURASI BENCHMARK}
+\clearpage
+\section{Kode Konfigurasi Benchmark}
 
 Berikut adalah potongan kode konfigurasi dan skrip \textit{workload} yang digunakan dalam pengujian benchmark menggunakan Hyperledger Caliper.
 
-\section*{1. Konfigurasi Skenario (scenarios.json)}
+\subsection{Konfigurasi Skenario (scenarios.json)}
 Potongan konfigurasi ini menunjukkan definisi skenario untuk pengujian \textit{Throughput Step} (peningkatan beban bertahap) dan \textit{Fault Injection}.
 
 \begin{lstlisting}[language=json, caption={Definisi Skenario Throughput dan Fault Injection}, label={lst:scenarios_json}]
@@ -56,7 +56,7 @@ Potongan konfigurasi ini menunjukkan definisi skenario untuk pengujian \textit{T
 }
 \end{lstlisting}
 
-\section*{2. Workload Minting (mint-certificate-workload.js)}
+\subsection{Workload Minting (mint-certificate-workload.js)}
 Skrip ini mengatur logika pembuatan transaksi penulisan (\textit{write}) untuk pencetakan sertifikat NFT dengan ID unik.
 
 \begin{lstlisting}[language=JavaScript, caption={Workload Module untuk Minting Sertifikat}, label={lst:mint_workload}]
@@ -107,7 +107,7 @@ function createWorkloadModule() {
 module.exports.createWorkloadModule = createWorkloadModule;
 \end{lstlisting}
 
-\section*{3. Workload Reading (read-certificate-workload.js)}
+\subsection{Workload Reading (read-certificate-workload.js)}
 Skrip ini mengatur logika pembacaan (\textit{read}) data sertifikat secara acak dari blockchain.
 
 \begin{lstlisting}[language=JavaScript, caption={Workload Module untuk Reading Sertifikat}, label={lst:read_workload}]

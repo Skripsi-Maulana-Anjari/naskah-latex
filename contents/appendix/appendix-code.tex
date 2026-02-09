@@ -1,11 +1,10 @@
-\chapter*{LAMPIRAN C: SPESIFIKASI PERANGKAT KERAS}
-\addcontentsline{toc}{section}{LAMPIRAN C: SPESIFIKASI PERANGKAT KERAS}
+\clearpage
+\section{Spesifikasi Perangkat Keras}
 
 Berikut adalah output terminal (\texttt{lscpu} dan \texttt{free -h}) yang menunjukkan spesifikasi teknis detail dari infrastruktur yang digunakan dalam eksperimen.
 
-\section*{1. Control Plane (AMD EPYC - 8 vCPU, 24GB RAM)}
-{\small
-\begin{verbatim}
+\subsection{Control Plane (AMD EPYC - 8 vCPU, 24GB RAM)}
+\begin{lstlisting}[basicstyle=\footnotesize, breaklines=true, numbers=none]
 maul@vmi2833588:~$ lscpu
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
@@ -32,13 +31,11 @@ maul@vmi2833588:~$ free -h
                total    used    free  shared  buff/cache  available
 Mem:            23Gi   4.5Gi    17Gi    22Mi       1.6Gi       18Gi
 Swap:             0B      0B      0B
-\end{verbatim}
-}
+\end{lstlisting}
 \vspace{1cm}
 
-\section*{2. VPS Node A \& B (AMD EPYC - 6 vCPU, 12GB RAM)}
-{\small
-\begin{verbatim}
+\subsection{VPS Node A \& B (AMD EPYC - 6 vCPU, 12GB RAM)}
+\begin{lstlisting}[basicstyle=\footnotesize, breaklines=true, numbers=none]
 maul@vmi2837308:~$ lscpu
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
@@ -63,13 +60,11 @@ maul@vmi2837308:~$ free -h
                total    used    free  shared  buff/cache  available
 Mem:            11Gi   3.1Gi   8.0Gi   2.0Mi       947Mi      8.6Gi
 Swap:             0B      0B      0B
-\end{verbatim}
-}
+\end{lstlisting}
 \vspace{1cm}
 
-\section*{3. VPS Node C, D, E (Intel Broadwell - 6 vCPU, 12GB RAM)}
-{\small
-\begin{verbatim}
+\subsection{VPS Node C, D, E (Intel Broadwell - 6 vCPU, 12GB RAM)}
+\begin{lstlisting}[basicstyle=\footnotesize, breaklines=true, numbers=none]
 maul@vmi2852834:~$ lscpu
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
@@ -97,13 +92,11 @@ maul@vmi2852834:~$ free -h
                total    used    free  shared  buff/cache  available
 Mem:            11Gi   2.0Gi   9.2Gi   2.0Mi       892Mi      9.7Gi
 Swap:             0B      0B      0B
-\end{verbatim}
-}
+\end{lstlisting}
 \vspace{1cm}
 
-\section*{4. Laptop Pengembangan (AMD Ryzen 5 4600H - 12 vCPU, 16GB RAM)}
-{\small
-\begin{verbatim}
+\subsection{Laptop Pengembangan (AMD Ryzen 5 4600H - 12 vCPU, 16GB RAM)}
+\begin{lstlisting}[basicstyle=\footnotesize, breaklines=true, numbers=none]
 maul@maul:~$ lscpu
 Architecture:                x86_64
   CPU op-mode(s):            32-bit, 64-bit
@@ -134,5 +127,4 @@ Caches (sum of all):
 NUMA:                        
   NUMA node(s):              1
   NUMA node0 CPU(s):         0-11
-\end{verbatim}
-}
+\end{lstlisting}

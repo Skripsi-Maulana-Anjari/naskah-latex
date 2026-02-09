@@ -17,7 +17,8 @@
 %======================================
 %% Initial Code
 %======================================
-\RequirePackage[english,bahasa]{babel} % language
+% babel is loaded later after options are processed to handle main language correctly
+
 \RequirePackage{etoolbox}% conditional statement
 \RequirePackage{indentfirst}
 \RequirePackage{setspace}
@@ -53,6 +54,14 @@
 %======================================
 \ExecuteOptions{bachelor,bahasa} % set default degree and language
 \ProcessOptions
+
+% load babel based on language selection
+\iftoggle{lang}{
+  \RequirePackage[english,main=bahasa]{babel}
+}{
+  \RequirePackage[bahasa,main=english]{babel}
+}
+
 
 
 %======================================
@@ -745,6 +754,27 @@
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinelanguage{json}{
+    string=[b]",
+    stringstyle=\color{codepurple},
+    showstringspaces=false,
+    keywords={false,true,null},
+    keywordstyle=\color{magenta},
+}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
+  morekeywords={class, export, boolean, throw, import, this, await, async, const, let},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+}
 
 \lstdefinestyle{mystyle}{ 
 	commentstyle=\color{codegreen},

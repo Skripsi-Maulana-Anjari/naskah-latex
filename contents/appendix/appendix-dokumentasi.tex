@@ -1,9 +1,9 @@
-\chapter*{LAMPIRAN E: DOKUMENTASI MONITORING DAN INFRASTRUKTUR}
-\addcontentsline{toc}{section}{LAMPIRAN E: DOKUMENTASI MONITORING DAN INFRASTRUKTUR}
+\clearpage
+\section{Dokumentasi Monitoring dan Infrastruktur}
 
-Lampiran ini memuat dokumentasi visual lengkap terkait infrastruktur, evolusi topologi jaringan (Ethstats), dan status monitoring sistem (Prometheus & Grafana) selama penelitian berlangsung.
+Lampiran ini memuat dokumentasi visual lengkap terkait infrastruktur, evolusi topologi jaringan (Ethstats), dan status monitoring sistem (Prometheus \& Grafana) selama penelitian berlangsung.
 
-\section*{1. Infrastruktur Cloud & Orkestrasi}
+\subsection{Infrastruktur Cloud \& Orkestrasi}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/vps-contabo.png}
@@ -19,10 +19,10 @@ Lampiran ini memuat dokumentasi visual lengkap terkait infrastruktur, evolusi to
 \end{figure}
 
 \clearpage
-\section*{2. Evolusi Topologi Jaringan (Ethstats)}
+\subsection{Evolusi Topologi Jaringan (Ethstats)}
 Dokumentasi ini menunjukkan perubahan topologi jaringan sesuai skenario pengujian (Skenario 1, 2, dan 3) yang dipantau melalui dashboard Ethstats.
 
-\subsection*{2.1. Proof of Authority (PoA)}
+\subsubsection{Proof of Authority (PoA)}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/ethstats-poa-3s-1ns.png}
@@ -40,7 +40,7 @@ Dokumentasi ini menunjukkan perubahan topologi jaringan sesuai skenario pengujia
 \end{figure}
 
 \clearpage
-\subsection*{2.2. Proof of Stake (PoS)}
+\subsubsection{Proof of Stake (PoS)}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/ethstats-pos-3v-1nv.png}
@@ -58,30 +58,30 @@ Dokumentasi ini menunjukkan perubahan topologi jaringan sesuai skenario pengujia
 \end{figure}
 
 \clearpage
-\section*{3. Status Konektivitas Monitoring (Prometheus)}
+\subsection{Status Konektivitas Monitoring (Prometheus)}
 Halaman \textit{Targets} pada Prometheus yang memverifikasi bahwa seluruh \textit{exporter} data (Node Exporter, cAdvisor, Geth) terhubung dengan sukses (State: UP).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/prometheus-poa-all-connected-1.png}
-    \caption{Status Target Prometheus (Bagian 1): Koneksi ke Node Exporter.}
+    \caption{Status Target Prometheus (Bagian 1): Koneksi ke cAdvisor Container.}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/prometheus-poa-all-connected-2.png}
-    \caption{Status Target Prometheus (Bagian 2): Koneksi ke cAdvisor Container.}
+    \caption{Status Target Prometheus (Bagian 2): Koneksi ke Geth Metrics.}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/prometheus-poa-all-connected-3.png}
-    \caption{Status Target Prometheus (Bagian 3): Koneksi ke Geth Metrics.}
+    \caption{Status Target Prometheus (Bagian 3): Koneksi ke Node Exporter dan Pushgateway.}
 \end{figure}
 
 \clearpage
-\section*{4. Visualisasi Beban Sistem (Grafana)}
+\subsection{Visualisasi Beban Sistem (Grafana)}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/grafana_resource_spike.png}
-    \caption{Dashboard Grafana saat \textit{Stress Test} 70 TPS. Terlihat korelasi antara panel TPS (bawah) yang aktif dengan lonjakan penggunaan CPU (kiri atas) dan Network (kanan tengah) pada seluruh node.}
+    \caption{Dashboard Grafana saat \textit{Load Test} 70 TPS. Terlihat korelasi antara panel TPS (bawah) yang aktif dengan lonjakan penggunaan CPU (kiri atas) dan Network (kanan tengah) pada seluruh node.}
     \label{fig:grafana_spike_full}
 \end{figure}

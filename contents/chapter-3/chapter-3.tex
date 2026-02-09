@@ -39,7 +39,7 @@ Bahan yang digunakan dalam penelitian ini meliputi:
 \section{Metode yang Digunakan}
 
 \subsection{Pendekatan Penelitian}
-Penelitian ini menggunakan pendekatan **kuantitatif eksperimental** dengan metode \textit{benchmarking} terkomputerisasi. Fokus utama adalah membandingkan kinerja mekanisme konsensus PoA dan PoS pada platform DChain melalui serangkaian uji beban terkontrol. Pendekatan ini dipilih karena mampu memberikan data empiris yang objektif mengenai metrik performa sistem terdistribusi. Eksperimen dilakukan dalam lingkungan \textit{testbed} terisolasi untuk meminimalkan gangguan eksternal.
+Penelitian ini menggunakan pendekatan \textbf{kuantitatif eksperimental} dengan metode \textit{benchmarking} terkomputerisasi. Fokus utama adalah membandingkan kinerja mekanisme konsensus PoA dan PoS pada platform DChain melalui serangkaian uji beban terkontrol. Pendekatan ini dipilih karena mampu memberikan data empiris yang objektif mengenai metrik performa sistem terdistribusi. Eksperimen dilakukan dalam lingkungan \textit{testbed} terisolasi untuk meminimalkan gangguan eksternal.
 
 \subsection{Desain Eksperimen}
 
@@ -47,7 +47,7 @@ Desain eksperimen dirancang untuk menjawab pertanyaan penelitian mengenai perban
 
 \subsubsection{Variabel Penelitian}
 
-\begin{longtable}{|p{4cm}|p{3cm}|p{8cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{8cm}|}
 \caption{Variabel Bebas} \label{tab:variabel_bebas} \\
 \hline
 \textbf{Variabel} & \textbf{Nilai} & \textbf{Deskripsi} \\
@@ -72,7 +72,7 @@ Jenis Transaksi & Mint, Read, Burn, CPU Stress & Operasi pada \textit{smart cont
 \hline
 \end{longtable}
 
-\begin{longtable}{|p{4cm}|p{4cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \caption{Variabel Terikat (Metrik)} \label{tab:variabel_terikat} \\
 \hline
 \textbf{Kategori} & \textbf{Metrik} & \textbf{Deskripsi} \\
@@ -150,7 +150,7 @@ Menggunakan protokol Gasper (LMD-GHOST + Casper FFG) dengan arsitektur Geth (Exe
 
 Orkestrasi dilakukan menggunakan Kurtosis untuk mengelola kompleksitas \textit{peering} antara EL dan CL. Setiap node validator menjalankan 22 validator keys (total 110 validator untuk 5 node) untuk mensimulasikan beban jaringan nyata.
 
-Visualisasi arsitektur eksperimen secara keseluruhan dapat dilihat pada Gambar \ref{fig:experimental_topology}. Topologi ini menerapkan skema **10 Node** yang terdiri dari:
+Visualisasi arsitektur eksperimen secara keseluruhan dapat dilihat pada Gambar \ref{fig:experimental_topology}. Topologi ini menerapkan skema \textbf{10 Node} yang terdiri dari:
 \begin{enumerate}
     \item \textbf{Control Plane}: Bertindak sebagai orkestrator yang mengirimkan beban transaksi (\textit{RPC Load}) ke node observer menggunakan Hyperledger Caliper.
     \item \textbf{Validator Nodes (Signers/Proposers)}: 5 node utama (V1--V5) yang memiliki hak untuk memvalidasi transaksi dan menyusun blok baru. Dalam konsensus PoA, node-node ini terhubung dalam topologi cincin (\textit{ring}) untuk rotasi \textit{proposer} secara \textit{Round-Robin} untuk PoA dan acak untuk PoS.
@@ -163,7 +163,7 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
     \centering
     \includegraphics[width=\textwidth]{images/experimental-topology.png}
     \caption{Topologi Eksperimen 10 Node dengan Infrastruktur Terdistribusi}
-    \label{fig:experimental_topology}
+    \label{fig:experimental_topology} % Main topology figure label
 \end{figure}
 
 \subsection{Monitoring dan Pengumpulan Data}
