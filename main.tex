@@ -21,6 +21,13 @@
 \usepackage{array}
 % Menjadwalkan konten (misal halaman landscape) ke halaman berikutnya
 \usepackage{afterpage}
+% Paket untuk diagram
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit}
+\usepackage{xurl}
+
+
+
 %\documentclass[bachelor,english]{thesisdtetiugm}
 %======================================
 % Information Input
@@ -28,17 +35,17 @@
 % Input author's name and ID number
 \author{Maulana Anjari Anggorokasih}{21/477748/TK/52619}
 % Input the thesis' title
-\title{<<JUDUL SKRIPSI>>}
+\title{Analisis Perbandingan Kinerja Mekanisme Konsensus Proof of Authority dan Proof of Stake pada Jaringan Blockchain Nasional DChain}
 % Program and the head of the program
-\program{Teknologi Informasi}{<<Program coordinator>>}{<<NIP>>}
+\program{Teknologi Informasi}{Dr. Ir. Ahmad Nasikun, S.T., M.Sc.}{198801082024061001}
 % Name of department head and NIP
-\departmenthead{<<Head of the department>>}{<<NIP>>}
-\major{<<Major>>}
-\yearsubmit{<<TAHUN PENDADARAN>>}
+\departmenthead{Prof. Ir. Hanung Adi Nugroho, S.T., M.Eng., Ph.D., IPM., SMIEEE.}{197802242002121001}
+\major{Teknologi Informasi}
+\yearsubmit{2026}
 \examdate{<<Exam date>>}
 % Name of thesis supervisors/promotors
-\addsupervisor{Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.}{<<NIP xxxxxx>>}
-\addsupervisor{Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D}{<<NIP xxxxxx>>}
+\addsupervisor{Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.}{NIP. 197506071999031002}
+\addsupervisor{Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D}{NIP. 196909201995121001}
 %\addsupervisor{<<Supervisor 3>>}{<<NIP>>}
 % Name of examiners
 %\addexaminer{<<Examiner 1>>}{<<NIP 1>>}
@@ -153,8 +160,6 @@
 \include{contents/chapter-4/chapter-4}
 \cleardoublepage \phantomsection
 \include{contents/chapter-5/chapter-5}
-\cleardoublepage \phantomsection
-\include{contents/chapter-6/chapter-6}
 
 %======================================
 

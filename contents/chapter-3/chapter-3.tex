@@ -161,10 +161,75 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/experimental-topology.png}
+    \resizebox{0.75\textwidth}{!}{
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        validator/.style={rectangle, draw, rounded corners, fill=blue!5, minimum width=2.2cm, minimum height=1cm, align=center, font=\scriptsize},
+        observer/.style={rectangle, draw, rounded corners, fill=gray!5, minimum width=2cm, minimum height=1cm, align=center, font=\scriptsize},
+        cp/.style={rectangle, draw, rounded corners, thick, fill=white, minimum width=3.5cm, minimum height=1.2cm, align=center, font=\scriptsize},
+        groupbox/.style={draw, dashed, thick, inner sep=0.5cm, gray!60},
+        arrow/.style={-latex, thick},
+        line/.style={draw, -latex, thick}
+    ]
+
+        % --- Bottom: Observer Nodes ---
+        \node[observer] (O3) at (0, 0) {Observer 3\\(Gundar)};
+        \node[observer] (O2) [left=0.5cm of O3] {Observer 2\\(UNUD)};
+        \node[observer] (O1) [left=0.5cm of O2] {Observer 1\\(UT)};
+        \node[observer] (O4) [right=0.5cm of O3] {Observer 4\\(UNIMED)};
+        \node[observer] (O5) [right=0.5cm of O4] {Observer 5\\(UNDIP)};
+
+        % Observer P2P Connections (Gossip)
+        \draw[<->, gray, thin] (O1) -- (O2);
+        \draw[<->, gray, thin] (O2) -- (O3);
+        \draw[<->, gray, thin] (O3) -- (O4);
+        \draw[<->, gray, thin] (O4) -- (O5);
+
+        % Observer Group Box
+        \node[draw, dashed, thick, gray!60, fit=(O1) (O5), inner sep=0.4cm] (obs_group) {};
+        \node[anchor=north, font=\scriptsize\bfseries] at (obs_group.north) {Observer Nodes (Non-Validators)};
+
+        % --- Middle: Control Plane ---
+        \node[cp] (CP) at (0, 3) {Control Plane\\(Caliper + Monitor)};
+
+        % --- Top: Validator Nodes ---
+        \begin{scope}[yshift=8cm]
+            \node[validator] (V2) at (0, 2.2) {Validator 2\\(ITB)};
+            \node[validator] (V1) at (3.5, 0.5) {Validator 1\\(UGM)};
+            \node[validator] (V3) at (-3.5, 0.5) {Validator 3\\(UI)};
+            \node[validator] (V5) at (2, -1.8) {Validator 5\\(ITS)};
+            \node[validator] (V4) at (-2, -1.8) {Validator 4\\(UB)};
+
+            % Validator Bidirectional Ring (P2P + Round-Robin Logic)
+            \draw[<->, thick] (V1) -- (V2);
+            \draw[<->, thick] (V2) -- (V3);
+            \draw[<->, thick] (V3) -- (V4);
+            \draw[<->, thick] (V4) -- (V5);
+            \draw[<->, thick] (V5) -- (V1);
+
+            % Validator Group Box
+            \node[draw, dashed, thick, gray!60, fit=(V1) (V2) (V3) (V4) (V5), inner sep=0.5cm, minimum height=5.5cm] (val_group) {};
+            \node[anchor=north, font=\scriptsize\bfseries] at (val_group.north) {Validator Nodes (Signers/Proposers)};
+        \end{scope}
+
+
+        % --- Connections ---
+        % CP to Observers (RPC Load)
+        \draw[<->, thick] (CP) -- (obs_group.north) node[midway, right, font=\scriptsize] {RPC Load};
+
+        % Observers to Validators (Gossip)
+        \draw[arrow] (obs_group.west) .. controls (-6, 2) and (-6, 6) .. (val_group.west);
+        \draw[arrow] (obs_group.east) .. controls (6, 2) and (6, 6) .. (val_group.east);
+
+        % CP to Validators (Monitoring)
+        \draw[dashed, arrow] (CP) -- (val_group.south);
+
+    \end{tikzpicture}
+    }
     \caption{Topologi Eksperimen 10 Node dengan Infrastruktur Terdistribusi}
-    \label{fig:experimental_topology} % Main topology figure label
+    \label{fig:experimental_topology}
 \end{figure}
+
 
 \subsection{Monitoring dan Pengumpulan Data}
 Sistem monitoring dibangun menggunakan Prometheus yang mengumpulkan metrik dari tiga sumber:

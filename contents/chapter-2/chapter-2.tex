@@ -267,10 +267,64 @@ Validator \textit{DChain} berasal dari berbagai perguruan tinggi di Indonesia, d
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{images/topology-dchain.png}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[
+        node distance=2cm,
+        signer/.style={circle, draw=blue!80, fill=blue!10, thick, minimum size=1.3cm, inner sep=1pt, font=\scriptsize\bfseries},
+        non-signer/.style={circle, draw=gray!80, fill=gray!10, dashed, thick, minimum size=1.3cm, inner sep=1pt, font=\scriptsize},
+        connection/.style={->, >=stealth, thin, gray!60}
+    ]
+        % --- PoA Topology ---
+        \node (poa_label) at (0, 4.5) {\textbf{PoA (Clique)}};
+        
+        % Signers (Core)
+        \foreach \a/\name [count=\i] in {90/UGM, 162/ITB, 234/UI, 306/UB, 18/ITS} {
+            \node[signer] (S\i) at (\a:1.5) {\name};
+        }
+        % Connections between Signers (Full Mesh in Clique)
+        \foreach \i in {1,...,5} {
+            \foreach \j in {\i,...,5} {
+                \draw[connection, <->] (S\i) -- (S\j);
+            }
+        }
+        
+        % Non-Signers (Edge)
+        \foreach \a/\name [count=\i] in {90/UT, 162/UNUD, 234/Gundar, 306/UNIMED, 18/UNDIP} {
+            \node[non-signer] (N\i) at (\a:3.5) {\name};
+            % Connection from Core to Edge
+            \draw[connection] (S\i) -- (N\i);
+        }
+
+        % --- Separator ---
+        \draw[thick, dashed, gray!30] (5, 4.5) -- (5, -4);
+
+        % --- PoS Topology ---
+        \begin{scope}[xshift=10cm]
+            \node (pos_label) at (0, 4.5) {\textbf{PoS (Gasper)}};
+            
+            % All 10 Nodes (Validators & Non-Validators in Mesh)
+            \foreach \a/\name [count=\i] in {18/UGM, 54/ITB, 90/UI, 126/UB, 162/ITS, 198/UT, 234/UNUD, 270/Gundar, 306/UNIMED, 342/UNDIP} {
+                \node[signer] (V\i) at (\a:3) {\name};
+            }
+
+            
+            % P2P Connections (Full Mesh)
+            \foreach \i in {1,...,10} {
+                \foreach \j in {\i,...,10} {
+                    \ifnum\i=\j\else
+                        \draw[connection, <->] (V\i) -- (V\j);
+                    \fi
+                }
+            }
+
+        \end{scope}
+    \end{tikzpicture}
+    }
     \caption{Perbandingan topologi jaringan DChain pada mekanisme konsensus PoA dan PoS.}
     \label{fig:dchain_topologi}
 \end{figure}
+
+
 
 Gambar~\ref{fig:dchain_topologi} menggambarkan perbedaan topologi jaringan \textit{DChain} pada mekanisme konsensus \textit{Proof of Authority} (PoA) dan rencana migrasi ke \textit{Proof of Stake} (PoS). Pada arsitektur PoA, hanya sejumlah \textit{node} otoritatif yang memiliki kewenangan untuk memvalidasi transaksi dan menghasilkan blok baru, sementara \textit{node} lain berfungsi sebagai \textit{full node} untuk sinkronisasi data. Pola ini memberikan efisiensi dengan latensi rendah, tetapi tingkat desentralisasi terbatas karena proses validasi terpusat.
 
