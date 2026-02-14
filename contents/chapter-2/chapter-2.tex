@@ -36,7 +36,7 @@ Dengan demikian, penelitian ini menegaskan posisinya sebagai perluasan dari stud
 \hline
 \textbf{No} & \textbf{Peneliti \& Tahun} & \textbf{Objek Penelitian} & \textbf{Metode/Alat} & \textbf{Metrik} & \textbf{Hasil Utama} & \textbf{Keterbatasan} & \textbf{Kontribusi Utama} \\ \hline
 
-1 & Choi \& Hong (2020) & PoA vs PoS pada Ethereum privat & Eksperimen performa & TPS, Latensi & PoA unggul dalam latensi rendah dan throughput tinggi & Tidak ukur konsumsi sumber daya & Perbandingan awal PoA–PoS di jaringan privat \\ \hline
+1 & Choi \& Hong (2020) & PoA vs PoS pada Ethereum privat & Eksperimen performa & TPS, Latensi & PoA unggul dalam latensi rendah dan \textit{throughput} tinggi & Tidak ukur konsumsi sumber daya & Perbandingan awal PoA–PoS di jaringan privat \\ \hline
 
 2 & Rebello \textit{et al.} (2020) & PoA dan PoS di jaringan Ethereum privat & Simulasi & TPS, Latensi & PoA efisien di beban sedang; PoS stabil di beban besar & Tanpa analisis stabilitas & Dasar empiris evaluasi PoA–PoS \\ \hline
 
@@ -44,7 +44,7 @@ Dengan demikian, penelitian ini menegaskan posisinya sebagai perluasan dari stud
 
 4 & Li (2021) & PoW, PoS, BFT, DAG & Analisis literatur & Teoretis (skala, efisiensi) & PoS efisien energi & Tidak diuji eksperimen & Arah pengembangan konsensus \\ \hline
 
-5 & Kumar \textit{et al.} (2020) & Evaluasi performa blockchain dengan Caliper & Eksperimen & TPS, Latensi & Caliper efektif untuk benchmarking & Hanya satu konsensus diuji & Validasi alat ukur performa \\ \hline
+5 & Kumar \textit{et al.} (2020) & Evaluasi performa blockchain dengan Caliper & Eksperimen & TPS, Latensi & Caliper efektif untuk \textit{benchmarking} & Hanya satu konsensus diuji & Validasi alat ukur performa \\ \hline
 
 6 & Kaushal \& Kumar (2020) & Benchmarking Hyperledger & Eksperimen performa & TPS, Latensi, Throughput & Caliper akurat mengukur performa & Tidak bandingkan PoA–PoS & Perkenalan alat ukur standar \\ \hline
 \end{tabularx}
@@ -119,7 +119,7 @@ Pada periode 2008--2014, penelitian \textit{blockchain} masih sangat terbatas pa
 
 Memasuki periode 2015--2020, riset \textit{blockchain} mengalami ekspansi signifikan. Peluncuran Ethereum pada 2015 dengan konsep \textit{smart contract} membuka peluang aplikasi di luar sektor finansial. Fokus penelitian meluas ke bidang \textit{supply chain}, kesehatan, \textit{Internet of Things} (IoT), pemerintahan, dan pendidikan, serta mulai membahas integrasi \textit{blockchain} dengan teknologi lain seperti kecerdasan buatan (AI) dan \textit{big data} \cite{casino2019, monrat2019, bhutta2021, salah2019, deepa2022, dutta2020, wang2019}. Tren ini ditandai dengan lonjakan publikasi akademik dan semakin beragamnya topik riset, yang tidak lagi hanya berfokus pada keamanan transaksi tetapi juga pada isu privasi, interoperabilitas, dan skalabilitas \cite{dutta2020, wang2019}.
 
-Pada periode 2021--2025, riset \textit{blockchain} semakin diarahkan pada adopsi sektor publik dan pendidikan, termasuk aplikasi untuk identitas digital, sertifikat akademik, tata kelola data, dan pengembangan \textit{smart cities}. Selain itu, penelitian lebih menekankan pada integrasi lintas teknologi, seperti konvergensi \textit{blockchain} dengan AI, IoT, \textit{cloud computing}, dan \textit{big data}, untuk meningkatkan efisiensi serta keamanan sistem digital \cite{sunny2022, gad2022, abdelmaboud2022, bhushan2020}. Tantangan teknis yang paling banyak disorot pada fase ini meliputi skalabilitas (throughput, latency, konsumsi energi), interoperabilitas antar-\textit{blockchain}, privasi, serta regulasi \cite{rao2024, kolb2020, mohanta2019, habib2022}.
+Pada periode 2021--2025, riset \textit{blockchain} semakin diarahkan pada adopsi sektor publik dan pendidikan, termasuk aplikasi untuk identitas digital, sertifikat akademik, tata kelola data, dan pengembangan \textit{smart cities}. Selain itu, penelitian lebih menekankan pada integrasi lintas teknologi, seperti konvergensi \textit{blockchain} dengan AI, IoT, \textit{cloud computing}, dan \textit{big data}, untuk meningkatkan efisiensi serta keamanan sistem digital \cite{sunny2022, gad2022, abdelmaboud2022, bhushan2020}. Tantangan teknis yang paling banyak disorot pada fase ini meliputi skalabilitas (\textit{throughput}, \textit{latency}, konsumsi energi), interoperabilitas antar-\textit{blockchain}, privasi, serta regulasi \cite{rao2024, kolb2020, mohanta2019, habib2022}.
 
 Meskipun riset \textit{blockchain} terus berkembang, terdapat indikasi kelesuan riset \textit{mainstream} sejak 2022. Hal ini ditandai dengan penurunan tren publikasi di beberapa domain, seiring bergesernya perhatian akademik dan industri ke bidang lain seperti AI, IoT, dan \textit{metaverse} \cite{salah2019, cao2021}. Namun demikian, penelitian mengenai evaluasi performa \textit{blockchain} dan perbandingan mekanisme konsensus (khususnya PoS dan PoA) tetap aktif dan relevan, terutama dalam konteks aplikasi nasional dan tata kelola data publik \cite{li2023, lin2022, johar2021}.
 
@@ -349,7 +349,7 @@ Namun demikian, PoA juga memiliki sejumlah keterbatasan. Desentralisasi rendah m
 Validator & Terbatas, berbasis otoritas/reputasi & Penambang dengan daya komputasi tinggi & Pemegang token yang dipilih berdasarkan jumlah kepemilikan & \cite{reshi2025, joshi2021, qiu2022} \\ \hline
 Desentralisasi & Rendah – validator terbatas & Tinggi – siapa pun bisa menambang & Tinggi – siapa pun bisa berpartisipasi jika memiliki token & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
 Efisiensi Energi & Sangat tinggi – tidak membutuhkan daya komputasi besar & Sangat rendah – boros energi karena mining & Sedang – lebih hemat energi dibanding PoW & \cite{reshi2025, joshi2021, sytnyk2024} \\ \hline
-Kecepatan Transaksi & Sangat tinggi (latensi rendah, throughput tinggi) & Rendah – konfirmasi transaksi lambat & Sedang–tinggi – lebih cepat dari PoW, lebih lambat dari PoA & \cite{joshi2021, chikezie2021} \\ \hline
+Kecepatan Transaksi & Sangat tinggi (latensi rendah, \textit{throughput} tinggi) & Rendah – konfirmasi transaksi lambat & Sedang–tinggi – lebih cepat dari PoW, lebih lambat dari PoA & \cite{joshi2021, chikezie2021} \\ \hline
 Finalitas Blok & Instan – blok langsung sah karena validator sudah diotorisasi & Probabilistik – membutuhkan beberapa konfirmasi blok & Relatif cepat – finalitas tercapai setelah validator menyetujui & \cite{joshi2021, chikezie2021, sytnyk2024} \\ \hline
 Keamanan & Bergantung pada reputasi validator; rawan kolusi & Sangat tinggi, sulit diserang namun rentan 51\% attack & Tinggi, namun berisiko sentralisasi jika token terkonsentrasi & \cite{joshi2021, chikezie2021, qiu2022} \\ \hline
 Risiko Sentralisasi & Tinggi – validator sedikit dan terpusat & Rendah – kompetisi terbuka & Sedang – bergantung pada distribusi token & \cite{joshi2021, qiu2022} \\ \hline
@@ -469,13 +469,13 @@ Dari sisi infrastruktur, spesifikasi CPU, memori, \textit{bandwidth} jaringan, s
 \begin{tabular}{|p{3.5cm}|p{5cm}|p{5cm}|p{2cm}|}
 \hline
 \textbf{Faktor} & \textbf{Dampak Utama} & \textbf{Trade-off} & \textbf{Sumber} \\ \hline
-Jumlah Node Validator & Meningkatkan desentralisasi dan keamanan; menambah redundansi jaringan & Menurunkan throughput karena overhead komunikasi meningkat & \cite{kaur2021, hao2018} \\ \hline
+Jumlah Node Validator & Meningkatkan desentralisasi dan keamanan; menambah redundansi jaringan & Menurunkan \textit{throughput} karena \textit{overhead} komunikasi meningkat & \cite{kaur2021, hao2018} \\ \hline
 Waktu Blok (Block Time) & Interval pendek menurunkan latensi dan mempercepat konfirmasi transaksi & Risiko instabilitas jaringan dan meningkatnya frekuensi fork & \cite{shahsavari2022, xu2021} \\ \hline
-Ukuran Blok (Block Size) & Blok lebih besar menampung lebih banyak transaksi, throughput meningkat & Propagasi lebih lambat, risiko fork lebih tinggi & \cite{shahsavari2022, gobel2017} \\ \hline
-Beban Transaksi (Load) & Throughput meningkat seiring beban, hingga titik jenuh & Setelah batas, latensi meningkat drastis, sistem jadi tidak stabil & \cite{thakkar2018, ucbas2023} \\ \hline
-Jumlah Worker (Caliper) & Paralelisme transaksi meningkat, simulasi beban lebih realistis & Terlalu banyak worker dapat memicu overload dan bottleneck & \cite{thakkar2018, ucbas2023} \\ \hline
-Jenis Transaksi & Operasi baca lebih ringan; tulis dan komputasi intensif menambah konsumsi CPU/I/O & Beban tinggi pada operasi tulis/komputasi menurunkan throughput & \cite{dinh2017, gaba2022} \\ \hline
-Infrastruktur (VPS/OS) & CPU, RAM, bandwidth, dan containerization memengaruhi efisiensi dan skalabilitas & Infrastruktur lemah menyebabkan bottleneck; konfigurasi salah menurunkan validitas eksperimen & \cite{zheng2019, wu2022} \\ \hline
+Ukuran Blok (Block Size) & Blok lebih besar menampung lebih banyak transaksi, \textit{throughput} meningkat & Propagasi lebih lambat, risiko \textit{fork} lebih tinggi & \cite{shahsavari2022, gobel2017} \\ \hline
+Beban Transaksi (Load) & \textit{Throughput} meningkat seiring beban, hingga titik jenuh & Setelah batas, latensi meningkat drastis, sistem jadi tidak stabil & \cite{thakkar2018, ucbas2023} \\ \hline
+Jumlah Worker (Caliper) & Paralelisme transaksi meningkat, simulasi beban lebih realistis & Terlalu banyak \textit{worker} dapat memicu \textit{overload} dan \textit{bottleneck} & \cite{thakkar2018, ucbas2023} \\ \hline
+Jenis Transaksi & Operasi baca lebih ringan; tulis dan komputasi intensif menambah konsumsi CPU/I/O & Beban tinggi pada operasi tulis/komputasi menurunkan \textit{throughput} & \cite{dinh2017, gaba2022} \\ \hline
+Infrastruktur (VPS/OS) & CPU, RAM, \textit{bandwidth}, dan \textit{containerization} memengaruhi efisiensi dan skalabilitas & Infrastruktur lemah menyebabkan \textit{bottleneck}; konfigurasi salah menurunkan validitas eksperimen & \cite{zheng2019, wu2022} \\ \hline
 \end{tabular}}
 \end{table}
 
@@ -568,13 +568,13 @@ Berdasarkan analisis literatur, dapat diidentifikasi perbedaan karakteristik ant
 \begin{tabular}{|p{2.8cm}|p{3.5cm}|p{3cm}|p{4cm}|p{4cm}|}
 \hline
 \textbf{Alat} & \textbf{Metrik Utama} & \textbf{Platform Didukung} & \textbf{Kelebihan} & \textbf{Keterbatasan} \\ \hline
-\textbf{Hyperledger Caliper} & TPS, latency, resource usage, scalability, stability & Ethereum, Fabric, Besu, Quorum & \textit{Open-source}, modular, integrasi \textit{Prometheus/Grafana}, aktif dipelihara & Instalasi kompleks, kurva belajar tinggi \\ \hline
-\textbf{Blockbench} & Throughput, latency, scalability, fault tolerance & Ethereum (geth), Parity, Fabric & \textit{Framework} komprehensif, cocok untuk \textit{private blockchain} & Tidak aktif dikembangkan, \textit{workload} terbatas \\ \hline
-\textbf{PERSECUS} & TPS, latency, CPU/RAM, gas, energi & Ethereum, Fabric & Fokus pada \textit{reproducibility}, \textit{stress testing} modular & Dokumentasi publik minim \\ \hline
-\textbf{Diablo} & Latency, gas cost, error resilience & Ethereum, Fabric, Tendermint & Kuat dalam skenario \textit{fault injection}, \textit{workload} scripting fleksibel & Masih tahap pengembangan awal \\ \hline
-\textbf{Gromit} & Throughput, storage overhead, metadata cost & Ethereum, Fabric & Analisis makro lintas platform, fokus metadata & Komunitas kecil, kurang populer \\ \hline
-\textbf{BlockCompass} & Throughput, resource efficiency & Enterprise Blockchain & Integrasi \textit{enterprise}, dukungan \textit{workload} realistis & Tidak \textit{open-source}, akses terbatas \\ \hline
-\textbf{Grafana + Prometheus} & CPU, RAM, bandwidth (monitoring eksternal) & Agnostik (umum) & Visualisasi kuat, fleksibel lintas platform & Tidak menghasilkan \textit{workload}, hanya \textit{monitoring} \\ \hline
+\textbf{Hyperledger Caliper} & TPS, \textit{latency}, \textit{resource usage}, \textit{scalability}, \textit{stability} & Ethereum, Fabric, Besu, Quorum & \textit{Open-source}, modular, integrasi \textit{Prometheus/Grafana}, aktif dipelihara & Instalasi kompleks, kurva belajar tinggi \\ \hline
+\textbf{Blockbench} & \textit{Throughput}, \textit{latency}, \textit{scalability}, \textit{fault tolerance} & Ethereum (geth), Parity, Fabric & \textit{Framework} komprehensif, cocok untuk \textit{private blockchain} & Tidak aktif dikembangkan, \textit{workload} terbatas \\ \hline
+\textbf{PERSECUS} & \textit{TPS}, \textit{latency}, \textit{CPU/RAM}, \textit{gas}, \textit{energy} & Ethereum, Fabric & Fokus pada \textit{reproducibility}, \textit{stress testing} modular & Dokumentasi publik minim \\ \hline
+\textbf{Diablo} & \textit{Latency}, \textit{gas cost}, \textit{error resilience} & Ethereum, Fabric, Tendermint & Kuat dalam skenario \textit{fault injection}, \textit{workload scripting} fleksibel & Masih tahap pengembangan awal \\ \hline
+\textbf{Gromit} & \textit{Throughput}, \textit{storage overhead}, \textit{metadata cost} & Ethereum, Fabric & Analisis makro lintas platform, fokus \textit{metadata} & Komunitas kecil, kurang populer \\ \hline
+\textbf{BlockCompass} & \textit{Throughput}, \textit{resource efficiency} & \textit{Enterprise Blockchain} & Integrasi \textit{enterprise}, dukungan \textit{workload} realistis & Tidak \textit{open-source}, akses terbatas \\ \hline
+\textbf{Grafana + Prometheus} & \textit{CPU}, \textit{RAM}, \textit{bandwidth} (\textit{monitoring} eksternal) & Agnostik (umum) & Visualisasi kuat, fleksibel lintas platform & Tidak menghasilkan \textit{workload}, hanya \textit{monitoring} \\ \hline
 \end{tabular}}
 \end{table}
 
@@ -631,13 +631,13 @@ Selain itu, pengulangan eksperimen dilakukan secara sistematis untuk meminimalka
 \textbf{Variabel/Metrik} & \textbf{Definisi} & \textbf{Alasan Penggunaan} & \textbf{Referensi} \\ \hline
 \textbf{Throughput (TPS)} & Jumlah transaksi yang diproses per detik & Indikator utama efisiensi sistem; mudah dibandingkan antar konsensus tanpa bias & \cite{fan2020, dinh2017} \\ \hline
 \textbf{Latency} & Waktu tunda antara pengiriman transaksi hingga konfirmasi blok & Penting untuk aplikasi \textit{real-time} dan menilai responsivitas jaringan & \cite{fan2020, thakkar2018} \\ \hline
-\textbf{Resource Usage} & Konsumsi CPU, memori, dan bandwidth & Menggambarkan efisiensi pemanfaatan infrastruktur; relevan untuk biaya operasional & \cite{dinh2017, kuzlu2019} \\ \hline
+\textbf{Resource Usage} & Konsumsi CPU, memori, dan \textit{bandwidth} & Menggambarkan efisiensi pemanfaatan infrastruktur; relevan untuk biaya operasional & \cite{dinh2017, kuzlu2019} \\ \hline
 \textbf{Scalability} & Kemampuan sistem menangani peningkatan jumlah node atau transaksi & Penting untuk keberlanjutan sistem \textit{blockchain} pada skala besar & \cite{fan2020, kaur2021} \\ \hline
 \textbf{Stability} & Konsistensi performa saat diuji dengan beban tinggi dan kondisi ekstrem & Menunjukkan ketahanan sistem terhadap lonjakan transaksi dan kegagalan node & \cite{thakkar2018, kuzlu2019} \\ \hline
 \textbf{Block Time} & Interval waktu antara pembuatan blok baru & Mempengaruhi \textit{throughput}, \textit{latency}, dan stabilitas; relevan dalam \textit{tuning} parameter DChain & \cite{dinh2017, kaur2021} \\ \hline
 \textbf{Block Size} & Kapasitas data dalam setiap blok & Berkaitan dengan \textit{throughput} vs risiko \textit{fork}; penting untuk simulasi kondisi nyata & \cite{thakkar2018, kuzlu2019} \\ \hline
 \textbf{Jumlah Node Validator} & Jumlah node yang berperan dalam konsensus & Merepresentasikan \textit{trade-off} antara desentralisasi, \textit{throughput}, dan overhead komunikasi & \cite{dinh2017, kaur2021} \\ \hline
-\textbf{Jumlah Worker (Caliper)} & Klien/worker yang mengirim transaksi dalam eksperimen & Menentukan variasi beban transaksi; mereplikasi kondisi multi-klien dalam sistem nyata & \cite{thakkar2018, kuzlu2019} \\ \hline
+\textbf{Jumlah Worker (Caliper)} & Klien/\textit{worker} yang mengirim transaksi dalam eksperimen & Menentukan variasi beban transaksi; mereplikasi kondisi multi-klien dalam sistem nyata & \cite{thakkar2018, kuzlu2019} \\ \hline
 \textbf{Jenis Transaksi} & Tulis (I/O-intensive), baca (read-only), komputasi (CPU-intensive) & Menilai performa pada beban yang berbeda sesuai tipe aplikasi \textit{blockchain} & \cite{dinh2017, kuzlu2019} \\ \hline
 \end{tabular}}
 \end{table}

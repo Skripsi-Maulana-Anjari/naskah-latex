@@ -2,11 +2,11 @@
 
 \section{Latar Belakang}
 
-Teknologi \textit{blockchain} pertama kali diperkenalkan melalui Bitcoin pada tahun 2009 dengan tujuan menghadirkan sistem transaksi elektronik yang terdesentralisasi, transparan, dan aman tanpa perantara. Sejak saat itu, \textit{blockchain} berkembang pesat dan banyak diadopsi dalam berbagai sektor karena karakteristiknya yang mampu menjamin keamanan data serta integritas transaksi. Inovasi ini kemudian diperluas melalui Ethereum pada tahun 2015 dengan hadirnya konsep \textit{smart contract}, yang memungkinkan eksekusi otomatis aplikasi desentralisasi (dApps) di atas \textit{blockchain}. Perkembangan ini mendorong munculnya berbagai penelitian mengenai mekanisme konsensus alternatif yang lebih efisien dibandingkan \textit{proof-of-work} (PoW), seperti \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS).
+Teknologi \textit{blockchain} pertama kali diperkenalkan melalui Bitcoin pada tahun 2009 dengan tujuan menghadirkan sistem transaksi elektronik yang terdesentralisasi, transparan, dan aman tanpa perantara. Sejak saat itu, \textit{blockchain} berkembang pesat dan banyak diadopsi dalam berbagai sektor karena karakteristiknya yang mampu menjamin keamanan data serta integritas transaksi. Inovasi ini kemudian diperluas melalui Ethereum pada tahun 2015 dengan hadirnya konsep \textit{smart contract}, yang memungkinkan eksekusi otomatis aplikasi desentralisasi (\textit{dApps}) di atas \textit{blockchain}. Perkembangan ini mendorong munculnya berbagai penelitian mengenai mekanisme konsensus alternatif yang lebih efisien dibandingkan \textit{proof-of-work} (PoW), seperti \textit{Proof of Authority} (PoA) dan \textit{Proof of Stake} (PoS).
 
 Selain pada sektor finansial, \textit{blockchain} juga mulai diterapkan dalam bidang pendidikan. Salah satu implementasi di Indonesia adalah DChain (Dikti Chain), sebuah jaringan \textit{blockchain} nasional yang dirancang untuk mendukung ekosistem pendidikan tinggi. DChain berfungsi sebagai infrastruktur digital terdesentralisasi yang memungkinkan penerbitan, penyimpanan, dan verifikasi dokumen akademik—seperti ijazah digital, sertifikat kompetensi, dan transkrip—dengan jaminan integritas data. Salah satu komponen krusial yang menentukan kinerja DChain adalah mekanisme konsensus yang digunakan untuk memvalidasi transaksi dan menjaga integritas jaringan.
 
-Saat ini DChain mengimplementasikan konsensus PoA, yang dikenal efisien karena hanya node terotorisasi yang dapat memvalidasi transaksi. Namun, meningkatnya skala penggunaan dan kompleksitas jaringan mendorong perlunya mekanisme yang lebih terdesentralisasi dan skalabel, seperti PoS, yang memberikan kesempatan kepada seluruh pemegang token untuk berpartisipasi dalam proses validasi. Relevansi isu ini juga sejalan dengan tren global, di mana Ethereum sebagai salah satu \textit{blockchain} publik terbesar telah bermigrasi dari PoW ke PoS pada tahun 2022.
+Saat ini DChain mengimplementasikan konsensus PoA, yang dikenal efisien karena hanya \textit{node} terotorisasi yang dapat memvalidasi transaksi. Namun, meningkatnya skala penggunaan dan kompleksitas jaringan mendorong perlunya mekanisme yang lebih terdesentralisasi dan skalabel, seperti PoS, yang memberikan kesempatan kepada seluruh pemegang token untuk berpartisipasi dalam proses validasi. Relevansi isu ini juga sejalan dengan tren global, di mana Ethereum sebagai salah satu \textit{blockchain} publik terbesar telah bermigrasi dari PoW ke PoS pada tahun 2022.
 
 Rencana migrasi dari PoA ke PoS pada DChain menimbulkan pertanyaan strategis mengenai dampaknya terhadap performa jaringan. Sejauh ini, belum ada kajian komprehensif yang mengevaluasi migrasi konsensus pada DChain dengan menggunakan parameter pengujian yang terstandar. Oleh karena itu, penelitian ini dirancang untuk menganalisis dan membandingkan kinerja DChain pada kedua mekanisme konsensus, dengan fokus pada metrik seperti \textit{Transactions Per Second} (TPS), latensi, penggunaan sumber daya komputasi, skalabilitas, dan stabilitas sistem.
 
@@ -40,7 +40,7 @@ Penelitian ini dibatasi pada ruang lingkup tertentu untuk menjaga fokus pada per
 
 \begin{enumerate}
     \item \textbf{Objek Penelitian} \\
-    Objek yang diteliti adalah performa jaringan DChain menggunakan teknologi go-ethereum yang dijalankan dengan dua mekanisme konsensus, yaitu PoA (Clique) dan PoS (Prysm).
+    Objek yang diteliti adalah performa jaringan DChain menggunakan teknologi \textit{go-ethereum} yang dijalankan dengan dua mekanisme konsensus, yaitu PoA (\textit{Clique}) dan PoS (\textit{Prysm}).
     
     \item \textbf{Metode Penelitian} \\
     Penelitian ini menggunakan pendekatan eksperimental berbasis simulasi, yang dijalankan pada lingkungan terkontainerisasi (Docker, Kubernetes, dan Kurtosis) yang terdiri dari 1 VPS utama sebagai \textit{control plane} dan \textit{worker manager} dan juga 5 VPS dengan spesifikasi identik sebagai mesin untuk menjalankan \textit{nodes} jaringan. Proses pengujian dilakukan dengan membangun \textit{pipeline} dengan bantuan \textit{benchmarking tools} seperti Hyperledger Caliper, Prometheus, dan Grafana.
@@ -49,7 +49,7 @@ Penelitian ini dibatasi pada ruang lingkup tertentu untuk menjaga fokus pada per
     Pengujian dilakukan di bulan Agustus-Desember 2025 dengan infrastruktur berbasis VPS yang disiapkan khusus sebagai lingkungan uji.
     
     \item \textbf{Populasi dan Sampel} \\
-    Populasi adalah jaringan PoA dan PoS dengan jumlah node sebanyak node validator DChain saat ini (15 nodes) dan sampel diambil sebanyak 10 nodes.
+    Populasi adalah jaringan PoA dan PoS dengan jumlah \textit{node} sebanyak \textit{node} validator DChain saat ini (15 \textit{nodes}) dan sampel diambil sebanyak 10 \textit{nodes}.
     
     \item \textbf{Variabel Penelitian} \\
     Variabel bebas adalah faktor yang diubah untuk melihat pengaruhnya terhadap performa jaringan. Dalam penelitian ini, variabel bebas mencakup:
@@ -57,9 +57,9 @@ Penelitian ini dibatasi pada ruang lingkup tertentu untuk menjaga fokus pada per
         \item \textbf{Jenis Mekanisme Konsensus}: PoA dan PoS.
         \item \textbf{Topologi Jaringan (Jumlah Nodes)}: variasi konfigurasi:
         \begin{itemize}
-            \item 4 node (3 Signer/Validator + 1 Non-Signer/Observer)
-            \item 6 node (3 Signer/Validator + 3 Non-Signer/Observer)
-            \item 10 node (5 Signer/Validator + 5 Non-Signer/Observer)
+            \item 4 \textit{node} (3 \textit{Signer}/\textit{Validator} + 1 \textit{Non-Signer}/\textit{Observer})
+            \item 6 \textit{node} (3 \textit{Signer}/\textit{Validator} + 3 \textit{Non-Signer}/\textit{Observer})
+            \item 10 \textit{node} (5 \textit{Signer}/\textit{Validator} + 5 \textit{Non-Signer}/\textit{Observer})
         \end{itemize}
         \item \textbf{Beban Kerja (\textit{Transaction Load})}: jumlah transaksi per detik (TPS) dengan beban bervariasi dan disesuaikan.
         \item \textbf{Jenis Operasi Transaksi}: meliputi operasi tulis (\textit{I/O-Intensive}), \textit{minting} NFT, baca (\textit{Read-Only}), dan komputasi (\textit{CPU-Intensive}).

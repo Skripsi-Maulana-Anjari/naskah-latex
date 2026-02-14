@@ -8,32 +8,32 @@ Penelitian ini membutuhkan perangkat keras dan perangkat lunak yang spesifik unt
 Perangkat keras dan infrastruktur yang digunakan dalam penelitian ini meliputi:
 \begin{itemize}
     \item \textbf{Laptop Pengembangan}: Lenovo Ideapad Gaming 3 (AMD Ryzen 5 4600H, 16GB RAM, Ubuntu 24.04 LTS). Digunakan untuk pengembangan skrip, manajemen klaster, dan analisis data.
-    \item \textbf{Cloud VPS (Virtual Private Server)}:
+    \item \textbf{\textit{Cloud VPS (Virtual Private Server)}}:
     \begin{itemize}
-        \item 1x \textbf{VPS Control Plane} (Contabo Cloud VPS 30): Processor \textbf{AMD EPYC}, 8 vCPU, 24 GB RAM, 200 GB NVMe. Berfungsi sebagai \textit{host} untuk orkestrator Caliper, Prometheus, Grafana, dan PostgreSQL.
-        \item 5x \textbf{VPS Nodes} (Contabo Cloud VPS 20): Spesifikasi dasar 6 vCPU, 12 GB RAM, 200 GB SSD. Infrastruktur ini bersifat heterogen yang terdiri dari 2 node berbasis \textbf{AMD EPYC} dan 3 node berbasis \textbf{Intel Broadwell}. Node ini berfungsi sebagai \textit{worker nodes} (System Under Test) yang menjalankan protokol konsensus PoA dan PoS.
+        \item 1x \textbf{\textit{VPS Control Plane}} (\textit{Contabo Cloud VPS} 30): \textit{Processor} \textbf{AMD EPYC}, 8 vCPU, 24 GB RAM, 200 GB NVMe. Berfungsi sebagai \textit{host} untuk orkestrator \textit{Caliper}, \textit{Prometheus}, \textit{Grafana}, dan \textit{PostgreSQL}.
+        \item 5x \textbf{\textit{VPS Nodes}} (\textit{Contabo Cloud VPS} 20): Spesifikasi dasar 6 vCPU, 12 GB RAM, 200 GB SSD. Infrastruktur ini bersifat heterogen yang terdiri dari 2 \textit{node} berbasis \textbf{AMD EPYC} dan 3 \textit{node} berbasis \textbf{Intel Broadwell}. \textit{Node} ini berfungsi sebagai \textit{worker nodes} (\textit{System Under Test}) yang menjalankan protokol konsensus PoA dan PoS.
     \end{itemize}
 \end{itemize}
 
 Perangkat lunak yang digunakan terdiri dari:
 \begin{itemize}
-    \item \textbf{Docker \& Docker Compose}: Platform kontainerisasi untuk isolasi lingkungan node.
-    \item \textbf{Kubernetes (k3s)}: Orkestrator untuk manajemen kluster \textit{multi-node}.
-    \item \textbf{Go-Ethereum (Geth)} v1.13.15 (PoA) \& v1.16.7 (PoS): Klien eksekusi blockchain Ethereum.
-    \item \textbf{Prysm} v6.0.4: Klien konsensus (Beacon Chain) untuk PoS.
-    \item \textbf{Clef}: Manajemen akun dan penandatanganan transaksi untuk PoA.
-    \item \textbf{Hyperledger Caliper} v0.6.0: \textit{Workload generator} untuk \textit{benchmarking}.
-    \item \textbf{Prometheus, Grafana, Pushgateway, Node-Exporter}: Stack monitoring untuk metrik sistem dan blockchain.
-    \item \textbf{PostgreSQL} v17: Basis data untuk menyimpan hasil eksperimen mentah.
-    \item \textbf{Kurtosis} v1.13.2: Alat orkestrasi untuk \textit{deployment} jaringan PoS yang kompleks.
+    \item \textbf{\textit{Docker} \& \textit{Docker Compose}}: \textit{Platform} kontainerisasi untuk isolasi lingkungan \textit{node}.
+    \item \textbf{\textit{Kubernetes} (\textit{k3s})}: Orkestrator untuk manajemen kluster \textit{multi-node}.
+    \item \textbf{\textit{Go-Ethereum} (\textit{Geth})} v1.13.15 (PoA) \& v1.16.7 (PoS): Klien eksekusi \textit{blockchain} Ethereum.
+    \item \textbf{\textit{Prysm}} v6.0.4: Klien konsensus (\textit{Beacon Chain}) untuk PoS.
+    \item \textbf{\textit{Clef}}: Manajemen akun dan penandatanganan transaksi untuk PoA.
+    \item \textbf{\textit{Hyperledger Caliper}} v0.6.0: \textit{Workload generator} untuk \textit{benchmarking}.
+    \item \textbf{\textit{Prometheus}, \textit{Grafana}, \textit{Pushgateway}, \textit{Node-Exporter}}: \textit{Stack monitoring} untuk metrik sistem dan \textit{blockchain}.
+    \item \textbf{\textit{PostgreSQL}} v17: Basis data untuk menyimpan hasil eksperimen mentah.
+    \item \textbf{\textit{Kurtosis}} v1.13.2: Alat orkestrasi untuk \textit{deployment} jaringan PoS yang kompleks.
 \end{itemize}
 
 \subsection{Bahan Penelitian}
 Bahan yang digunakan dalam penelitian ini meliputi:
 \begin{itemize}
-    \item \textbf{Dataset Transaksi Sintetis}: Beban kerja yang dihasilkan secara deterministik oleh Caliper.
-    \item \textbf{Smart Contract DChain}: Kontrak pintar riil yang digunakan di DChain (CertificateContract, SertifikatLAM) untuk simulasi kasus penggunaan nyata.
-    \item \textbf{Image Kontainer}: Docker image resmi untuk Geth, Prysm, dan tools pendukung.
+    \item \textbf{\textit{Dataset} Transaksi Sintetis}: Beban kerja yang dihasilkan secara deterministik oleh \textit{Caliper}.
+    \item \textbf{\textit{Smart Contract} DChain}: Kontrak pintar riil yang digunakan di DChain (\textit{CertificateContract}, SertifikatLAM) untuk simulasi kasus penggunaan nyata.
+    \item \textbf{\textit{Image} Kontainer}: \textit{Docker image} resmi untuk \textit{Geth}, \textit{Prysm}, dan \textit{tools} pendukung.
 \end{itemize}
 
 \section{Metode yang Digunakan}
@@ -67,9 +67,9 @@ Topologi Jaringan & 3N-1NS, 3N-3NS, 5N-5NS & Variasi jumlah node validator (Sign
 \hline
 Jumlah Worker & 1, 3, 5 & Tingkat paralelisasi klien pengirim transaksi (Caliper). \\
 \hline
-Jenis Beban & Fixed-load, Fixed-rate & Metode kontrol laju transaksi (antrean tetap vs TPS tetap). \\
+Jenis Beban & \textit{Fixed-load}, \textit{Fixed-rate} & Metode kontrol laju transaksi (antrean tetap vs TPS tetap). \\
 \hline
-Jenis Transaksi & Mint, Read, Burn, CPU Stress & Operasi pada \textit{smart contract} (tulis, baca, hapus, komputasi). \\
+Jenis Transaksi & \textit{Mint}, \textit{Read}, \textit{Burn}, \textit{CPU Stress} & Operasi pada \textit{smart contract} (tulis, baca, hapus, komputasi). \\
 \hline
 \end{longtable}
 
@@ -84,81 +84,106 @@ Jenis Transaksi & Mint, Read, Burn, CPU Stress & Operasi pada \textit{smart cont
 \hline
 \endlastfoot
 
-Kinerja Transaksi & Throughput (TPS) & Jumlah transaksi berhasil per detik. \\
-& Latency (Avg, P95) & Waktu tunda rata-rata dan persentil ke-95. \\
-& Success Rate & Persentase transaksi berhasil. \\
+Kinerja Transaksi & \textit{Throughput} (TPS) & Jumlah transaksi berhasil per detik. \\
+& \textit{Latency} (Avg, P95) & Waktu tunda rata-rata dan persentil ke-95. \\
+& \textit{Success Rate} & Persentase transaksi berhasil. \\
 \hline
-Sumber Daya & CPU Usage (\%) & Rata-rata penggunaan CPU node. \\
-& Memory Usage (MB) & Rata-rata penggunaan RAM node. \\
-& Network I/O & Throughput jaringan masuk/keluar. \\
-& Disk I/O & Throughput baca/tulis disk. \\
+Sumber Daya & \textit{CPU Usage} (\%) & Rata-rata penggunaan CPU node. \\
+& \textit{Memory Usage} (MB) & Rata-rata penggunaan RAM node. \\
+& \textit{Network I/O} & \textit{Throughput} jaringan masuk/keluar. \\
+& \textit{Disk I/O} & \textit{Throughput} baca/tulis disk. \\
 \hline
-Stabilitas & Stability Index & Konsistensi TPS dalam durasi panjang (Soak Test). \\
+Stabilitas & \textit{Stability Index} & Konsistensi TPS dalam durasi panjang (\textit{Soak Test}). \\
 \hline
 \end{longtable}
 
 \textbf{Variabel Kontrol}:
 Untuk memastikan validitas internal, parameter berikut dijaga konstan:
 \begin{itemize}
-    \item \textbf{Block Time}: 5 detik (PoA) dan 12 detik (PoS - Slot Time standar Ethereum 2.0). 
-    \item \textbf{Gas Limit}: 30.000.000 gas per blok.
-    \item \textbf{Spesifikasi VPS}: Identik untuk semua trial.
+    \item \textbf{\textit{Block Time}}: 5 detik (PoA) dan 12 detik (PoS - \textit{Slot Time} standar Ethereum 2.0). 
+    \item \textbf{\textit{Gas Limit}}: 30.000.000 gas per blok.
+    \item \textbf{Spesifikasi VPS}: Identik untuk semua uji coba.
     \item \textbf{Durasi Pemanasan (\textit{Pre-warm})}: Dilakukan sebelum setiap sesi pengukuran untuk menghilangkan efek \textit{cold start}.
-    \item \textbf{Mempool Cleaning}: Memastikan antrean transaksi kosong sebelum memulai skenario baru.
+    \item \textbf{\textit{Mempool Cleaning}}: Memastikan antrean transaksi kosong sebelum memulai skenario baru.
 \end{itemize}
 
 \subsection{Skenario Benchmarking}
 Penelitian ini menerapkan lima skenario utama untuk menguji berbagai aspek kinerja:
 
 \begin{enumerate}
-    \item \textbf{Throughput Capacity (Step Load)}:
+    \item \textbf{\textit{Throughput Capacity (Step Load)}}:
     \begin{itemize}
         \item Tujuan: Mencari titik jenuh (\textit{knee point}) sistem.
         \item Metode: Meningkatkan beban TPS secara bertahap (5, 10, ..., 100 TPS) hingga latensi melonjak drastis.
     \end{itemize}
 
-    \item \textbf{Fixed Load (Baseline)}:
+    \item \textbf{\textit{Fixed Load (Baseline)}}:
     \begin{itemize}
         \item Tujuan: Mengukur kapasitas maksimum teoretis tanpa jeda pengiriman.
         \item Metode: Mempertahankan antrean transaksi tetap (\textit{backlog} 20 tx) selama 180 detik.
     \end{itemize}
 
-    \item \textbf{Worker Scalability}:
+    \item \textbf{\textit{Worker Scalability}}:
     \begin{itemize}
         \item Tujuan: Menguji efisiensi penanganan klien konkuren.
         \item Metode: Menjalankan beban TPS optimal dengan variasi 1, 3, dan 5 \textit{worker}.
     \end{itemize}
 
-    \item \textbf{Read Intensive}:
+    \item \textbf{\textit{Read Intensive}}:
     \begin{itemize}
         \item Tujuan: Mengukur kinerja operasi baca (RPC) yang dominan pada aplikasi nyata.
         \item Metode: Beban baca tinggi (200, 400, 600 TPS) pada data yang sudah ada.
     \end{itemize}
     
-    \item \textbf{Functional Lifecycle \& Stability}:
+    \item \textbf{\textit{Functional Lifecycle \& Stability}}:
     \begin{itemize}
-        \item Tujuan: Menguji fungsi penuh (Mint-Read-Burn) dan stabilitas jangka panjang.
+        \item Tujuan: Menguji fungsi penuh (\textit{Mint-Read-Burn}) dan stabilitas jangka panjang.
         \item Metode: \textit{Soak Test} selama 15 menit pada 60\% beban optimal.
     \end{itemize}
 \end{enumerate}
 
+\subsection{Strategi dan Justifikasi Skenario}
+Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis} untuk memastikan evaluasi yang holistik:
+
+\begin{enumerate}
+    \item \textbf{Layer 1: Pemanasan (\textit{Warming Up})}.
+    Sistem terdistribusi sering mengalami performa awal yang rendah akibat \textit{cold start} (inisialisasi cache, koneksi peer) \cite{ioini2020}. Fase ini mencetak 20.000 token pada 20 TPS konstan untuk mencapai kondisi \textit{steady-state} sebelum pengukuran dimulai \cite{schwartz2019}.
+
+    \item \textbf{Layer 2: Analisis Kapasitas (\textit{Capacity})}.
+    Skenario \textit{Step Load} digunakan untuk mengidentifikasi "Knee Point" atau titik jenuh di mana peningkatan beban input tidak lagi linear dengan output, melainkan menyebabkan lonjakan latensi (\textit{hockey-stick curve}) \cite{thakkar2018}.
+
+    \item \textbf{Layer 3: Beban Kerja Fungsional}.
+    Menguji perilaku sistem di luar transfer aset sederhana:
+    \begin{itemize}
+        \item \textit{Read-Intensive}: Menguji batas skalabilitas horizontal RPC node (baca 200--600 TPS) \cite{pongnumkul2017}.
+        \item \textit{Certificate Lifecycle}: Memvalidasi konsistensi data (\textit{read-after-write}) \cite{rouhani2019} dan manajemen state (\textit{Burn}) \cite{pierro2019}.
+        \item \textit{CPU Stress}: Mengisolasi \textit{compute-bound bottleneck} menggunakan \textit{smart contract} yang melakukan hashing iteratif \cite{dinh2017}.
+    \end{itemize}
+
+    \item \textbf{Layer 4: Skalabilitas Klien}.
+    Berdasarkan Hukum Amdahl, pengujian dengan variasi jumlah worker (1, 3, 5) dilakukan untuk membedakan apakah bottleneck terjadi pada konsensus jaringan atau pada konkurensi klien pengirim (Caliper) \cite{amdahl1967, sukhwani2020}.
+
+    \item \textbf{Layer 5: Resiliensi (\textit{Soak Test})}.
+    Uji durabilitas 15 menit dilakukan untuk mendeteksi degradasi performa akumulatif seperti \textit{memory leaks} atau \textit{resource exhaustion} yang tidak terdeteksi pada uji singkat \cite{ieee829}.
+\end{enumerate}
+
 \subsection{Konfigurasi Testbed}
-\subsubsection{Jaringan PoA (Proof of Authority)}
-Menggunakan protokol Clique dengan Geth + Clef. Topologi didistribusikan ke 5 VPS menggunakan Kubernetes (Host Network). Setiap \textit{signer} (validator) diamankan dengan Clef yang menyimpan \textit{private key} secara terekstraksi.
+\subsubsection{Jaringan PoA (\textit{Proof of Authority})}
+Menggunakan protokol \textit{Clique} dengan \textit{Geth} + \textit{Clef}. Topologi didistribusikan ke 5 \textit{VPS} menggunakan \textit{Kubernetes} (\textit{Host Network}). Setiap \textit{signer} (validator) diamankan dengan \textit{Clef} yang menyimpan \textit{private key} secara terekstraksi.
 
-\subsubsection{Jaringan PoS (Proof of Stake)}
-Menggunakan protokol Gasper (LMD-GHOST + Casper FFG) dengan arsitektur Geth (Execution Layer) dan Prysm (Consensus Layer). 
+\subsubsection{Jaringan PoS (\textit{Proof of Stake})}
+Menggunakan protokol \textit{Gasper} (\textit{LMD-GHOST} + \textit{Casper FFG}) dengan arsitektur \textit{Geth} (\textit{Execution Layer}) dan \textit{Prysm} (\textit{Consensus Layer}). 
 
-Orkestrasi dilakukan menggunakan Kurtosis untuk mengelola kompleksitas \textit{peering} antara EL dan CL. Setiap node validator menjalankan 22 validator keys (total 110 validator untuk 5 node) untuk mensimulasikan beban jaringan nyata.
+Orkestrasi dilakukan menggunakan \textit{Kurtosis} untuk mengelola kompleksitas \textit{peering} antara \textit{EL} dan \textit{CL}. Setiap \textit{node} validator menjalankan 22 \textit{validator keys} (total 110 validator untuk 5 \textit{node}) untuk mensimulasikan beban jaringan nyata.
 
 Visualisasi arsitektur eksperimen secara keseluruhan dapat dilihat pada Gambar \ref{fig:experimental_topology}. Topologi ini menerapkan skema \textbf{10 Node} yang terdiri dari:
 \begin{enumerate}
-    \item \textbf{Control Plane}: Bertindak sebagai orkestrator yang mengirimkan beban transaksi (\textit{RPC Load}) ke node observer menggunakan Hyperledger Caliper.
-    \item \textbf{Validator Nodes (Signers/Proposers)}: 5 node utama (V1--V5) yang memiliki hak untuk memvalidasi transaksi dan menyusun blok baru. Dalam konsensus PoA, node-node ini terhubung dalam topologi cincin (\textit{ring}) untuk rotasi \textit{proposer} secara \textit{Round-Robin} untuk PoA dan acak untuk PoS.
-    \item \textbf{Observer Nodes (Non-Validators)}: 5 node tambahan (O1--O5) yang tidak memproduksi blok tetapi berpartisipasi dalam sinkronisasi data melalui protokol \textit{gossip} (P2P). Node ini mensimulasikan institusi anggota konsorsium yang hanya memegang salinan \textit{ledger} tanpa hak validasi. Node ini berfungsi sebagai pintu masuk (\textit{gateway}) bagi transaksi yang dikirimkan oleh Control Plane. Meskipun tidak memiliki validasi blok, Observer Node bertanggung jawab untuk menerima beban transaksi injeksi dari Caliper dan mempropagasi transaksi tersebut ke seluruh jaringan (termasuk ke Validator Node) agar dapat diproses dan dimasukkan ke dalam blok baru.
+    \item \textbf{\textit{Control Plane}}: Bertindak sebagai orkestrator yang mengirimkan beban transaksi (\textit{RPC Load}) ke \textit{node} observer menggunakan \textit{Hyperledger Caliper}.
+    \item \textbf{\textit{Validator Nodes (Signers/Proposers)}}: 5 \textit{node} utama (V1--V5) yang memiliki hak untuk memvalidasi transaksi dan menyusun blok baru. Dalam konsensus PoA, \textit{node-node} ini terhubung dalam topologi cincin (\textit{ring}) untuk rotasi \textit{proposer} secara \textit{Round-Robin} untuk PoA dan acak untuk PoS.
+    \item \textbf{\textit{Observer Nodes (Non-Validators)}}: 5 \textit{node} tambahan (O1--O5) yang tidak memproduksi blok tetapi berpartisipasi dalam sinkronisasi data melalui protokol \textit{gossip} (\textit{P2P}). \textit{Node} ini mensimulasikan institusi anggota konsorsium yang hanya memegang salinan \textit{ledger} tanpa hak validasi. \textit{Node} ini berfungsi sebagai pintu masuk (\textit{gateway}) bagi transaksi yang dikirimkan oleh \textit{Control Plane}. Meskipun tidak memiliki validasi blok, \textit{Observer Node} bertanggung jawab untuk menerima beban transaksi injeksi dari \textit{Caliper} dan mempropagasi transaksi tersebut ke seluruh jaringan (termasuk ke \textit{Validator Node}) agar dapat diproses dan dimasukkan ke dalam blok baru.
 \end{enumerate}
 
-Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP yang digunakan untuk setiap topologi dapat dilihat secara lengkap pada \textbf{Lampiran D}.
+Rincian pemetaan alokasi \textit{node} ke infrastruktur \textit{VPS} beserta alamat \textit{IP} yang digunakan untuk setiap topologi dapat dilihat secara lengkap pada \textbf{Lampiran D}.
 
 \begin{figure}[htbp]
     \centering
@@ -174,11 +199,11 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
     ]
 
         % --- Bottom: Observer Nodes ---
-        \node[observer] (O3) at (0, 0) {Observer 3\\(Gundar)};
-        \node[observer] (O2) [left=0.5cm of O3] {Observer 2\\(UNUD)};
-        \node[observer] (O1) [left=0.5cm of O2] {Observer 1\\(UT)};
-        \node[observer] (O4) [right=0.5cm of O3] {Observer 4\\(UNIMED)};
-        \node[observer] (O5) [right=0.5cm of O4] {Observer 5\\(UNDIP)};
+        \node[observer] (O3) at (0, 0) {\textit{Observer} 3\\(Gundar)};
+        \node[observer] (O2) [left=0.5cm of O3] {\textit{Observer} 2\\(UNUD)};
+        \node[observer] (O1) [left=0.5cm of O2] {\textit{Observer} 1\\(UT)};
+        \node[observer] (O4) [right=0.5cm of O3] {\textit{Observer} 4\\(UNIMED)};
+        \node[observer] (O5) [right=0.5cm of O4] {\textit{Observer} 5\\(UNDIP)};
 
         % Observer P2P Connections (Gossip)
         \draw[<->, gray, thin] (O1) -- (O2);
@@ -188,18 +213,18 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
 
         % Observer Group Box
         \node[draw, dashed, thick, gray!60, fit=(O1) (O5), inner sep=0.4cm] (obs_group) {};
-        \node[anchor=north, font=\scriptsize\bfseries] at (obs_group.north) {Observer Nodes (Non-Validators)};
+        \node[anchor=north, font=\scriptsize\bfseries] at (obs_group.north) {\textit{Observer Nodes (Non-Validators)}};
 
         % --- Middle: Control Plane ---
-        \node[cp] (CP) at (0, 3) {Control Plane\\(Caliper + Monitor)};
+        \node[cp] (CP) at (0, 3) {\textit{Control Plane}\\\\(\textit{Caliper} + \textit{Monitor})};
 
         % --- Top: Validator Nodes ---
         \begin{scope}[yshift=8cm]
-            \node[validator] (V2) at (0, 2.2) {Validator 2\\(ITB)};
-            \node[validator] (V1) at (3.5, 0.5) {Validator 1\\(UGM)};
-            \node[validator] (V3) at (-3.5, 0.5) {Validator 3\\(UI)};
-            \node[validator] (V5) at (2, -1.8) {Validator 5\\(ITS)};
-            \node[validator] (V4) at (-2, -1.8) {Validator 4\\(UB)};
+            \node[validator] (V2) at (0, 2.2) {\textit{Validator} 2\\(ITB)};
+            \node[validator] (V1) at (3.5, 0.5) {\textit{Validator} 1\\(UGM)};
+            \node[validator] (V3) at (-3.5, 0.5) {\textit{Validator} 3\\(UI)};
+            \node[validator] (V5) at (2, -1.8) {\textit{Validator} 5\\(ITS)};
+            \node[validator] (V4) at (-2, -1.8) {\textit{Validator} 4\\(UB)};
 
             % Validator Bidirectional Ring (P2P + Round-Robin Logic)
             \draw[<->, thick] (V1) -- (V2);
@@ -210,13 +235,13 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
 
             % Validator Group Box
             \node[draw, dashed, thick, gray!60, fit=(V1) (V2) (V3) (V4) (V5), inner sep=0.5cm, minimum height=5.5cm] (val_group) {};
-            \node[anchor=north, font=\scriptsize\bfseries] at (val_group.north) {Validator Nodes (Signers/Proposers)};
+            \node[anchor=north, font=\scriptsize\bfseries] at (val_group.north) {\textit{Validator Nodes (Signers/Proposers)}};
         \end{scope}
 
 
         % --- Connections ---
         % CP to Observers (RPC Load)
-        \draw[<->, thick] (CP) -- (obs_group.north) node[midway, right, font=\scriptsize] {RPC Load};
+        \draw[<->, thick] (CP) -- (obs_group.north) node[midway, right, font=\scriptsize] {\textit{RPC Load}};
 
         % Observers to Validators (Gossip)
         \draw[arrow] (obs_group.west) .. controls (-6, 2) and (-6, 6) .. (val_group.west);
@@ -235,19 +260,59 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur VPS beserta alamat IP ya
 \subsection{Monitoring dan Pengumpulan Data}
 Sistem monitoring dibangun menggunakan Prometheus yang mengumpulkan metrik dari tiga sumber:
 \begin{enumerate}
-    \item \textbf{Geth/Prysm}: Metrik internal blockchain (peer count, block height, tx pool).
-    \item \textbf{Node Exporter/cAdvisor}: Metrik infrastruktur (CPU, RAM, Network container).
-    \item \textbf{Hyperledger Caliper}: Metrik transaksi (TPS, Latency, Errors) yang dikirim via Pushgateway.
+    \item \textbf{\textit{Geth/Prysm}}: Metrik internal \textit{blockchain} (\textit{peer count}, \textit{block height}, \textit{tx pool}).
+    \item \textbf{\textit{Node Exporter/cAdvisor}}: Metrik infrastruktur (\textit{CPU, RAM, Network container}).
+    \item \textbf{\textit{Hyperledger Caliper}}: Metrik transaksi (\textit{TPS, Latency, Errors}) yang dikirim via \textit{Pushgateway}.
 \end{enumerate}
 
-Selain penyimpanan otomatis ke PostgreSQL, Hyperledger Caliper secara bawaan menghasilkan laporan hasil \textit{benchmark} dalam format HTML dan \textit{logs}, serta catatan eksekusi \textit{pipeline} (\textit{pipeline logs}) yang berguna untuk penelusuran kesalahan. Namun, untuk kebutuhan analisis mendalam, penelitian ini mengekspor data metrik dari ketiga sumber pantauan ke dalam file CSV terpisah. Metrik yang diekspor mencakup tiga kategori utama:
+Selain penyimpanan otomatis ke \textit{PostgreSQL}, \textit{Hyperledger Caliper} secara bawaan menghasilkan laporan hasil \textit{benchmark} dalam format \textit{HTML} dan \textit{logs}, serta catatan eksekusi \textit{pipeline} (\textit{pipeline logs}) yang berguna untuk penelusuran kesalahan. Namun, untuk kebutuhan analisis mendalam, penelitian ini mengekspor data metrik dari ketiga sumber pantauan ke dalam \textit{file CSV} terpisah. Metrik yang diekspor mencakup tiga kategori utama:
 \begin{itemize}
     \item \textbf{Metrik Kinerja Transaksi}: \texttt{latency}, \texttt{tps\_finished}, \texttt{success\_ratio}, \texttt{tx\_submitted}.
     \item \textbf{Metrik Sumber Daya Sistem}: \texttt{cpu\_usage}, \texttt{memory\_usage}, \texttt{disk\_read}, \texttt{disk\_write}, \texttt{net\_receive}, \texttt{net\_transmit}.
     \item \textbf{Metrik Internal Blockchain}: \texttt{block\_height}, \texttt{p2p\_peers}, \texttt{txpool\_status}.
 \end{itemize}
 
-Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{sampling rate}) setiap 5 detik untuk semua skenario pengujian. Penentuan interval 5 detik ini didasarkan pada pertimbangan untuk menyeimbangkan detail granularitas data dengan efisiensi sumber daya, di mana interval ini cukup rapat untuk menangkap fluktuasi kinerja tanpa membebani I/O penyimpanan. Analisis akhir dalam penelitian ini sepenuhnya menggunakan data CSV tersebut karena fleksibilitasnya dalam pengolahan data statistik dibandingkan data mentah di PostgreSQL.
+Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{sampling rate}) setiap 5 detik untuk semua skenario pengujian. Penentuan interval 5 detik ini didasarkan pada pertimbangan untuk menyeimbangkan detail granularitas data dengan efisiensi sumber daya, di mana interval ini cukup rapat untuk menangkap fluktuasi kinerja tanpa membebani \textit{I/O} penyimpanan. Analisis akhir dalam penelitian ini sepenuhnya menggunakan data \textit{CSV} tersebut karena fleksibilitasnya dalam pengolahan data statistik dibandingkan data mentah di \textit{PostgreSQL}.
+
+\section{Implementasi Teknis Lingkungan Eksperimen}
+
+Bagian ini merinci implementasi teknis dari arsitektur \textit{testbed} yang dibangun untuk menjamin reprodusibilitas eksperimen.
+
+\subsection{Otomasi Pembangkitan Jaringan PoA}
+Jaringan \textit{Proof-of-Authority} dibangun menggunakan skrip otomasi berbasis \textit{Bash} dan \textit{Docker} yang mengintegrasikan \textbf{\textit{Geth}} dan \textbf{\textit{Clef}} (lihat detail implementasi pada \textbf{[Repo-Gen-PoA]}.
+\begin{itemize}
+    \item \textbf{Manajemen Kunci Aman}: Berbeda dengan konfigurasi pengembangan biasa yang menyimpan \textit{private key} dalam teks biasa, implementasi ini menggunakan \textbf{\textit{Clef}} sebagai penandatangan eksternal (\textit{external signer}). Aturan keamanan (\textit{rules.js}) dikonfigurasi untuk mengizinkan penandatanganan otomatis hanya pada permintaan yang berasal dari sirkuit \textit{Docker} internal yang terverifikasi.
+    \item \textbf{\textit{Tuning Parameter}}: Berdasarkan studi literatur dan karakteristik jaringan antar-\textit{VPS}, parameter \texttt{BlockTime} diatur pada \textbf{5 detik} (standar default 15 detik) \cite{angelis2018}. Nilai ini dipilih sebagai \textit{sweet spot} yang memberikan \textit{throughput} 3x lebih tinggi tanpa risiko reorganisasi blok akibat latensi jaringan \cite{ekparinya2018}, berbeda dengan konfigurasi \textit{instant-seal} yang tidak stabil di jaringan terdistribusi \cite{sok2020}. \texttt{GasLimit} ditingkatkan menjadi \textbf{30.000.000} untuk mengakomodasi \textit{batch} transaksi besar setara \textit{mainnet} modern \cite{bsc2020}.
+\end{itemize}
+
+\subsection{Orkestrasi Multi-\textit{VPS} dengan \textit{Kubernetes}}
+\textit{Deployment multi-node} dilakukan di atas klaster \textit{Kubernetes} (\textit{k3s}) yang membentang di 5 \textit{VPS} fisik \textbf{[Repo-Deploy-PoA]}.
+\begin{itemize}
+    \item \textbf{\textit{Stateful Identity}}: Setiap \textit{node} validator di-\textit{deploy} sebagai \texttt{StatefulSet} untuk menjamin persistensi identitas jaringan (\textit{enode ID}) dan data \textit{blockchain} saat terjadi \textit{pod restart}.
+    \item \textbf{\textit{Traffic Routing}}: Komunikasi \textit{P2P} antar \textit{node} menggunakan mode \texttt{hostNetwork: true} untuk meminimalkan \textit{overhead} \textit{overlay network CNI} (\textit{Flannel}), memastikan latensi jaringan serendah mungkin mendekati kinerja \textit{bare-metal}.
+\end{itemize}
+
+\subsection{Pembangkitan Jaringan PoS dengan \textit{Kurtosis}}
+Kompleksitas jaringan \textit{Proof-of-Stake} yang membutuhkan sepasang klien (\textit{Execution Layer} + \textit{Consensus Layer}) dikelola menggunakan \textit{Kurtosis} dengan konfigurasi dasar pada \textbf{[Repo-Gen-PoS]}.
+\begin{itemize}
+    \item \textbf{Arsitektur \textit{Geth} + \textit{Prysm}}: \textit{Kurtosis} secara otomatis melakukan \textit{bootstrapping} jaringan, pertukaran \texttt{genesis.json}, dan \textit{peering} antara \textit{EL} (\textit{Geth}) dan \textit{CL} (\textit{Prysm}).
+    \item \textbf{Topologi Fleksibel}: Konfigurasi didefinisikan dalam format \textit{Starlark}, memungkinkan pembangkitan variasi topologi (misal: 3 \textit{Validator} + 1 \textit{Non-Validator}) secara deterministik dan cepat untuk setiap skenario pengujian.
+\end{itemize}
+
+\subsection{Integrasi Sistem Monitoring Terpusat}
+Sistem observabilitas dibangun secara terpusat di server \textit{Control Plane} untuk memantau kesehatan seluruh klaster secara \textit{real-time} (kode sumber: \textbf{[Repo-Monitoring]}).
+\begin{itemize}
+    \item \textbf{\textit{Dual-Mode Scraping}}: \textit{Prometheus} dikonfigurasi dengan \textit{job} terpisah untuk memantau metrik spesifik \textit{Geth} (PoA) dan \textit{Beacon Chain} (PoS) secara simultan.
+    \item \textbf{\textit{Caliper Sequential Execution}}: Alat \textit{benchmark} dikonfigurasi dengan `--caliper-max-send-parallel 1`. Ini memaksa pengiriman transaksi secara sekuensial (satu per satu) untuk mendapatkan pengukuran latensi \textit{end-to-end} yang paling akurat dan menghindari \textit{backpressure} semu pada sisi klien \textit{Node.js} \cite{hyperledger_caliper}.
+\end{itemize}
+
+\subsection{\textit{Pipeline Benchmarking} Otomatis}
+Seluruh rangkaian pengujian diorkestrasi oleh \textit{pipeline script} (\textbf{[Repo-Benchmark-Pipeline]}) yang melakukan:
+\begin{enumerate}
+    \item \textbf{\textit{Setup \& Teardown}}: Membersihkan artefak data lama dan me-\textit{restart} jaringan untuk memastikan kondisi \textit{fresh} setiap skenario.
+    \item \textbf{\textit{Automated Iteration}}: Menjalankan \textit{loop} pengujian untuk variasi beban (\textit{Step Load}) dan variasi \textit{worker} secara otomatis.
+    \item \textbf{\textit{Data Collection}}: Secara otomatis mengekspor hasil dari \textit{Caliper} dan \textit{Prometheus} ke format \textit{CSV} terstruktur segera setelah pengujian selesai, meminimalkan risiko kehilangan data. Data mentah disimpan di \textbf{[Repo-Benchmark-Results]} dan dianalisis menggunakan skrip di \textbf{[Repo-Analysis]}.
+\end{enumerate}
 
 \section{Alur Penelitian}
 
@@ -272,12 +337,12 @@ Penelitian ini dilaksanakan dalam beberapa tahapan sistematis, mulai dari studi 
 \section{Etika, Masalah, dan Keterbatasan Penelitian}
 
 \subsection{Etika Penelitian}
-Penelitian ini menekankan pada integritas ilmiah dan transparansi. Seluruh kode konfigurasi, skrip \textit{benchmark}, dan data hasil eksperimen dibuka (\textit{open source}) untuk mendukung reproduksibilitas. Penggunaan infrastruktur \textit{cloud} dilakukan secara terisolasi (Private Testnet) agar tidak mengganggu jaringan publik.
+Penelitian ini menekankan pada integritas ilmiah dan transparansi. Seluruh kode konfigurasi, skrip \textit{benchmark}, dan data hasil eksperimen dibuka (\textit{open source}) untuk mendukung reproduksibilitas. Penggunaan infrastruktur \textit{cloud} dilakukan secara terisolasi (\textit{Private Testnet}) agar tidak mengganggu jaringan publik.
 
 \subsection{Masalah Potensial}
 \begin{itemize}
     \item \textbf{Variabilitas Jaringan}: Penggunaan VPS publik rentan terhadap fluktuasi latensi (\textit{network jitter}). Mitigasi dilakukan dengan teknik statistik robust (Median) dan pengulangan eksperimen ($N=5$).
-    \item \textbf{Saturasi Sumber Daya}: Beban tinggi dapat menyebabkan \textit{throttling}. Mitigasi dilakukan dengan jeda \textit{cooldown} 10 menit antar trial.
+    \item \textbf{Saturasi Sumber Daya}: Beban tinggi dapat menyebabkan \textit{throttling}. Mitigasi dilakukan dengan jeda \textit{cooldown} 10 menit antar uji coba.
 \end{itemize}
 
 \subsection{Keterbatasan Penelitian}
