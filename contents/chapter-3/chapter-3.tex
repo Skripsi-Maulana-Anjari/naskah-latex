@@ -239,7 +239,15 @@ Sistem monitoring dibangun menggunakan Prometheus yang mengumpulkan metrik dari 
     \item \textbf{Node Exporter/cAdvisor}: Metrik infrastruktur (CPU, RAM, Network container).
     \item \textbf{Hyperledger Caliper}: Metrik transaksi (TPS, Latency, Errors) yang dikirim via Pushgateway.
 \end{enumerate}
-Data disimpan di PostgreSQL untuk analisis lebih lanjut.
+
+Selain penyimpanan otomatis ke PostgreSQL, Hyperledger Caliper secara bawaan menghasilkan laporan hasil \textit{benchmark} dalam format HTML dan \textit{logs}, serta catatan eksekusi \textit{pipeline} (\textit{pipeline logs}) yang berguna untuk penelusuran kesalahan. Namun, untuk kebutuhan analisis mendalam, penelitian ini mengekspor data metrik dari ketiga sumber pantauan ke dalam file CSV terpisah. Metrik yang diekspor mencakup tiga kategori utama:
+\begin{itemize}
+    \item \textbf{Metrik Kinerja Transaksi}: \texttt{latency}, \texttt{tps\_finished}, \texttt{success\_ratio}, \texttt{tx\_submitted}.
+    \item \textbf{Metrik Sumber Daya Sistem}: \texttt{cpu\_usage}, \texttt{memory\_usage}, \texttt{disk\_read}, \texttt{disk\_write}, \texttt{net\_receive}, \texttt{net\_transmit}.
+    \item \textbf{Metrik Internal Blockchain}: \texttt{block\_height}, \texttt{p2p\_peers}, \texttt{txpool\_status}.
+\end{itemize}
+
+Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{sampling rate}) setiap 5 detik untuk semua skenario pengujian. Penentuan interval 5 detik ini didasarkan pada pertimbangan untuk menyeimbangkan detail granularitas data dengan efisiensi sumber daya, di mana interval ini cukup rapat untuk menangkap fluktuasi kinerja tanpa membebani I/O penyimpanan. Analisis akhir dalam penelitian ini sepenuhnya menggunakan data CSV tersebut karena fleksibilitasnya dalam pengolahan data statistik dibandingkan data mentah di PostgreSQL.
 
 \section{Alur Penelitian}
 

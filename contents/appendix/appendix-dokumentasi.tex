@@ -61,6 +61,8 @@ Dokumentasi ini menunjukkan perubahan topologi jaringan sesuai skenario pengujia
 \subsection{Status Konektivitas Monitoring (Prometheus)}
 Halaman \textit{Targets} pada Prometheus yang memverifikasi bahwa seluruh \textit{exporter} data (Node Exporter, cAdvisor, Geth) terhubung dengan sukses (State: UP).
 
+\subsubsection{Proof of Authority (PoA)}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{images/prometheus-poa-all-connected-1.png}
@@ -75,6 +77,18 @@ Halaman \textit{Targets} pada Prometheus yang memverifikasi bahwa seluruh \texti
     \centering
     \includegraphics[width=1\textwidth]{images/prometheus-poa-all-connected-3.png}
     \caption{Status Target Prometheus (Bagian 3): Koneksi ke Node Exporter dan Pushgateway.}
+\end{figure}
+
+\subsubsection{Proof of Stake (PoS)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/prometheus-pos-all-connected-1.png}
+    \caption{Status Target Prometheus PoS (Bagian 1): Koneksi ke Monitoring Targets.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/prometheus-pos-all-connected-2.png}
+    \caption{Status Target Prometheus PoS (Bagian 2): Koneksi ke Consensus Layer Metrics.}
 \end{figure}
 
 \clearpage

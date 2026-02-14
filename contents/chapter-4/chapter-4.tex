@@ -8,7 +8,7 @@ Bab ini memaparkan hasil eksperimen yang telah dilakukan untuk membandingkan kin
 
 Eksperimen dilaksanakan dalam lingkungan terkontrol dengan spesifikasi sebagai berikut:
 \begin{itemize}
-    \item \textbf{Topologi}: 3 Topologi utama (3 Node, 6 Node, 10 Node) diuji untuk melihat dampak ukuran jaringan.
+    \item \textbf{Topologi}: 3 Topologi utama (4 Node, 6 Node, 10 Node) diuji untuk melihat dampak ukuran jaringan.
     \item \textbf{Infrastruktur}: Node validator berjalan di atas Kubernetes (k3s) dengan sumber daya terdedikasi.
     \item \textbf{Klien Blockchain}:
     \begin{itemize}
@@ -41,14 +41,31 @@ Bagian ini menyajikan data kuantitatif hasil pengukuran dari berbagai skenario t
 
 \subsection{Throughput dan Titik Saturasi}
 
-Pengujian \textit{Throughput Step} meningkatkan beban dari 5 hingga 100 TPS.
-Hasil pengukuran menunjukkan bahwa pada topologi 3 Node, PoA mulai mengalami saturasi pada beban $\approx$30 TPS, sedangkan PoS mampu mempertahankan linearitas hingga $\approx$60 TPS sebelum saturasi. PoS mencapai \textit{throughput} puncak 2x lipat dibanding PoA pada konfigurasi ini.
+Pengujian \textit{Throughput Step} meningkatkan beban dari 5 hingga 100 TPS untuk mengidentifikasi batas kapasitas jaringan. Kurva saturasi dapat dilihat pada Gambar \ref{fig:throughput_curve} (4 Node), Gambar \ref{fig:throughput_curve_6} (6 Node), dan Gambar \ref{fig:throughput_curve_10} (10 Node).
+
+Pada Gambar \ref{fig:throughput_curve}, terlihat bahwa PoA (garis biru) mulai mengalami saturasi (\textit{throughput} mendatar) pada beban $\approx$30 TPS. Artinya, meskipun beban input dinaikkan melebih 30 TPS, jaringan tidak dapat memproses lebih banyak transaksi. Sebaliknya, PoS (garis oranye) menunjukkan linearitas yang lebih panjang, mampu melayani hingga $\approx$60 TPS sebelum mencapai titik jenuh. Hal ini mengindikasikan bahwa pada konfigurasi 4 node, PoS memiliki kapasitas pemrosesan transaksi 2x lipat lebih tinggi dibanding PoA. Tren serupa juga terlihat pada topologi 6 dan 10 node, di mana PoS secara konsisten mengungguli PoA dalam hal \textit{throughput} maksimal.
+
+Gambar \ref{fig:optimal_tps} merangkum titik optimal (Stability Point) untuk semua topologi, menegaskan dominasi PoS dalam aspek kapasitas murni.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/throughput_curve_3_Nodes.png}
-    \caption{Kurva Throughput pada Topologi 3 Node}
+    \includegraphics[width=0.9\textwidth]{images/throughput_curve_zoomed_4_Nodes.png}
+    \caption{Kurva Throughput pada Topologi 4 Node}
     \label{fig:throughput_curve}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/throughput_curve_zoomed_6_Nodes.png}
+    \caption{Kurva Throughput pada Topologi 6 Node}
+    \label{fig:throughput_curve_6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/throughput_curve_zoomed_10_Nodes.png}
+    \caption{Kurva Throughput pada Topologi 10 Node}
+    \label{fig:throughput_curve_10}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -60,17 +77,33 @@ Hasil pengukuran menunjukkan bahwa pada topologi 3 Node, PoA mulai mengalami sat
 
 \subsection{Latensi Transaksi}
 
-Pengukuran latensi dilakukan pada kondisi \textit{steady-state}. Grafik \textit{latency trade-off} memperlihatkan hubungan antara beban (TPS) dan waktu respons.
+Pengukuran latensi dilakukan pada kondisi \textit{steady-state} untuk melihat responsivitas jaringan. Grafik \textit{Latency Trade-off} pada Gambar \ref{fig:latency_tradeoff} hingga Gambar \ref{fig:latency_tradeoff_10} memperlihatkan pola "Hockey Stick", di mana latensi stabil pada beban rendah namun melonjak drastis saat jaringan mencapai saturasi.
+
+Analisis lebih detail dari grafik tersebut menunjukkan:
 \begin{itemize}
-    \item \textbf{Baseline Latency}: Pada beban rendah ($<15$ TPS), PoA memiliki latensi rata-rata 4--5 detik, sedangkan PoS berkisar 7--8 detik.
-    \item \textbf{Latency Under Load}: Saat mendekati titik jenuh, latensi PoS meningkat tajam dibandingkan PoA yang cenderung lebih stabil kenaikannya.
+    \item \textbf{Baseline Latency}: Pada beban rendah ($<15$ TPS), PoA secara konsisten mencatat latensi rata-rata 4--5 detik (sesuai interval blok 5 detik), sedangkan PoS berkisar 7--8 detik. Ini menunjukkan PoA lebih responsif untuk beban ringan.
+    \item \textbf{Latency Under Load}: Menariknya, saat beban mendekati titik jenuh, latensi PoS meningkat lebih tajam dibandingkan PoA. Gambar \ref{fig:latency_absolute} memperlihatkan perbandingan absolut ini, di mana PoA mempertahankan profil latensi yang lebih rendah dan terprediksi di hampir seluruh spektrum pengujian.
 \end{itemize}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/latency_tradeoff_3_Nodes.png}
-    \caption{Latency Trade-off (Hockey Stick Curve)}
+    \includegraphics[width=0.9\textwidth]{images/latency_tradeoff_lowload_4_Nodes.png}
+    \caption{Latency Trade-off pada Topologi 4 Node}
     \label{fig:latency_tradeoff}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/latency_tradeoff_lowload_6_Nodes.png}
+    \caption{Latency Trade-off pada Topologi 6 Node}
+    \label{fig:latency_tradeoff_6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/latency_tradeoff_lowload_10_Nodes.png}
+    \caption{Latency Trade-off pada Topologi 10 Node}
+    \label{fig:latency_tradeoff_10}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -82,8 +115,10 @@ Pengukuran latensi dilakukan pada kondisi \textit{steady-state}. Grafik \textit{
 
 \subsection{Efisiensi Sumber Daya \& Skalabilitas}
 
-Efisiensi diukur berdasarkan rasio TPS per persen penggunaan CPU, dan skalabilitas diukur dengan menambah jumlah \textit{worker} klien.
-Hasil menunjukkan PoA memiliki efisiensi CPU yang jauh lebih tinggi. PoS memiliki overhead komputasi yang signifikan. Pada sisi skalabilitas klien, kedua konsensus mengalami degradasi performa saat jumlah \textit{worker} dinaikkan dari 1 ke 5, mengindikasikan \textit{bottleneck} pada sisi klien/RPC.
+Efisiensi penggunaan sumber daya prosesor divisualisasikan pada Gambar \ref{fig:efficiency_cpu}. Metrik "TPS per \% CPU" menunjukkan seberapa banyak transaksi yang dapat diproses untuk setiap persen daya CPU yang dikonsumsi.
+Hasil pada Gambar \ref{fig:efficiency_cpu} memperlihatkan bahwa PoA jauh lebih efisien dibanding PoS. PoA mampu memproses lebih banyak transaksi dengan daya komputasi yang minimal, sedangkan PoS memiliki \textit{overhead} komputasi yang signifikan. Hal ini diperkuat dengan hasil uji \textit{CPU Stress} pada Gambar \ref{fig:cpu_stress}, di mana performa PoS menurun lebih drastis dibandingkan PoA saat sumber daya CPU dibatasi secara ekstrim.
+
+Terkait skalabilitas klien (Gambar \ref{fig:scalability_client_4} hingga \ref{fig:scalability_client_10}), kedua konsensus mengalami degradasi performa total saat jumlah \textit{worker} dinaikkan dari 1 ke 5. Ini mengindikasikan adanya \textit{bottleneck} pada sisi klien Caliper atau antrian RPC node, bukan pada konsensus itu sendiri. Namun, pola penurunannya serupa untuk kedua mekanisme.
 
 \begin{figure}[htbp]
     \centering
@@ -94,25 +129,91 @@ Hasil menunjukkan PoA memiliki efisiensi CPU yang jauh lebih tinggi. PoS memilik
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/scalability_client_tps_3_Nodes.png}
-    \caption{Skalabilitas Klien (Worker Scaling)}
-    \label{fig:scalability_client}
+    \includegraphics[width=0.9\textwidth]{images/cpu_stress_comparison.png}
+    \caption{Perbandingan CPU Stress Test}
+    \label{fig:cpu_stress}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/scalability_client_tps_4_Nodes.png}
+    \caption{Skalabilitas Klien pada Topologi 4 Node}
+    \label{fig:scalability_client_4}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/scalability_client_tps_6_Nodes.png}
+    \caption{Skalabilitas Klien pada Topologi 6 Node}
+    \label{fig:scalability_client_6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/scalability_client_tps_10_Nodes.png}
+    \caption{Skalabilitas Klien pada Topologi 10 Node}
+    \label{fig:scalability_client_10}
 \end{figure}
 
 \subsection{Stabilitas Jaringan (Soak Test)}
 
-Uji durabilitas 15 menit menunjukkan profil stabilitas jaringan. Grafik \textit{time-series} memperlihatkan fluktuasi TPS yang wajar tanpa tren penurunan performa yang signifikan pada kedua konsensus.
+Uji durabilitas (\textit{Soak Test}) selama 15 menit dilakukan untuk memverifikasi kestabilan jaringan. Hasilnya dapat dilihat pada grafik \textit{Time Series} TPS (Gambar \ref{fig:stability_timeseries_tps_4}, \ref{fig:stability_timeseries_tps_6}, \ref{fig:stability_timeseries_tps_10}).
+
+Garis yang mendatar (flat) pada grafik time-series TPS menunjukkan stabilitas yang sangat baik. Hal serupa juga terlihat pada stabilitas latensi (Gambar \ref{fig:stability_timeseries_latency_4}, \ref{fig:stability_timeseries_latency_6}, \ref{fig:stability_timeseries_latency_10}), di mana waktu respons tetap konsisten sepanjang pengujian tanpa adanya lonjakan (*spike*) yang tidak wajar. Baik PoA maupun PoS mampu mempertahankan performa yang konstan selama durasi pengujian.
+Namun, jika dilihat dari Gambar \ref{fig:stability_cv} yang membandingkan \textit{Coefficient of Variation} (CV), PoA memiliki nilai CV yang sedikit lebih rendah di beberapa skenario, mengindikasikan variabilitas performa yang lebih kecil (lebih deterministik) dibandingkan PoS yang memiliki variasi probabilistik antar-blok.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_tps_3_Nodes.png}
-    \caption{Time Series TPS pada Uji Stabilitas}
-    \label{fig:stability_timeseries}
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_tps_4_Nodes.png}
+    \caption{Time Series TPS pada Uji Stabilitas (4 Node)}
+    \label{fig:stability_timeseries_tps_4}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_tps_6_Nodes.png}
+    \caption{Time Series TPS pada Uji Stabilitas (6 Node)}
+    \label{fig:stability_timeseries_tps_6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_tps_10_Nodes.png}
+    \caption{Time Series TPS pada Uji Stabilitas (10 Node)}
+    \label{fig:stability_timeseries_tps_10}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_latency_4_Nodes.png}
+    \caption{Time Series Latency pada Uji Stabilitas (4 Node)}
+    \label{fig:stability_timeseries_latency_4}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_latency_6_Nodes.png}
+    \caption{Time Series Latency pada Uji Stabilitas (6 Node)}
+    \label{fig:stability_timeseries_latency_6}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_timeseries_latency_10_Nodes.png}
+    \caption{Time Series Latency pada Uji Stabilitas (10 Node)}
+    \label{fig:stability_timeseries_latency_10}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/stability_cv_comparison.png}
+    \caption{Perbandingan Coefficient of Variation (Stabilitas)}
+    \label{fig:stability_cv}
 \end{figure}
 
 \subsection{Skenario Fungsional (Lifecycle)}
 
-Perbandingan latensi untuk tiga operasi utama: \textit{Mint}, \textit{Read}, dan \textit{Burn}.
+Perbandingan latensi untuk tiga operasi utama: \textit{Mint}, \textit{Read}, dan \textit{Burn} ditampilkan pada Gambar \ref{fig:lifecycle_latency} dan Gambar \ref{fig:lifecycle_tps}.
 \begin{itemize}
     \item \textbf{Mint (Write)}: PoA ($\approx 4.6$s) lebih cepat dibanding PoS ($\approx 8$s).
     \item \textbf{Read}: Keduanya instan ($\approx 0.01$s).
@@ -126,11 +227,18 @@ Perbandingan latensi untuk tiga operasi utama: \textit{Mint}, \textit{Read}, dan
     \label{fig:lifecycle_latency}
 \end{figure}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/lifecycle_tps_comparison.png}
+    \caption{Perbandingan TPS Operasi Lifecycle}
+    \label{fig:lifecycle_tps}
+\end{figure}
+
 \section{Analisis dan Pembahasan}
 
 \subsection{Analisis Performa Throughput dan Skalabilitas}
 
-Data menunjukkan fenomena menarik di mana PoS justru mencapai \textit{throughput} saturasi 2x lebih tinggi dibanding PoA pada skala kecil (3 Node). Hal ini diduga disebabkan oleh batasan \textit{Block Time}. PoA dengan blok 5 detik memiliki batas fisik jumlah gas/blok per satuan waktu. Sebaliknya, PoS dengan slot 12 detik, meskipun intervalnya lebih lama, memungkinkan \textit{batching} transaksi yang lebih efisien dengan batas gas yang sama per blok, menghasilkan \textit{throughput} agregat yang lebih tinggi sebelum saturasi RPC.
+Data menunjukkan fenomena menarik di mana PoS justru mencapai \textit{throughput} saturasi 2x lebih tinggi dibanding PoA pada skala kecil (4 Node). Hal ini diduga disebabkan oleh batasan \textit{Block Time}. PoA dengan blok 5 detik memiliki batas fisik jumlah gas/blok per satuan waktu. Sebaliknya, PoS dengan slot 12 detik, meskipun intervalnya lebih lama, memungkinkan \textit{batching} transaksi yang lebih efisien dengan batas gas yang sama per blok, menghasilkan \textit{throughput} agregat yang lebih tinggi sebelum saturasi RPC.
 
 Namun, skalabilitas klien menunjukkan pola \textit{Sub-linear} untuk kedua konsensus, mengindikasikan bahwa \textit{bottleneck} utama bukan pada lapisan konsensus, melainkan pada lapisan RPC Node atau antrian transaksi di Caliper.
 
@@ -144,7 +252,20 @@ PoA unggul dalam efisiensi sumber daya. PoS "membayar" desentralisasinya dengan 
 
 \subsection{Sintesis Visual: Trade-off Multidimensi}
 
-Gambar berikut menyajikan diagram radar yang membandingkan karakteristik kedua konsensus pada lima dimensi. PoS condong ke sisi \textbf{Kapasitas} (Throughput), sementara PoA mendominasi sisi \textbf{Efisiensi} dan \textbf{Responsivitas}.
+Gambar \ref{fig:radar_chart} menyajikan sintesis karakteristik performa kedua konsensus dalam diagram radar lima dimensi. Setiap sumbu merepresentasikan skor 1-10 (semakin luar semakin baik).
+
+Skor pada diagram ini merupakan hasil normalisasi kualitatif dari data kuantitatif yang diperoleh pada pengujian sebelumnya. Skala 1-10 digunakan untuk memvisualisasikan performa relatif, di mana nilai 10 merepresentasikan capaian terbaik dalam eksperimen ini. Sebagai contoh, pada dimensi \textit{Throughput}, PoS diberi skor 10 karena mencapai saturasi tertinggi ($\approx$60 TPS), sedangkan PoA diberi skor 5 karena hanya mencapai setengahnya ($\approx$30 TPS). Metode ini diterapkan secara konsisten pada dimensi lain untuk memudahkan pembandingan trade-off secara visual.
+
+Interpretasi dari grafik tersebut adalah:
+\begin{itemize}
+    \item \textbf{Throughput (Capacity)}: PoS unggul signifikan (Skor 10), mencapai volume transaksi tertinggi.
+    \item \textbf{Responsiveness}: PoA unggul (Skor 9) dengan latensi yang lebih rendah dan waktu blok lebih singkat.
+    \item \textbf{Resource Efficiency}: PoA sangat dominan (Skor 9), sangat hemat CPU.
+    \item \textbf{Stability}: Keduanya seimbang, namun PoA sedikit lebih stabil (CV Score lebih baik).
+    \item \textbf{Finality Speed}: PoA Clique memberikan finalitas yang lebih cepat untuk aplikasi pengguna karena sifat deterministiknya.
+\end{itemize}
+
+Secara keseluruhan, PoA membentuk area grafik yang condong ke sisi efisiensi dan responsivitas, sedangkan PoS condong ke sisi kapasitas murni.
 
 \begin{figure}[htbp]
     \centering
@@ -163,7 +284,7 @@ Untuk kasus penggunaan sertifikat akademik di DChain, karakteristik \textbf{PoA}
 
 \section{Perbandingan dengan Penelitian Terdahulu}
 
-Penelitian ini memberikan kontribusi empiris dengan membandingkan hasil pengujian DChain terhadap literatur yang ada.
+Penelitian ini memberikan kontribusi empiris dengan membandingkan hasil pengujian DChain terhadap literatur yang ada, sebagaimana dirangkum dalam Tabel \ref{tab:comparison_literature}.
 
 \begin{table}[htbp]
 \centering
@@ -182,7 +303,7 @@ Penelitian ini memberikan kontribusi empiris dengan membandingkan hasil pengujia
 \end{tabularx}
 \end{table}
 
-Penelitian ini mengisi celah (\textit{research gap}) dengan:
+Berdasarkan analisis pada Tabel \ref{tab:comparison_literature}, penelitian ini mengisi celah (\textit{research gap}) dengan:
 \begin{enumerate}
     \item \textbf{Studi Kasus Spesifik}: Menguji beban kerja fungsional (\textit{Lifecycle}) yang relevan secara bisnis, bukan sekadar transfer token.
     \item \textbf{Topologi Geografis Nyata}: Simulasi latensi antar-kampus (UGM, UI, ITB), bukan \textit{localhost}.
