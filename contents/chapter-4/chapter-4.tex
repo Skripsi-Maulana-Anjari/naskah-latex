@@ -41,17 +41,20 @@ Evaluasi ulang pada topologi PoS menunjukkan adanya variasi performa yang signif
 Topologi 3V-3NV mengalami saturasi dini pada 35-40 TPS, berbeda dengan varian lain yang mampu mencapai 60 TPS. Sesuai prinsip \textit{Weakest Link}, kapasitas global sistem untuk perbandingan yang adil dibatasi oleh kinerja komponen terlemahnya.
 
 \subsection{Justifikasi Akademis Penentuan Parameter}
-Berdasarkan data di atas, ditetapkan 40 TPS sebagai \textit{Common Safe Baseline} untuk pengujian komparatif (\textit{Soak}). Keputusan ini didasarkan pada prinsip rekayasa kinerja:
+Berdasarkan data di atas, ditetapkan 40 TPS sebagai \textit{Common Safe Baseline} untuk pengujian komparatif (\textit{Soak}). Keputusan ini didasarkan pada prinsip rekayasa kinerja dan metodologi benchmarking standar industri \cite{spec2019}:
 
 \begin{enumerate}
     \item \textbf{Hukum Mata Rantai Terlemah (\textit{Law of the Weakest Link})}:
-    Validitas perbandingan sistem heterogen bergantung pada konsistensi beban. Sistem harus dinilai berdasarkan batasan komponen terlemahnya (PoS 3V-3NV di 40 TPS) untuk memastikan \textit{lowest common denominator} yang adil. Memaksa pengujian di atas batas ini akan menyebabkan kegagalan sistematis pada satu varian, menghasilkan data yang tidak valid.
+    Validitas perbandingan sistem heterogen bergantung pada konsistensi beban. Sistem harus dinilai berdasarkan batasan komponen terlemahnya (PoS 3V-3NV di 40 TPS) untuk memastikan \textit{lowest common denominator} yang adil. Memaksa pengujian di atas batas ini akan menyebabkan kegagalan sistematis pada satu varian akibat saturasi antrean (\textit{congestion collapse}), bukan murni karakteristik konsensus \cite{huffman2020}.
 
     \item \textbf{Identifikasi "\textit{Knee of the Curve}"}:
-    Titik 40 TPS mewakili \textit{knee point} bagi topologi terlemah, di mana peningkatan beban lebih lanjut tidak lagi menghasilkan peningkatan \textit{throughput} linier melainkan lonjakan latensi.
+    Titik 40 TPS mewakili \textit{knee point} bagi topologi terlemah, di mana peningkatan beban lebih lanjut tidak lagi menghasilkan peningkatan \textit{throughput} linier melainkan lonjakan latensi yang eksponensial \cite{spillner2019}.
 
-    \item \textbf{Margin Keamanan (\textit{Safety Margin})}:
-    Mengadopsi nilai 40 TPS (alih-alih mode statistik 45/60 TPS) memberikan \textit{headroom} untuk mengakomodasi variabilitas jaringan intrinsik dan \textit{propagation delay} antar-VPS, mencegah gangguan minor berkembang menjadi kegagalan pengujian total selama \textit{soak testing} durasi panjang.
+    \item \textbf{Prinsip \textit{Sustainable Load} (Derating)}:
+    Untuk pengujian stabilitas jangka panjang (\textit{Soak Test}), beban ditetapkan pada 60\% dari kapasitas optimal ($\approx 25$ TPS). Sesuai prinsip \textit{Site Reliability Engineering} (SRE), pengujian ketahanan harus dilakukan pada beban berkelanjutan (\textit{sustainable}), bukan beban puncak, guna memberikan \textit{headroom} untuk menyerap variabilitas jaringan tanpa menyebabkan pembengkakan \textit{mempool} tak terbatas \cite{googleSRE2016, spec2019}.
+
+    \item \textbf{Penggunaan Statistik Robust (Median)}:
+    Dalam menghitung metrik performa di sistem terdistribusi, penelitian ini mengutamakan nilai \textbf{Median} dibandingkan Rata-rata (\textit{Average}) untuk penentuan baseline. Median merupakan \textit{robust estimator} yang lebih resisten terhadap \textit{outlier} (misal: \textit{network glitch} sesaat), memberikan representasi \textit{central tendency} yang lebih akurat untuk sistem stokastik seperti \textit{blockchain} \cite{rousseeuw1993}.
 \end{enumerate}
 
 \section{Implementasi Eksperimen}
@@ -299,6 +302,8 @@ Namun, skalabilitas klien menunjukkan pola \textit{Sub-linear} untuk kedua konse
 \subsection{Analisis Responsivitas dan Latensi}
 
 PoA menunjukkan keunggulan telak dalam aspek responsivitas. Rata-rata latensi PoA (4.6 detik) sangat mendekati waktu blok (5 detik), menunjukkan inefisiensi minimal. Sebaliknya, PoS (8 detik) menderita latensi inheren dari mekanisme slot dan finalitas probabilistik awal. Untuk sistem layanan akademik, perbedaan 3--4 detik ini signifikan secara UX (\textit{User Experience}).
+
+Konsistensi data pada beban tinggi dijamin oleh algoritma generator beban kerja yang menggunakan strategi \textit{Zero-Coordination IDs} (pembagian rentang ID unik per \textit{worker}), sehingga setiap transaksi yang berhasil dijamin unik tanpa hambatan koordinasi antar-klien. Selain itu, pola akses acak (\textit{Random Access}) pada skenario \textit{Read-Intensive} membuktikan ketangguhan \textit{LevelDB/RocksDB} pada \textit{node} dalam menangani \textit{disk seek} tanpa hanya mengandalkan \textit{cache} RAM \cite{Repo-Benchmark-Pipeline}.
 
 \subsection{Analisis Efisiensi dan Stabilitas}
 

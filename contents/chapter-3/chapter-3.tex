@@ -143,28 +143,28 @@ Penelitian ini menerapkan lima skenario utama untuk menguji berbagai aspek kiner
 \end{enumerate}
 
 \subsection{Strategi dan Justifikasi Skenario}
-Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis} untuk memastikan evaluasi yang holistik:
+Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis} untuk memastikan evaluasi yang holistik dan memiliki dasar ilmiah yang kuat \cite{spec2019}:
 
 \begin{enumerate}
     \item \textbf{Layer 1: Pemanasan (\textit{Warming Up})}.
-    Sistem terdistribusi sering mengalami performa awal yang rendah akibat \textit{cold start} (inisialisasi cache, koneksi peer) \cite{ioini2020}. Fase ini mencetak 20.000 token pada 20 TPS konstan untuk mencapai kondisi \textit{steady-state} sebelum pengukuran dimulai \cite{schwartz2019}.
+    Sistem terdistribusi sering mengalami performa awal yang rendah akibat fenomena \textit{cold start} (inisialisasi \textit{cache}, pembentukan koneksi \textit{peer-to-peer}, dan kompilasi \textit{Just-In-Time} pada \textit{Virtual Machine}). Fase ini mencetak 20.000 token pada 20 TPS konstan untuk memastikan sistem berada dalam kondisi \textit{hot state} atau \textit{steady-state} sebelum pengukuran dimulai, serta memastikan populasi \textit{state} awal telah tersedia pada \textit{ledger} untuk meminimalkan \textit{revert} pada fase pengujian selanjutnya \cite{ioini2020, spec2019}.
 
     \item \textbf{Layer 2: Analisis Kapasitas (\textit{Capacity})}.
-    Skenario \textit{Step Load} digunakan untuk mengidentifikasi "Knee Point" atau titik jenuh di mana peningkatan beban input tidak lagi linear dengan output, melainkan menyebabkan lonjakan latensi (\textit{hockey-stick curve}) \cite{thakkar2018}.
+    Skenario \textit{Step Load} digunakan untuk mengindentifikasi "\textit{Knee Point}" atau titik jenuh sistem. Hal ini krusial untuk menemukan \textit{maximal sustainable throughput}, di mana peningkatan beban input selanjutnya tidak lagi menghasilkan output yang linear melainkan menyebabkan lonjakan latensi (\textit{hockey-stick curve}) akibat saturasi antrean \textit{mempool} \cite{thakkar2018, spillner2019}.
 
     \item \textbf{Layer 3: Beban Kerja Fungsional}.
-    Menguji perilaku sistem di luar transfer aset sederhana:
+    Menguji perilaku sistem melalui variasi kompleksitas algoritma \textit{smart contract}:
     \begin{itemize}
-        \item \textit{Read-Intensive}: Menguji batas skalabilitas horizontal RPC node (baca 200--600 TPS) \cite{pongnumkul2017}.
-        \item \textit{Certificate Lifecycle}: Memvalidasi konsistensi data (\textit{read-after-write}) \cite{rouhani2019} dan manajemen state (\textit{Burn}) \cite{pierro2019}.
-        \item \textit{CPU Stress}: Mengisolasi \textit{compute-bound bottleneck} menggunakan \textit{smart contract} yang melakukan hashing iteratif \cite{dinh2017}.
+        \item \textit{Read-Intensive}: Menguji batas skalabilitas horizontal antarmuka \textit{RPC node} (200--600 TPS) dengan pola akses acak (\textit{random access}) guna menguji \textit{Disk I/O} database \cite{pongnumkul2017}.
+        \item \textit{Certificate Lifecycle}: Memvalidasi konsistensi data (\textit{read-after-write}) \cite{rouhani2019}. Pada fase ini, fungsi \texttt{burn} sengaja dirancang memiliki kompleksitas $O(N)$ (pencarian linear) untuk mensimulasikan degradasi performa seiring bertambahnya ukuran \textit{state} (\textit{state bloat}) \cite{pierro2019}.
+        \item \textit{CPU Stress}: Mengisolasi \textit{compute-bound bottleneck} menggunakan hashing \texttt{keccak256} iteratif guna menguji kecepatan eksekusi \textit{EVM} secara murni tanpa hambatan \textit{I/O} \cite{dinh2017}.
     \end{itemize}
 
     \item \textbf{Layer 4: Skalabilitas Klien}.
-    Berdasarkan Hukum Amdahl, pengujian dengan variasi jumlah worker (1, 3, 5) dilakukan untuk membedakan apakah bottleneck terjadi pada konsensus jaringan atau pada konkurensi klien pengirim (Caliper) \cite{amdahl1967, sukhwani2020}.
+    Berdasarkan Hukum Amdahl, pengujian dengan variasi jumlah \textit{worker} (1, 3, 5) dilakukan untuk memastikan bahwa \textit{bottleneck} yang teramati adalah murni karakteristik jaringan \textit{blockchain}, bukan keterbatasan alat uji (proses \textit{Node.js} tunggal pada satu \textit{worker} Caliper) \cite{sukhwani2020, huffman2020}.
 
-    \item \textbf{Layer 5: Resiliensi (\textit{Soak Test})}.
-    Uji durabilitas 15 menit dilakukan untuk mendeteksi degradasi performa akumulatif seperti \textit{memory leaks} atau \textit{resource exhaustion} yang tidak terdeteksi pada uji singkat \cite{ieee829}.
+    \item \textbf{Layer 5: Resiliensi dan Stabilitas (\textit{Soak Test})}.
+    Uji durabilitas 15 menit dilakukan pada beban berkelanjutan (\textit{sustainable load} sebesar 60\% dari TPS optimal) untuk mendeteksi degradasi performa akumulatif seperti kebocoran memori (\textit{memory leaks}) atau saturasi sumber daya bertahap yang tidak terdeteksi pada uji beban puncak yang singkat \cite{ieee829, avizienis2004}.
 \end{enumerate}
 
 \subsection{Konfigurasi Testbed}
@@ -272,47 +272,30 @@ Selain penyimpanan otomatis ke \textit{PostgreSQL}, \textit{Hyperledger Caliper}
     \item \textbf{Metrik Internal Blockchain}: \texttt{block\_height}, \texttt{p2p\_peers}, \texttt{txpool\_status}.
 \end{itemize}
 
-Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{sampling rate}) setiap 5 detik untuk semua skenario pengujian. Penentuan interval 5 detik ini didasarkan pada pertimbangan untuk menyeimbangkan detail granularitas data dengan efisiensi sumber daya, di mana interval ini cukup rapat untuk menangkap fluktuasi kinerja tanpa membebani \textit{I/O} penyimpanan. Analisis akhir dalam penelitian ini sepenuhnya menggunakan data \textit{CSV} tersebut karena fleksibilitasnya dalam pengolahan data statistik dibandingkan data mentah di \textit{PostgreSQL}.
+Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{sampling rate}) setiap 5 detik untuk semua skenario pengujian. Penentuan interval 5 detik ini didasarkan pada studi komparatif untuk menyeimbangkan stabilitas sinyal metrik dengan retensi informasi detail. Interval yang terlalu singkat (1 detik) menghasilkan \textit{noise} tinggi akibat variabilitas natural \textit{hardware}, sementara interval terlalu panjang (60 detik) berisiko kehilangan informasi mengenai anomali latensi sesaat. Analisis akhir dalam penelitian ini sepenuhnya menggunakan data \textit{CSV} tersebut karena fleksibilitasnya dalam pengolahan data statistik menggunakan metode \textit{robust statistics} (Median) guna meminimalkan pengaruh \textit{outlier} pada sistem terdistribusi \cite{rousseeuw1993}.
 
 \section{Implementasi Teknis Lingkungan Eksperimen}
 
 Bagian ini merinci implementasi teknis dari arsitektur \textit{testbed} yang dibangun untuk menjamin reprodusibilitas eksperimen.
 
 \subsection{Otomasi Pembangkitan Jaringan PoA}
-Jaringan \textit{Proof-of-Authority} dibangun menggunakan skrip otomasi berbasis \textit{Bash} dan \textit{Docker} yang mengintegrasikan \textbf{\textit{Geth}} dan \textbf{\textit{Clef}} (lihat detail implementasi pada \textbf{[Repo-Gen-PoA]}.
-\begin{itemize}
-    \item \textbf{Manajemen Kunci Aman}: Berbeda dengan konfigurasi pengembangan biasa yang menyimpan \textit{private key} dalam teks biasa, implementasi ini menggunakan \textbf{\textit{Clef}} sebagai penandatangan eksternal (\textit{external signer}). Aturan keamanan (\textit{rules.js}) dikonfigurasi untuk mengizinkan penandatanganan otomatis hanya pada permintaan yang berasal dari sirkuit \textit{Docker} internal yang terverifikasi.
-    \item \textbf{\textit{Tuning Parameter}}: Berdasarkan studi literatur dan karakteristik jaringan antar-\textit{VPS}, parameter \texttt{BlockTime} diatur pada \textbf{5 detik} (standar default 15 detik) \cite{angelis2018}. Nilai ini dipilih sebagai \textit{sweet spot} yang memberikan \textit{throughput} 3x lebih tinggi tanpa risiko reorganisasi blok akibat latensi jaringan \cite{ekparinya2018}, berbeda dengan konfigurasi \textit{instant-seal} yang tidak stabil di jaringan terdistribusi \cite{sok2020}. \texttt{GasLimit} ditingkatkan menjadi \textbf{30.000.000} untuk mengakomodasi \textit{batch} transaksi besar setara \textit{mainnet} modern \cite{bsc2020}.
-\end{itemize}
+Otomasi pembangunan jaringan PoA diimplementasikan menggunakan orkestrasi skrip \textit{bash} dan \textit{Docker} yang mengintegrasikan \textit{Geth} dengan \textit{Clef}. Berbeda dengan \textit{setup} pengembangan standar, setiap \textit{signer node} (validator) dipisahkan secara logis antara proses eksekusi (\textit{Geth}) dan proses penandatanganan (\textit{Clef}). Penandatangan eksternal (\textit{external signer}) \textit{Clef} dikonfigurasi dengan aturan keamanan khusus dalam file \texttt{rules.js}. Aturan ini memastikan bahwa permintaan penandatanganan hanya akan disetujui secara otomatis jika berasal dari jaringan internal \textit{Docker} dan hanya untuk tipe transaksi penandatanganan blok \textit{Clique} (PoA), sehingga memitigasi risiko penyalahgunaan \textit{private key} oleh entitas luar. 
+
+Konfigurasi \textit{genesis} jaringan menetapkan \texttt{Chain ID} 1337 dan \texttt{Block Period} sebesar 5 detik. Interval 5 detik dipilih sebagai nilai optimal untuk lingkugan \textit{Multi-VPS} geografis guna menyeimbangkan antara \textit{throughput} dan waktu propagasi blok agar tidak terjadi pembengkakan \textit{mempool} \cite{saltini2019}. \texttt{Gas Limit} ditetapkan sebesar 30.000.000 guna menyelaraskan kapasitas blok dengan standar \textit{Mainnet} Ethereum modern dan memungkinkan pengujian titik jenuh secara maksimal tanpa hambatan \textit{artificial} \cite{roughgarden2020, Repo-Gen-PoA}.
 
 \subsection{Orkestrasi Multi-\textit{VPS} dengan \textit{Kubernetes}}
-\textit{Deployment multi-node} dilakukan di atas klaster \textit{Kubernetes} (\textit{k3s}) yang membentang di 5 \textit{VPS} fisik \textbf{[Repo-Deploy-PoA]}.
-\begin{itemize}
-    \item \textbf{\textit{Stateful Identity}}: Setiap \textit{node} validator di-\textit{deploy} sebagai \texttt{StatefulSet} untuk menjamin persistensi identitas jaringan (\textit{enode ID}) dan data \textit{blockchain} saat terjadi \textit{pod restart}.
-    \item \textbf{\textit{Traffic Routing}}: Komunikasi \textit{P2P} antar \textit{node} menggunakan mode \texttt{hostNetwork: true} untuk meminimalkan \textit{overhead} \textit{overlay network CNI} (\textit{Flannel}), memastikan latensi jaringan serendah mungkin mendekati kinerja \textit{bare-metal}.
-\end{itemize}
+Penyebaran jaringan dilakukan menggunakan klaster \textit{Kubernetes} (\textit{k3s}) yang terdistribusi pada 5 lokasi \textit{VPS} fisik yang berbeda. Penggunaan \texttt{StatefulSet} sangat krusial dalam arsitektur ini untuk memastikan setiap \textit{node} mempertahankan identitas jaringan (\textit{enode ID}) yang statis meskipun terjadi \textit{restart} atau kegagalan \textit{pod}. Untuk mengoptimalkan kinerja \textit{P2P} di lingkungan terdistribusi, konfigurasi \texttt{hostNetwork: true} diterapkan guna meminimalkan \textit{overhead} enkapsulasi paket data oleh \textit{overly network CNI} (\textit{Flannel}), sehingga latensi komunikasi antar-\textit{node} mendekati kinerja \textit{bare-metal}. Data \textit{state} blockchain disimpan secara persisten di penyimpanan lokal \textit{VPS} menggunakan mekanisme \texttt{hostPath} untuk performa \textit{I/O} yang maksimal \cite{Repo-Deploy-PoA}.
 
 \subsection{Pembangkitan Jaringan PoS dengan \textit{Kurtosis}}
-Kompleksitas jaringan \textit{Proof-of-Stake} yang membutuhkan sepasang klien (\textit{Execution Layer} + \textit{Consensus Layer}) dikelola menggunakan \textit{Kurtosis} dengan konfigurasi dasar pada \textbf{[Repo-Gen-PoS]}.
-\begin{itemize}
-    \item \textbf{Arsitektur \textit{Geth} + \textit{Prysm}}: \textit{Kurtosis} secara otomatis melakukan \textit{bootstrapping} jaringan, pertukaran \texttt{genesis.json}, dan \textit{peering} antara \textit{EL} (\textit{Geth}) dan \textit{CL} (\textit{Prysm}).
-    \item \textbf{Topologi Fleksibel}: Konfigurasi didefinisikan dalam format \textit{Starlark}, memungkinkan pembangkitan variasi topologi (misal: 3 \textit{Validator} + 1 \textit{Non-Validator}) secara deterministik dan cepat untuk setiap skenario pengujian.
-\end{itemize}
+Jaringan PoS dibangun menggunakan kerangka kerja \textit{Kurtosis} yang mengorkestrasi interaksi antara sepasang klien Ethereum lapisan eksekusi (\textit{Execution Layer} - \textit{Geth}) dan lapisan konsensus (\textit{Consensus Layer} - \textit{Prysm}). Interaksi antara kedua lapisan ini diamankan melalui protokol autentikasi \textit{JWT (JSON Web Token)} yang bersifat mandatori sesuai spesifikasi Ethereum 2.0. Konfigurasi jaringan didefinisikan secara deterministik menggunakan skrip \textit{Starlark}, yang memungkinkan pembangkitan topologi kompleks secara otomatis. Setiap \textit{validator node} dalam eksperimen ini menjalankan \textit{Validator Client} yang mengelola 22 \textit{keys} penandatanganan unik (total 110 validator untuk 5 \textit{node}), guna mensimulasikan karakteristik beban kerja konsensus \textit{Gasper} di lingkungan nyata \cite{Repo-Gen-PoS}.
 
 \subsection{Integrasi Sistem Monitoring Terpusat}
-Sistem observabilitas dibangun secara terpusat di server \textit{Control Plane} untuk memantau kesehatan seluruh klaster secara \textit{real-time} (kode sumber: \textbf{[Repo-Monitoring]}).
-\begin{itemize}
-    \item \textbf{\textit{Dual-Mode Scraping}}: \textit{Prometheus} dikonfigurasi dengan \textit{job} terpisah untuk memantau metrik spesifik \textit{Geth} (PoA) dan \textit{Beacon Chain} (PoS) secara simultan.
-    \item \textbf{\textit{Caliper Sequential Execution}}: Alat \textit{benchmark} dikonfigurasi dengan `--caliper-max-send-parallel 1`. Ini memaksa pengiriman transaksi secara sekuensial (satu per satu) untuk mendapatkan pengukuran latensi \textit{end-to-end} yang paling akurat dan menghindari \textit{backpressure} semu pada sisi klien \textit{Node.js} \cite{hyperledger_caliper}.
-\end{itemize}
+Sistem observabilitas dibangun secara terpusat di server \textit{Control Plane} mencakup pengumpulan metrik secara komprehensif menggunakan \textit{stack} Prometheus, Grafana, Pushgateway, Node Exporter, dan cAdvisor. Fitur unggulan dari sistem ini adalah mekanisme \textit{Dual-Mode Scraping}, di mana satu \textit{instance} Prometheus dikonfigurasi menggunakan teknik \textit{relabeling} untuk membedakan dan memetakan metrik spesifik dari \textit{Geth} (PoA) dan \textit{Prysm Beacon Chain} (PoS) secara simultan. \textit{cAdvisor} digunakan untuk mengekstraksi metrik pemakaian sumber daya pada level kontainer, sementara \textit{Pushgateway} berfungsi sebagai penampung sementara hasil \textit{benchmark} dari \textit{Caliper} sebelum ditarik (\textit{scraped}) oleh Prometheus. Seluruh data visualisasi kesehatan jaringan ditampilkan secara \textit{real-time} melalui \textit{Ethstats} dan dasbor Grafana yang telah dikhususkan untuk analisis performa \textit{blockchain} \cite{Repo-Monitoring}.
 
-\subsection{\textit{Pipeline Benchmarking} Otomatis}
-Seluruh rangkaian pengujian diorkestrasi oleh \textit{pipeline script} (\textbf{[Repo-Benchmark-Pipeline]}) yang melakukan:
-\begin{enumerate}
-    \item \textbf{\textit{Setup \& Teardown}}: Membersihkan artefak data lama dan me-\textit{restart} jaringan untuk memastikan kondisi \textit{fresh} setiap skenario.
-    \item \textbf{\textit{Automated Iteration}}: Menjalankan \textit{loop} pengujian untuk variasi beban (\textit{Step Load}) dan variasi \textit{worker} secara otomatis.
-    \item \textbf{\textit{Data Collection}}: Secara otomatis mengekspor hasil dari \textit{Caliper} dan \textit{Prometheus} ke format \textit{CSV} terstruktur segera setelah pengujian selesai, meminimalkan risiko kehilangan data. Data mentah disimpan di \textbf{[Repo-Benchmark-Results]} dan dianalisis menggunakan skrip di \textbf{[Repo-Analysis]}.
-\end{enumerate}
+\subsection{\textit{Pipeline Benchmarking} Otomasi}
+Seluruh rangkaian pengujian diorkestrasi secara penuh oleh skrip \texttt{run\_pipeline.sh} yang berfungsi sebagai \textit{Automated Experimentation Controller}. Skrip ini mengimplementasikan fitur \textit{Mempool Guard} (Watchdog) yang memantau status antrean transaksi melalui \textit{RPC} \texttt{txpool\_status}. Sistem akan menunda eksekusi trial berikutnya jika antrean transaksi melebihi ambang batas 300 TX, guna menjamin isolasi \textit{state} antar-percobaan (\textit{inter-trial isolation}) dan mencegah \textit{cascading failure} \cite{nygard2018}. 
+
+Untuk akurasi pengukuran latensi, parameter \texttt{--caliper-max-send-parallel} ditetapkan bernilai 1. Hal ini memaksa pengiriman transaksi secara sekuensial (\textit{sequential send}) guna meminimalkan \textit{overhead} antrean internal pada \textit{event loop Node.js}, sehingga didapatkan pengukuran latensi \textit{round-trip} yang paling presisi murni dari sisi klien. Selain itu, sistem menerapkan strategi biaya transaksi EIP-1559 dengan \textit{Priority Fee} statis (8 Gwei) untuk menjamin inklusi transaksi yang agresif selama uji beban tinggi \cite{roughgarden2020}. Percobaan dilakukan dengan replikasi sebanyak 5 \textit{trial} untuk setiap skenario guna mencapai signifikansi statistik, dipisahkan oleh jeda \textit{cooldown} selama 600 detik (10 menit) untuk menetralkan akumulasi panas (\textit{thermal throttling}) pada \textit{hardware} fisik VPS \cite{spec2019, Repo-Benchmark-Pipeline}.
 
 \section{Alur Penelitian}
 
