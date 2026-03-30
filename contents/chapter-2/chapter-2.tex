@@ -104,9 +104,20 @@ Kondisi saat ini menunjukkan bahwa \textit{blockchain} telah berevolusi menjadi 
 
 \textit{Blockchain} merupakan bentuk teknologi buku besar terdistribusi (\textit{distributed ledger technology}) yang menyimpan data dalam blok-blok yang saling terhubung secara kronologis melalui fungsi hash kriptografi \cite{dong2023, judmayer2018}. Setiap blok memuat kumpulan transaksi yang telah diverifikasi, serta hash unik yang merujuk pada blok sebelumnya, sehingga membentuk rantai data. Sifat keterhubungan ini menjadikan \textit{blockchain} tahan manipulasi, karena perubahan pada satu blok akan memengaruhi seluruh rantai setelahnya. Data yang tersimpan dalam \textit{blockchain} bersifat \textit{immutable}, yakni tidak dapat diubah atau dihapus, sehingga menjamin kepercayaan dan keamanan informasi \cite{dong2023, tripathi2023, guo2022}.
 
-Transaksi dalam \textit{blockchain} merupakan unit data yang merepresentasikan perpindahan aset digital atau informasi lain yang tercatat dalam jaringan. Agar transaksi dapat ditambahkan ke dalam blok, diperlukan proses verifikasi melalui mekanisme konsensus seperti \textit{Proof of Work} (PoW), \textit{Proof of Stake} (PoS), dan \textit{Proof of Authority} (PoA). Konsensus ini berfungsi memastikan seluruh \textit{node} dalam jaringan memiliki salinan data yang sama dan valid tanpa harus mengandalkan pihak pusat \cite{judmayer2018, guo2022, monrat2019}.
+Transaksi dalam \textit{blockchain} merupakan unit data yang merepresentasikan perpindahan aset digital atau informasi lain yang tercatat dalam jaringan. Secara sederhana, transaksi pada \textit{blockchain} dapat dianalogikan dengan catatan dalam buku besar akuntansi: setiap entri mencatat siapa pengirim, apa yang dikirimkan, dan siapa penerimanya. Pada platform Ethereum, transaksi dapat berupa (1) transfer aset digital antar alamat dompet, (2) pemanggilan fungsi \textit{smart contract} seperti pencetakan sertifikat baru, atau (3) penerbitan \textit{smart contract} baru ke dalam jaringan. Dalam konteks DChain, bentuk transaksi utama meliputi pencetakan sertifikat digital (\texttt{mint}), pembacaan data sertifikat (\texttt{read}), serta pencabutan sertifikat (\texttt{burn}).
 
-Karakteristik utama \textit{blockchain} meliputi: desentralisasi, di mana data didistribusikan ke banyak \textit{node} tanpa otoritas pusat \cite{dong2023, guo2022, monrat2019}; \textit{immutability}, yakni sifat permanen dari data yang sudah tercatat \cite{dong2023, tripathi2023, krichen2022}; transparansi dan auditabilitas, yang memungkinkan setiap transaksi dapat ditelusuri dan diverifikasi oleh seluruh peserta jaringan \cite{dong2023, guo2022, monrat2019}; serta keamanan, yang dicapai melalui algoritma kriptografi dan struktur hash \cite{dong2023, tripathi2023, kc2018}. 
+Dalam konteks umum, data yang tersimpan pada \textit{blockchain} mencakup \textit{hash} transaksi, alamat dompet pengirim dan penerima, \textit{timestamp}, serta data \textit{state} yang diperbarui oleh eksekusi \textit{smart contract}. Pada implementasi DChain, data yang dicatat secara spesifik meliputi \textit{hash} sertifikat akademik (seperti ijazah digital dan transkrip), metadata dokumen akademik (identitas penerbit, tanggal penerbitan, status validitas), serta informasi \textit{microcredential}. Perlu dicatat bahwa \textit{blockchain} pada umumnya tidak menyimpan dokumen secara langsung, melainkan hanya menyimpan \textit{hash} dan metadata yang merujuk pada dokumen asli yang disimpan di luar rantai (\textit{off-chain storage}) sebagaimana dijelaskan lebih lanjut pada Sub-bab 2.2.5. Agar transaksi dapat ditambahkan ke dalam blok, diperlukan proses verifikasi melalui mekanisme konsensus seperti \textit{Proof of Work} (PoW), \textit{Proof of Stake} (PoS), dan \textit{Proof of Authority} (PoA). Konsensus ini berfungsi memastikan seluruh \textit{node} dalam jaringan memiliki salinan data yang sama dan valid tanpa harus mengandalkan pihak pusat \cite{judmayer2018, guo2022, monrat2019}.
+
+Karakteristik utama \textit{blockchain} meliputi: desentralisasi, di mana data didistribusikan ke banyak \textit{node} tanpa otoritas pusat \cite{dong2023, guo2022, monrat2019}; \textit{immutability}, yakni sifat permanen dari data yang sudah tercatat \cite{dong2023, tripathi2023, krichen2022}; transparansi dan auditabilitas, yang memungkinkan setiap transaksi dapat ditelusuri dan diverifikasi oleh seluruh peserta jaringan \cite{dong2023, guo2022, monrat2019}; serta keamanan, yang dicapai melalui algoritma kriptografi dan struktur hash \cite{dong2023, tripathi2023, kc2018}. Struktur dasar \textit{blockchain} diilustrasikan pada Gambar~\ref{fig:blockchain_structure}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/blockchain-structure.png}
+    \caption{Struktur dasar \textit{blockchain} yang menunjukkan rangkaian blok yang terhubung melalui \textit{hash pointer}.}
+    \label{fig:blockchain_structure}
+\end{figure}
+
+Gambar~\ref{fig:blockchain_structure} mengilustrasikan struktur fundamental \textit{blockchain} yang terdiri dari rangkaian blok yang saling terhubung secara kronologis. Setiap blok memuat \textit{block header} yang berisi \textit{previous hash} (penunjuk ke blok sebelumnya), \textit{timestamp} (waktu pembuatan blok), \textit{nonce} (nilai acak untuk proses validasi), dan \textit{Merkle root} (representasi hash dari seluruh transaksi dalam blok). Panah yang mengarah ke kiri menunjukkan bahwa setiap blok menyimpan \textit{hash} dari blok sebelumnya, sehingga membentuk rantai yang tidak dapat diputus tanpa mengubah seluruh rantai setelahnya. Blok pertama (\textit{Genesis Block}) memiliki \textit{previous hash} bernilai nol karena tidak memiliki pendahulu. Variasi jumlah transaksi pada setiap blok menunjukkan bahwa kapasitas transaksi per blok bersifat dinamis sesuai konfigurasi jaringan. 
 
 Dibandingkan dengan basis data konvensional, \textit{blockchain} menawarkan transparansi, auditabilitas, dan ketahanan yang lebih tinggi terhadap manipulasi. Namun, teknologi ini juga menghadapi tantangan seperti skalabilitas, biaya implementasi, serta isu privasi yang masih menjadi fokus riset \cite{dong2023, monrat2019, krichen2022, bhutta2021}. Dengan sifat-sifat tersebut, \textit{blockchain} dapat dianggap sebagai teknologi fundamental yang menghadirkan sistem pencatatan digital yang aman, transparan, dan tahan manipulasi, sekaligus relevan untuk berbagai aplikasi modern.
 
@@ -237,6 +248,17 @@ Implementasi \textit{DChain} memberikan sejumlah manfaat praktis sebagai berikut
     \item Kemudahan penggunaan melalui antarmuka yang ramah pengguna.
 \end{itemize}
 
+Ekosistem \textit{DChain} secara keseluruhan yang mencakup berbagai pemangku kepentingan dan layanan yang terintegrasi diilustrasikan pada Gambar~\ref{fig:dchain_ecosystem}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/dchain-ecosystem.png}
+    \caption{Ekosistem \textit{DChain} yang menunjukkan interaksi antara pemangku kepentingan, layanan, dan infrastruktur \textit{blockchain}.}
+    \label{fig:dchain_ecosystem}
+\end{figure}
+
+Gambar~\ref{fig:dchain_ecosystem} mengilustrasikan ekosistem \textit{DChain} yang terdiri dari tiga lapisan utama. Lapisan pertama (\textit{Stakeholders}) mencakup para pemangku kepentingan yang berinteraksi dengan sistem, yaitu mahasiswa sebagai pemilik kredensial, institusi pendidikan tinggi sebagai penerbit sertifikat, dan industri/pemberi kerja sebagai pihak yang memverifikasi keaslian dokumen. Lapisan kedua (\textit{Services \& Applications}) menyediakan berbagai layanan seperti penerbitan ijazah digital, verifikasi sertifikat, dan pengelolaan \textit{microcredential}. Lapisan ketiga (\textit{Blockchain Infrastructure}) merupakan fondasi teknis yang terdiri dari jaringan \textit{node} validator yang tersebar di berbagai universitas, menjalankan mekanisme konsensus dan menyimpan data secara terdesentralisasi. Ketiga lapisan ini bekerja secara terintegrasi untuk mewujudkan sistem manajemen kredensial akademik yang aman, transparan, dan terpercaya.
+
 \subsubsection{Teknologi yang Digunakan}
 
 \textit{DChain} dibangun di atas \textit{Ethereum-compatible blockchain} dengan dukungan \textit{smart contract} berbasis \textit{Ethereum Virtual Machine} (EVM). Pada tahap awal, \textit{DChain} menggunakan mekanisme konsensus \textit{Proof of Authority} (PoA) dengan implementasi \textit{Go Ethereum} (Geth v1.13.2 dan v1.13.10) serta \textit{Clef v1.13.2} untuk pengelolaan akun dan penandatanganan transaksi. Dalam perkembangannya, \textit{DChain} dirancang untuk mendukung migrasi ke \textit{Proof of Stake} (PoS) dengan memanfaatkan klien \textit{Go Ethereum} dan \textit{Prysm}.
@@ -332,7 +354,7 @@ Sebaliknya, pada arsitektur PoS, setiap \textit{node} yang memiliki \textit{stak
 
 \subsection{Proof of Authority (PoA)}
 
-\textit{Proof of Authority} (PoA) merupakan salah satu mekanisme konsensus \textit{blockchain} yang menggunakan validator terbatas dan otoritatif untuk memverifikasi transaksi serta membentuk blok baru. Tidak seperti \textit{Proof of Work} (PoW) yang mengandalkan daya komputasi atau \textit{Proof of Stake} (PoS) yang didasarkan pada jumlah aset, PoA menitikberatkan pada identitas dan reputasi validator yang telah ditunjuk. Model ini menjadikan PoA sangat sesuai untuk \textit{blockchain} privat maupun konsorsium, termasuk aplikasi di sektor pendidikan seperti \textit{DChain}.
+\textit{Proof of Authority} (PoA) merupakan salah satu mekanisme konsensus \textit{blockchain} yang menggunakan validator terbatas dan otoritatif untuk memverifikasi transaksi serta membentuk blok baru. Secara sederhana, PoA dapat dianalogikan seperti sistem notaris, di mana hanya pihak-pihak yang sudah terpercaya dan dikenal identitasnya yang berhak mengesahkan dokumen. Dalam konteks \textit{blockchain}, pihak-pihak ini disebut sebagai validator. Tidak seperti \textit{Proof of Work} (PoW) yang mengandalkan daya komputasi atau \textit{Proof of Stake} (PoS) yang didasarkan pada jumlah aset, PoA menitikberatkan pada identitas dan reputasi validator yang telah ditunjuk. Model ini menjadikan PoA sangat sesuai untuk \textit{blockchain} privat maupun konsorsium, termasuk aplikasi di sektor pendidikan seperti \textit{DChain}.
 
 Dari sisi kelebihan, PoA memiliki beberapa keunggulan penting. Pertama, efisiensi transaksi yang tinggi karena mampu memproses ribuan transaksi per detik dengan latensi rendah, melampaui kinerja PoW maupun PoS \cite{reshi2025, joshi2021, chikezie2021}. Kedua, konsumsi energi rendah, sebab PoA tidak memerlukan daya komputasi besar untuk melakukan validasi blok, sehingga efisien bagi aplikasi dengan keterbatasan sumber daya \cite{reshi2025, joshi2021, sytnyk2024}. Ketiga, finalitas blok cepat, di mana transaksi segera dianggap sah karena validator telah diotorisasi sejak awal \cite{joshi2021, chikezie2021}.
 
@@ -359,7 +381,16 @@ Cocok untuk & Blockchain privat, konsorsium, pendidikan, IoT & Blockchain publik
 \end{tabular}}
 \end{table}
 
-Tabel~\ref{tab:perbandingan_konsensus} menunjukkan bahwa dibandingkan PoW dan PoS, PoA unggul dalam efisiensi energi dan kecepatan transaksi, namun lemah dalam desentralisasi dan berpotensi menghadapi risiko sentralisasi.
+Tabel~\ref{tab:perbandingan_konsensus} menunjukkan bahwa dibandingkan PoW dan PoS, PoA unggul dalam efisiensi energi dan kecepatan transaksi, namun lemah dalam desentralisasi dan berpotensi menghadapi risiko sentralisasi. Untuk memberikan gambaran visual yang lebih jelas mengenai perbedaan karakteristik ketiga mekanisme konsensus tersebut, Gambar~\ref{fig:consensus_comparison} menyajikan perbandingan dalam bentuk diagram.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/consensus-comparison.png}
+    \caption{Perbandingan karakteristik mekanisme konsensus PoW, PoA, dan PoS.}
+    \label{fig:consensus_comparison}
+\end{figure}
+
+Gambar~\ref{fig:consensus_comparison} mengilustrasikan perbandingan tiga mekanisme konsensus utama dalam \textit{blockchain}. \textit{Proof of Work} (PoW) mengandalkan kompetisi komputasi antar penambang untuk memvalidasi blok, menghasilkan desentralisasi tinggi namun dengan konsumsi energi yang besar. \textit{Proof of Authority} (PoA) menggunakan validator terpercaya yang telah diotorisasi, memberikan efisiensi tinggi dan latensi rendah, tetapi dengan tingkat desentralisasi yang terbatas. \textit{Proof of Stake} (PoS) memilih validator berdasarkan jumlah aset yang di-\textit{stake}, menawarkan keseimbangan antara efisiensi energi dan desentralisasi. Pemahaman terhadap karakteristik masing-masing konsensus ini menjadi dasar penting dalam menentukan mekanisme yang paling sesuai untuk konteks aplikasi tertentu, termasuk jaringan \textit{DChain}.
 
 Dalam konteks \textit{DChain}, mekanisme PoA digunakan dengan validator yang berasal dari universitas dan institusi pendidikan tinggi di Indonesia. Model ini mendukung efisiensi penerbitan serta verifikasi dokumen akademik seperti ijazah digital dengan kecepatan tinggi \cite{joshi2021, chikezie2021}. Meskipun demikian, meningkatnya jumlah pengguna \textit{DChain} menuntut adanya mekanisme pengawasan reputasi serta sistem rotasi validator untuk menjaga keamanan, transparansi, dan kepercayaan publik terhadap jaringan \cite{joshi2021, qiu2022}.
 
@@ -368,7 +399,7 @@ Dengan demikian, PoA terbukti efektif untuk \textit{blockchain} privat seperti \
 
 \subsection{Proof of Stake (PoS)}
 
-\textit{Proof of Stake} (PoS) merupakan mekanisme konsensus \textit{blockchain} yang memilih validator berdasarkan jumlah aset atau \textit{stake} yang dimiliki dan dikunci dalam jaringan. Mekanisme ini hadir sebagai alternatif dari \textit{Proof of Work} (PoW) yang dikenal boros energi, dengan tujuan menghadirkan model validasi yang lebih efisien, hemat energi, dan berpotensi lebih desentralisasi \cite{zhang2025, li2023, feng2023}.
+\textit{Proof of Stake} (PoS) merupakan mekanisme konsensus \textit{blockchain} yang memilih validator berdasarkan jumlah aset atau \textit{stake} yang dimiliki dan dikunci dalam jaringan. Secara sederhana, PoS dapat dianalogikan dengan sistem pemungutan suara berbobot, di mana peserta yang memiliki "jaminan" (\textit{stake}) lebih besar memiliki peluang lebih tinggi untuk dipilih sebagai pengesah transaksi. Semakin banyak aset yang dikunci, semakin besar tanggung jawab dan kepercayaan yang diberikan. Mekanisme ini hadir sebagai alternatif dari \textit{Proof of Work} (PoW) yang dikenal boros energi, dengan tujuan menghadirkan model validasi yang lebih efisien, hemat energi, dan berpotensi lebih desentralisasi \cite{zhang2025, li2023, feng2023}.
 
 Salah satu keunggulan utama PoS adalah efisiensi energi yang jauh lebih baik dibandingkan PoW, karena tidak memerlukan proses \textit{mining} berbasis komputasi intensif. Hal ini menjadikan PoS lebih ramah lingkungan dan berkelanjutan \cite{zhang2025, li2023, wendl2022, mandal2023}. Selain itu, PoS dinilai mampu meningkatkan skalabilitas karena memungkinkan \textit{throughput} transaksi lebih tinggi dan latensi yang lebih rendah pada beban tinggi \cite{zhang2025, ge2022, li2020}. Dari sisi tata kelola jaringan, PoS juga berpotensi menghadirkan desentralisasi yang lebih luas jika didukung oleh desain insentif yang tepat, sehingga partisipasi validator dapat lebih inklusif \cite{li2023, nguyen2019}. Dari segi keamanan, biaya untuk melakukan serangan seperti \textit{51\% attack} menjadi sangat tinggi karena penyerang harus menguasai sebagian besar token yang beredar, sehingga PoS dipandang lebih aman dalam jangka panjang \cite{john2025, li2020}.
 
@@ -424,11 +455,31 @@ Arsitektur Caliper terdiri dari dua komponen proses utama:
     \item \textbf{Worker Process}: Proses independen yang bertugas mengeksekusi beban kerja (\textit{workload}). Masing-masing \textit{worker} menjalankan \textit{loop} transaksi secara mandiri. Penggunaan banyak \textit{worker} memungkinkan simulasi konkurensi klien, di mana \textit{throughput} total sistem dihitung dari agregasi \textit{output} seluruh \textit{worker} \cite{kumar2020}.
 \end{itemize}
 
+Arsitektur lengkap Hyperledger Caliper yang menggambarkan interaksi antara komponen-komponen tersebut diilustrasikan pada Gambar~\ref{fig:caliper_architecture}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/caliper-architecture.png}
+    \caption{Arsitektur \textit{high-level Hyperledger Caliper} yang menunjukkan alur kerja \textit{benchmarking} dari konfigurasi hingga laporan \cite{hyperledger_caliper}.}
+    \label{fig:caliper_architecture}
+\end{figure}
+
+Gambar~\ref{fig:caliper_architecture} mengilustrasikan arsitektur \textit{high-level Hyperledger Caliper} berdasarkan dokumentasi resmi. Pada bagian atas, terdapat tiga komponen input utama: \textit{Workload Module} yang mendefinisikan logika transaksi yang akan dieksekusi, \textit{Benchmark Configuration} yang mengatur parameter pengujian seperti jumlah transaksi dan \textit{send rate}, serta \textit{Network Configuration} yang berisi informasi koneksi ke jaringan \textit{blockchain} target. Komponen \textit{Caliper} di tengah bertindak sebagai \textit{engine} utama yang memproses ketiga input tersebut dan mengirimkan \textit{workload} ke \textit{System Under Test} (SUT), yaitu jaringan \textit{blockchain} yang diuji. Selama eksekusi, Caliper juga melakukan \textit{monitoring} terhadap SUT untuk mengumpulkan metrik performa. Di sisi kiri, \textit{Benchmark Artifacts} menyimpan data pendukung seperti \textit{smart contract} dan \textit{state} awal jaringan. Setelah pengujian selesai, Caliper menghasilkan \textit{Benchmark Report} (bagian bawah) yang berisi ringkasan metrik performa seperti \textit{throughput}, latensi, dan tingkat keberhasilan transaksi.
+
 Pentingnya fitur \textit{Worker Scaling} dalam Caliper terletak pada hukum Amdahl: jika pembangkitan beban dilakukan oleh satu proses, maka CPU klien sering kali menjadi \textit{bottleneck} sebelum kapasitas jaringan \textit{blockchain} tercapai. Dengan mendistribusikan beban ke \textit{multi-worker}, Caliper dapat membanjiri jaringan hingga titik jenuh, memastikan validitas pengukuran kapasitas maksimum \cite{hyperledger_caliper, nasir2022}.
 
 \subsection{Observabilitas Sistem Terdistribusi}
 
-Dalam pengelolaan sistem terdistribusi kompleks seperti \textit{blockchain}, pendekatan observabilitas melampaui \textit{monitoring} tradisional. Jika \textit{monitoring} menjawab pertanyaan "apakah sistem sehat?", observabilitas menjawab "mengapa sistem tidak sehat?" dengan menganalisis \textit{output} eksternal sistem \cite{picco2021}. Tiga pilar utama observabilitas adalah \textit{Metrics}, \textit{Logs}, dan \textit{Traces}. Penelitian ini secara spesifik berfokus pada pilar \textit{Metrics} untuk analisis performa kuantitatif.
+Dalam pengelolaan sistem terdistribusi kompleks seperti \textit{blockchain}, pendekatan observabilitas melampaui \textit{monitoring} tradisional. Jika \textit{monitoring} menjawab pertanyaan "apakah sistem sehat?", observabilitas menjawab "mengapa sistem tidak sehat?" dengan menganalisis \textit{output} eksternal sistem \cite{picco2021}. Tiga pilar utama observabilitas adalah \textit{Metrics}, \textit{Logs}, dan \textit{Traces}. Penelitian ini secara spesifik berfokus pada pilar \textit{Metrics} untuk analisis performa kuantitatif. Ketiga pilar observabilitas tersebut diilustrasikan pada Gambar~\ref{fig:observability_pillars}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/observability-pillars.png}
+    \caption{Tiga pilar observabilitas sistem terdistribusi: \textit{Metrics}, \textit{Logs}, dan \textit{Traces}.}
+    \label{fig:observability_pillars}
+\end{figure}
+
+Gambar~\ref{fig:observability_pillars} mengilustrasikan tiga pilar utama observabilitas dalam sistem terdistribusi. \textit{Metrics} menyediakan data kuantitatif agregat seperti \textit{throughput}, latensi, penggunaan CPU, dan memori yang memungkinkan analisis tren performa dari waktu ke waktu. \textit{Logs} merekam kejadian diskret dalam sistem secara kronologis, berguna untuk \textit{debugging} dan audit. \textit{Traces} melacak alur permintaan (\textit{request}) yang melewati berbagai komponen sistem, membantu mengidentifikasi \textit{bottleneck} pada arsitektur \textit{microservices}. Dalam konteks penelitian ini, fokus utama diberikan pada pilar \textit{Metrics} karena paling relevan untuk evaluasi performa kuantitatif mekanisme konsensus \textit{blockchain}. Kombinasi ketiga pilar ini memungkinkan pemahaman menyeluruh terhadap perilaku dan kesehatan sistem terdistribusi.
 
 Untuk menangkap dinamika performa \textit{blockchain} yang berubah cepat, digunakan \textit{Time-Series Database} (TSDB) seperti Prometheus. Berbeda dengan \textit{database} relasional yang dioptimalkan untuk integritas transaksional, TSDB dioptimalkan untuk penulisan data berkecepatan tinggi dan kueri berbasis rentang waktu \cite{prometheus_docs}. Prometheus bekerja dengan mekanisme \textit{scraping}, di mana server secara periodik menarik data dari target melalui protokol HTTP \cite{prometheus_docs}. Grafana berperan sebagai lapisan visualisasi yang mengubah data mentah dari TSDB menjadi dasbor interaktif, memungkinkan analisis korelasi data \cite{chakravarthy2019}.
 
@@ -440,7 +491,7 @@ Untuk mengelola siklus hidup kontainer di banyak \textit{host}, digunakan \texti
 
 \subsection{Metrik dan Konsep Evaluasi Performa}
 
-Evaluasi kinerja \textit{blockchain} memerlukan pemahaman mendalam tentang berbagai metrik dan fenomena unik. Berikut adalah terminologi teknis yang digunakan:
+Penelitian ini mengukur lima aspek kinerja utama jaringan \textit{blockchain}, yaitu: (1) \textit{throughput} (jumlah transaksi berhasil per detik), yang mengukur kapasitas pemrosesan jaringan; (2) latensi (waktu tunda dari pengiriman hingga konfirmasi transaksi), yang mengukur responsivitas sistem; (3) penggunaan sumber daya (CPU, RAM, \textit{Disk I/O}, dan \textit{bandwidth}), yang mengukur efisiensi infrastruktur; (4) skalabilitas, yang menilai kemampuan sistem menangani peningkatan jumlah \textit{node} dan klien; serta (5) stabilitas, yang mengevaluasi konsistensi performa pada beban berkelanjutan melalui \textit{soak test}. Kelima metrik ini dipilih karena bersifat umum, netral terhadap jenis konsensus, dan dapat direplikasi sebagaimana dibahas lebih lanjut pada Bab III. Evaluasi kinerja \textit{blockchain} tersebut memerlukan pemahaman mendalam tentang berbagai metrik dan fenomena unik berikut:
 
 \begin{enumerate}
     \item \textbf{Knee Point}: Titik kritis dalam kurva kinerja di mana sistem mencapai kapasitas pemrosesan maksimumnya. Setelah titik ini, penambahan beban menyebabkan lonjakan drastis pada latensi \cite{avritzer2020}.

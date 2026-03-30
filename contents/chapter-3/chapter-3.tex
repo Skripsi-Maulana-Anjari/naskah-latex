@@ -108,7 +108,7 @@ Untuk memastikan validitas internal, parameter berikut dijaga konstan:
 \end{itemize}
 
 \subsection{Skenario Benchmarking}
-Penelitian ini menerapkan lima skenario utama untuk menguji berbagai aspek kinerja:
+Penelitian ini menerapkan enam skenario utama untuk menguji berbagai aspek kinerja:
 
 \begin{enumerate}
     \item \textbf{\textit{Throughput Capacity (Step Load)}}:
@@ -135,15 +135,21 @@ Penelitian ini menerapkan lima skenario utama untuk menguji berbagai aspek kiner
         \item Metode: Beban baca tinggi (200, 400, 600 TPS) pada data yang sudah ada.
     \end{itemize}
     
-    \item \textbf{\textit{Functional Lifecycle \& Stability}}:
+    \item \textbf{\textit{Functional Lifecycle}}:
     \begin{itemize}
-        \item Tujuan: Menguji fungsi penuh (\textit{Mint-Read-Burn}) dan stabilitas jangka panjang.
-        \item Metode: \textit{Soak Test} selama 15 menit pada 60\% beban optimal.
+        \item Tujuan: Menguji fungsi penuh siklus hidup sertifikat (\textit{Mint-Read-Burn}).
+        \item Metode: Eksekusi berurutan operasi \texttt{mint}, \texttt{read}, dan \texttt{burn} untuk memvalidasi konsistensi data (\textit{read-after-write}).
+    \end{itemize}
+
+    \item \textbf{\textit{Stability (Soak Test)}}:
+    \begin{itemize}
+        \item Tujuan: Menguji stabilitas dan ketahanan sistem jangka panjang.
+        \item Metode: \textit{Soak Test} selama 15 menit pada 60\% beban optimal untuk mendeteksi degradasi performa akumulatif.
     \end{itemize}
 \end{enumerate}
 
 \subsection{Strategi dan Justifikasi Skenario}
-Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis} untuk memastikan evaluasi yang holistik dan memiliki dasar ilmiah yang kuat \cite{spec2019}:
+Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 6-Lapis} untuk memastikan evaluasi yang holistik dan memiliki dasar ilmiah yang kuat \cite{spec2019}:
 
 \begin{enumerate}
     \item \textbf{Layer 1: Pemanasan (\textit{Warming Up})}.
@@ -156,7 +162,6 @@ Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis
     Menguji perilaku sistem melalui variasi kompleksitas algoritma \textit{smart contract}:
     \begin{itemize}
         \item \textit{Read-Intensive}: Menguji batas skalabilitas horizontal antarmuka \textit{RPC node} (200--600 TPS) dengan pola akses acak (\textit{random access}) guna menguji \textit{Disk I/O} database \cite{pongnumkul2017}.
-        \item \textit{Certificate Lifecycle}: Memvalidasi konsistensi data (\textit{read-after-write}) \cite{rouhani2019}. Pada fase ini, fungsi \texttt{burn} sengaja dirancang memiliki kompleksitas $O(N)$ (pencarian linear) untuk mensimulasikan degradasi performa seiring bertambahnya ukuran \textit{state} (\textit{state bloat}) \cite{pierro2019}.
         \item \textit{CPU Stress}: Mengisolasi \textit{compute-bound bottleneck} menggunakan hashing \texttt{keccak256} iteratif guna menguji kecepatan eksekusi \textit{EVM} secara murni tanpa hambatan \textit{I/O} \cite{dinh2017}.
     \end{itemize}
 
@@ -165,6 +170,9 @@ Pemilihan skenario di atas didasarkan pada \textbf{Strategi Benchmarking 5-Lapis
 
     \item \textbf{Layer 5: Resiliensi dan Stabilitas (\textit{Soak Test})}.
     Uji durabilitas 15 menit dilakukan pada beban berkelanjutan (\textit{sustainable load} sebesar 60\% dari TPS optimal) untuk mendeteksi degradasi performa akumulatif seperti kebocoran memori (\textit{memory leaks}) atau saturasi sumber daya bertahap yang tidak terdeteksi pada uji beban puncak yang singkat \cite{ieee829, avizienis2004}.
+    
+    \item \textbf{Layer 6: Siklus Hidup Fungsional (\textit{Functional Lifecycle})}.
+    Memvalidasi konsistensi data (\textit{read-after-write}) melalui eksekusi penuh siklus hidup sertifikat \cite{rouhani2019}. Pada fase ini, fungsi \texttt{burn} sengaja dirancang memiliki kompleksitas $O(N)$ (pencarian linear) untuk mensimulasikan degradasi performa seiring bertambahnya ukuran \textit{state} (\textit{state bloat}) \cite{pierro2019}.
 \end{enumerate}
 
 \subsection{Konfigurasi Testbed}
@@ -256,6 +264,28 @@ Rincian pemetaan alokasi \textit{node} ke infrastruktur \textit{VPS} beserta ala
     \label{fig:experimental_topology}
 \end{figure}
 
+Selain topologi logis, arsitektur infrastruktur fisik dari \textit{testbed} yang digunakan dalam penelitian ini diilustrasikan pada Gambar~\ref{fig:testbed_architecture}. Arsitektur ini menunjukkan distribusi komponen perangkat lunak di seluruh \textit{Virtual Private Server} (VPS) yang digunakan.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/testbed-architecture.png}
+    \caption{Arsitektur infrastruktur \textit{testbed} yang menunjukkan distribusi komponen perangkat lunak di seluruh VPS.}
+    \label{fig:testbed_architecture}
+\end{figure}
+
+Gambar~\ref{fig:testbed_architecture} mengilustrasikan arsitektur infrastruktur \textit{testbed} secara komprehensif. Pada bagian atas, \textit{VPS Control Plane} berfungsi sebagai pusat orkestrasi dan monitoring yang menjalankan \textit{Kubernetes Master}, \textit{Docker}, \textit{Prometheus} (pengumpul metrik), \textit{Grafana} (visualisasi), \textit{Ethstats} (monitoring jaringan Ethereum), \textit{Kurtosis} (orkestrasi jaringan PoS), \textit{PostgreSQL} (penyimpanan data), dan \textit{Hyperledger Caliper} (pembangkit beban transaksi). Pada bagian bawah, terdapat 5 VPS (A--E) yang masing-masing menjalankan 2 \textit{node blockchain}. Node dengan border hitam merupakan \textit{Validator Node} yang memiliki hak untuk memvalidasi transaksi dan memproduksi blok baru, sedangkan node dengan border merah merupakan \textit{Observer Node} yang hanya berpartisipasi dalam sinkronisasi data tanpa hak validasi. Setiap VPS dilengkapi dengan \textit{Kubernetes Worker}, \textit{Pushgateway}, \textit{Node Exporter}, dan \textit{cAdvisor} untuk mengumpulkan metrik performa yang kemudian dikirimkan ke \textit{Prometheus} di \textit{Control Plane}. Panah putus-putus oranye menunjukkan alur \textit{RPC Load} dari \textit{Hyperledger Caliper} yang dikirimkan ke \textit{Observer Node} untuk pengujian \textit{benchmarking}.
+
+Perbedaan arsitektur internal antara \textit{node} PoA dan PoS diilustrasikan pada Gambar~\ref{fig:node_architecture_comparison}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/node-architecture-comparison.png}
+    \caption{Perbandingan arsitektur internal \textit{node} pada konsensus PoA dan PoS.}
+    \label{fig:node_architecture_comparison}
+\end{figure}
+
+Gambar~\ref{fig:node_architecture_comparison} menunjukkan perbedaan fundamental arsitektur internal antara \textit{node} PoA dan PoS. Pada arsitektur PoA (kiri), setiap \textit{node} terdiri dari dua komponen utama: \textit{Execution Layer} yang diimplementasikan menggunakan \textit{Geth} untuk mengeksekusi transaksi dan mengelola \textit{state}, serta \textit{External Signer} yang diimplementasikan menggunakan \textit{Clef} untuk menyimpan dan mengelola \textit{private key} validator secara aman. Komunikasi antara kedua komponen dilakukan melalui protokol \textit{RPC}. Sebaliknya, pada arsitektur PoS (kanan), setiap \textit{node} memiliki dua lapisan terpisah: \textit{Consensus Layer} yang diimplementasikan menggunakan \textit{Prysm} untuk menangani mekanisme konsensus \textit{Gasper} (LMD-GHOST + Casper FFG), dan \textit{Execution Layer} yang tetap menggunakan \textit{Geth}. Komunikasi antara kedua lapisan dilakukan melalui \textit{Engine API} dengan autentikasi berbasis \textit{JWT} (\textit{JSON Web Token}). Perbedaan arsitektur ini berdampak pada kompleksitas \textit{deployment} dan konsumsi sumber daya, di mana PoS memerlukan dua proses terpisah per \textit{node} dibandingkan dengan PoA yang hanya memerlukan satu proses \textit{Geth} dengan \textit{signer} eksternal.
+
 
 \subsection{Monitoring dan Pengumpulan Data}
 Sistem monitoring dibangun menggunakan Prometheus yang mengumpulkan metrik dari tiga sumber:
@@ -277,6 +307,8 @@ Seluruh data tersebut diekspor dengan interval pengambilan data (\textit{samplin
 \section{Implementasi Teknis Lingkungan Eksperimen}
 
 Bagian ini merinci implementasi teknis dari arsitektur \textit{testbed} yang dibangun untuk menjamin reprodusibilitas eksperimen.
+
+Implementasi teknis dalam penelitian ini menggunakan kombinasi perangkat lunak \textit{open-source} yang sudah tersedia (\textit{given}) dengan komponen yang dikembangkan sendiri oleh peneliti. Perangkat lunak yang sudah tersedia (\textit{given}) meliputi \textit{Geth}, \textit{Prysm}, \textit{Kurtosis}, \textit{Hyperledger Caliper}, dan \textit{Kubernetes}. Sementara itu, komponen yang dikembangkan sendiri meliputi skrip otomasi pembangkitan jaringan PoA berbasis \textit{bash} dan \textit{Docker}, konfigurasi \textit{Starlark} untuk orkestrasi jaringan PoS, \textit{pipeline benchmarking} otomatis (\texttt{run\_pipeline.sh}), serta konfigurasi sistem monitoring terpusat dengan mekanisme \textit{Dual-Mode Scraping}. Seluruh kode sumber tersebut telah dipublikasikan secara \textit{open-source} pada lampiran dan repositori publik.
 
 \subsection{Otomasi Pembangkitan Jaringan PoA}
 Otomasi pembangunan jaringan PoA diimplementasikan menggunakan orkestrasi skrip \textit{bash} dan \textit{Docker} yang mengintegrasikan \textit{Geth} dengan \textit{Clef}. Berbeda dengan \textit{setup} pengembangan standar, setiap \textit{signer node} (validator) dipisahkan secara logis antara proses eksekusi (\textit{Geth}) dan proses penandatanganan (\textit{Clef}). Penandatangan eksternal (\textit{external signer}) \textit{Clef} dikonfigurasi dengan aturan keamanan khusus dalam file \texttt{rules.js}. Aturan ini memastikan bahwa permintaan penandatanganan hanya akan disetujui secara otomatis jika berasal dari jaringan internal \textit{Docker} dan hanya untuk tipe transaksi penandatanganan blok \textit{Clique} (PoA), sehingga memitigasi risiko penyalahgunaan \textit{private key} oleh entitas luar. 
