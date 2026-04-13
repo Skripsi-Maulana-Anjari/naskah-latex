@@ -622,20 +622,18 @@
 %% Dedication Page
 %======================================
 \newcommand{\chapterdedication}[1]{
-	\newgeometry{top=2.54cm,bottom=2.54cm,left=3.54cm,right=2.54cm}
 	\chapter*{\dedicationpage}%
-	\input{#1}
 	\addcontentsline{toc}{chapter}{\dedicationpage}
+	\input{#1}
 }
 
 %======================================
 %% Statement Page
 %======================================
 \newcommand{\chapterstatement}[1]{
-	\newgeometry{right=2.54cm,left=3.54cm,top=2.54cm,bottom=2.54cm}
 	\chapter*{\statementname}%
-	\input{#1}
 	\addcontentsline{toc}{chapter}{\statementname}
+	\input{#1}
 }
 
 %======================================
@@ -659,8 +657,8 @@
 \newcommand{\chapterpreface}[1]{
 	\restoregeometry% Restore Geometry
 	\chapter*{\prefacename}%
-	\input{#1}
 	\addcontentsline{toc}{chapter}{\prefacename}
+	\input{#1}
 }
 
 %======================================
@@ -668,8 +666,8 @@
 %======================================
 \newcommand{\chapternomenclature}[1]{
 	\chapter*{\nomenclaturename}
-	\input{#1}	
 	\addcontentsline{toc}{chapter}{\nomenclaturename}
+	\input{#1}	
 }
 
 %======================================
@@ -677,8 +675,8 @@
 %======================================
 \newcommand{\chapterabstract}[1]{
 	\chapter*{ABSTRACT}
-	\input{#1}
 	\addcontentsline{toc}{chapter}{ABSTRACT}
+	\input{#1}
 }
 
 %======================================
@@ -686,8 +684,8 @@
 %======================================
 \newcommand{\chapterintisari}[1]{
 	\chapter*{INTISARI}
-	\input{#1}
 	\addcontentsline{toc}{chapter}{INTISARI}	
+	\input{#1}
 }
 
 %======================================
